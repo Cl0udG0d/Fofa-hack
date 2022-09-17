@@ -2,11 +2,9 @@
 
 ### 简介
 
-基于[fofa_spider-1.0.5](https://github.com/FightingForWhat/fofa_spider-1.0.5) - 非付费会员，fofa数据无限抓取版 的梅开二度
+基于[fofa_spider-1.0.5](https://github.com/FightingForWhat/fofa_spider-1.0.5) - 非付费会员，fofa数据无限抓取版 的梅开二度，配置普通用户cookie即可使用
 
-配置普通用户cookie即可使用
-
-因为目前只是把原来的规则重新修改了一下，还不是很稳定，可以适当把等待时间拉长，后续会进行优化
+截止至 `2022-9-17` 日 ，亲测可用，如果项目不行了欢迎联系我
 
 
 
@@ -16,7 +14,7 @@
 git clone https://github.com/Cl0udG0d/Fofa-hack
 ```
 
-配置`config.py`中的`cookie`
+配置`config.py`中的`cookie`，注意不是`Authorization`
 
 `cookie`的位置如下
   ![](https://github.com/Cl0udG0d/Fofa-script/blob/master/images/2.png)
@@ -29,17 +27,19 @@ git clone https://github.com/Cl0udG0d/Fofa-hack
 
 
 
-### 原理
+### 测试
 
-群友说[ [fofa_spider-1.0.5](https://github.com/FightingForWhat/fofa_spider-1.0.5) - 非付费会员，fofa数据无限抓取版 ] 这个项目的爬取规则早早失效了，原理就是通过修改搜索关键字来获取更多的数据（众所周知非会员只能查看前五页）
-
-
-
-目前大多数Fofa爬虫都是直接调用Fofa官方给出的API接口来获取数据，非会员是用不了接口的，所以问题回归到直接在`fofa.info`上获取数据
+输入 搜索关键字 `app="ThinkPHP"`，等待秒数为5的情况下，下载1-50页数据经过测试无问题，经过自动去重之后剩余497条
 
 
 
-另外一个问题就是不断修改关键字的时间戳即可
+### 更新日志
+
+只记录比较重要的更新
+
++ 2022-9-17，修改时间戳获取规则，项目整体趋于稳定
+
++ 2022-9-15，创建项目并修改适用于目前fofa的规则
 
 
 

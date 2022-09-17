@@ -66,41 +66,31 @@ def get_page_num(search_key):
     print("[*] 存在页码:"+pagenum)
     return searchbs64, headers_use
 
+def getTimeList(text):
+    timelist=list()
+    pattern="<span>[0-9]*-[0-9]*-[0-9]*</span>"
+    result = re.findall(pattern, text)
+    for temp in result:
+        timelist.append(temp.replace("<span>","").replace("</span>","").strip())
+    # print(timelist)
+    return timelist
+
 def fofa_spider_page(page, search_key, searchbs64, headers_use, turn_num):
     global host_list
     global timestamp_list
     searchurl = quote_plus(search_key)# searchurl是search_key url encode
     searchurl = searchurl.replace('%28', '(').replace('%29', ')')
     print("[*] 正在爬取第" + str(5*int(turn_num) + int(page)) + "页")
-    request_url = 'https://fofa.info/result?qbase64=' + searchbs64 + '&full=false&page=' + str(page) +"&page_size=20"
+    request_url = 'https://fofa.info/result?qbase64=' + searchbs64 + '&full=false&page=' + str(page) +"&page_size=10"
     # print('request_url:')
     # print(request_url)
     rep = requests.get(request_url, headers=headers_use)
     tree = etree.HTML(rep.text)
-    # page_data = page_json['data']['assets']
-    # print(type(page_json))
-    # print(page_json.keys())
-    # doc_result = open('fofa_result.txt', 'a+')
     urllist = tree.xpath('//span[@class="aSpan"]/a/@href')
-    timelist=tree.xpath('//div[@class="contentLeft"]/p[6]/span/text()')
+    timelist=getTimeList(rep.text)
     print(urllist)
     host_list.extend(urllist)
     timestamp_list.extend(timelist)
-    # for i in range(len(page_data)):
-    #     host_data = page_data[i]['link']
-    #     host_time = page_data[i]['mtime']
-    #     timestamp_list.append(host_time)
-    #     # doc_result.write(host_data + '\n')
-    #     if host_data not in host_list:
-    #         host_list.append(host_data)
-    #     # html_time = page_data[i]['mtime']
-    #     print('[+] ' + host_data)
-    # try:
-    #     print('[*] 第' + str(5*int(turn_num) + int(page)) + '页爬取完毕 抓取数据' + str(i + 1) + '条 最后一条数据时间戳为：' + str(timestamp_list[-1]) + '\n')
-    # except UnboundLocalError:
-    #     print('[-] 发生错误，请检查cookie信息是否为最新')
-    # except Exception as error:
-    #     print(str(error))
 
     time.sleep(config.TimeSleep)
     return
@@ -181,8 +171,8 @@ def modify_search_url(search_key):
 
 def host_list_print():
     global host_list
-    print('++++++++++++++++++++++++++++++++\n')
-    doc_result = open('spider_result.txt', 'a+')
+    print("="*60+'\n')
+    doc_result = open('spider_result.txt', 'w+')
     for host in host_list:
         print('[+] ' + host)
         doc_result.write(host + '\n')
