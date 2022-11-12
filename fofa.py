@@ -86,7 +86,7 @@ def fofa_spider_page(page, search_key, searchbs64, headers_use, turn_num):
     # print(request_url)
     rep = requests.get(request_url, headers=headers_use)
     tree = etree.HTML(rep.text)
-    urllist = tree.xpath('//span[@class="aSpan"]/a/@href')
+    urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
     timelist=getTimeList(rep.text)
     print(urllist)
     host_list.extend(urllist)
