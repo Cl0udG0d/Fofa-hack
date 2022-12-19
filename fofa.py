@@ -16,6 +16,7 @@ from lxml import etree
 import requests
 from urllib.parse import quote_plus
 import config
+from urllib.parse import quote
 
 host_list = []
 timestamp_list = []
@@ -30,11 +31,26 @@ def logo():
         |_| |_|/__/\__\\\\____)|__|\__\\
     ''')
 
+def preCheckSession():
+    checkKeyword="thinkphp"
+    searchbs64 = quote(str(base64.b64encode(checkKeyword.encode()), encoding='utf-8'))
+    rep = requests.get('https://fofa.info/result?qbase64=' + searchbs64 + "&page=1&page_size=10",
+                       headers=headers())
+
+    tree = etree.HTML(rep.text)
+    urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
+    return len(urllist)==0
+
 def checkSession():
-    if config.cookie=="":
-        print("[-] 请配置config文件cookie字段")
+    if config.cookie == "":
+        print("请配置config文件")
         exit(0)
-    print("[*] 检测cookie成功")
+    print("检测cookie存在")
+    if preCheckSession():
+        print("警告：请检查cookie是否正确！")
+        exit(0)
+    else:
+        print("提示：cookie可用")
     return
 
 def headers():
