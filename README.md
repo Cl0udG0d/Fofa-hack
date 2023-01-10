@@ -14,6 +14,12 @@
 git clone https://github.com/Cl0udG0d/Fofa-hack
 ```
 
+安装运行所需的库文件，国内请加源 https://pypi.tuna.tsinghua.edu.cn/simple
+
+```shell
+pip install -r requirements.txt
+```
+
 配置`config.py`中的`cookie`，注意不是`Authorization`
 
 `cookie`的位置如下
