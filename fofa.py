@@ -97,6 +97,7 @@ class Fofa:
             tempstr = ''
             for key, value in self.session.cookies.get_dict().items():
                 tempstr += key + "=" + value + "; "
+            print(tempstr)
             with open('fofa_cookie.txt', 'w') as f:
                 f.write(tempstr)
             return self.session.cookies, 1
@@ -121,13 +122,13 @@ class Fofa:
         return len(urllist), cookies
 
     def cookie_info(self):
-        with open('fofa_cookie.txt', 'r+') as f:
+        """
+        读取cookie
+        :rtype: object
+        """
+        with open('fofa_cookie.txt', 'r') as f:
             cookies = f.read()
-            if cookies != '':
-                cookies = cookies
-            else:
-                cookies = cookies
-        return cookies
+            return cookies if cookies!='' else ''
 
     def headers(self,cookie):
         user_agent_use = config.user_agent[random.randint(0, len(config.user_agent) - 1)]
@@ -138,25 +139,6 @@ class Fofa:
         }
         return headers_use
 
-    def preCheckSession(self,cookie):
-        checkKeyword = "thinkphp"
-        searchbs64 = quote(str(base64.b64encode(checkKeyword.encode()), encoding='utf-8'))
-        rep = requests.get('https://fofa.info/result?qbase64=' + searchbs64 + "&page=2&page_size=10",
-                           headers=self.headers(cookie))
-        tree = etree.HTML(rep.text)
-        urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
-        return len(urllist) == 0
-
-    def checkSession(self, cookie):
-        if cookie == "":
-            exit(0)
-        print("检测cookie存在")
-        if self.preCheckSession(cookie):
-            print("警告：请检查cookie是否正确！")
-            exit(0)
-        else:
-            print("提示：cookie可用")
-        return
 
     def init(self):
         config.TimeSleep = int(input('[*] 请输入爬取每一页等待的秒数，防止IP被ban\n'))
@@ -283,23 +265,20 @@ class Fofa:
         return search_key_modify, searchbs64_modify
 
     def run(self, cookie):
-        self.checkSession(cookie)
         self.init()
         searchbs64, headers_use = self.get_page_num(config.SearchKEY,cookie)
         self.fofa_spider(config.SearchKEY, searchbs64, headers_use)
         print('[+] 抓取结束，共抓取数据 ' + str(len(host_list)) + ' 条\n')
 
     def main(self):
-        fofa_username = 'Wans'
-        fofa_password = "199823Wans"
         print('检测是否登录')
         urllist, cookie = self.check_login(self.cookie_info())
         if urllist == 0:
             print("未登录")
-            if self.fofa_login(fofa_username, fofa_password)[1] == 1:
+            if self.fofa_login(config.fofa_username, config.fofa_password)[1] == 1:
                 print('开始搜索')
                 self.run(self.cookie_info())
-                print('推出')
+                print('退出')
             else:
                 exit(0)
         else:

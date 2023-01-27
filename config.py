@@ -6,6 +6,10 @@
 # @Github: https://github.com/Cl0udG0d
 
 
+fofa_username = ""
+fofa_password = ""
+
+
 SearchKEY = ""
 StopPage = ""
 StartPage = ""
