@@ -4,7 +4,7 @@
 
 基于[fofa_spider-1.0.5](https://github.com/FightingForWhat/fofa_spider-1.0.5) - 非付费会员，fofa数据无限抓取版 的梅开二度，配置普通用户cookie即可使用
 
-截止至 `2022-12-19` 日 ，亲测可用，如果项目不行了欢迎联系我
+截止至 `2023-1-27` 日 ，亲测可用，如果项目不行了欢迎联系我
 
 
 
@@ -20,10 +20,11 @@ git clone https://github.com/Cl0udG0d/Fofa-hack
 pip install -r requirements.txt
 ```
 
-配置`config.py`中的`cookie`，注意不是`Authorization`
+配置`config.py`中的
++ fofa_username = ""
++ fofa_password = ""
 
-`cookie`的位置如下
-  ![](https://github.com/Cl0udG0d/Fofa-script/blob/master/images/2.png)
+也就是你的FOFA账号密码(老版本的直接复制cookie的方式弃用)
 
 运行`fofa.py`
 
@@ -42,6 +43,8 @@ pip install -r requirements.txt
 ### 更新日志
 
 只记录比较重要的更新
+
++ 2023-1-27，合入[wanswu](https://github.com/wanswu)师傅提交的代码，通过账号密码进行登录
 
 + 2022-12-19，添加cookie的预判断
 
