@@ -55,7 +55,10 @@ pip install -r requirements.txt
 + 2022-9-15，创建项目并修改适用于目前fofa的规则
 
 
+### 贡献者
 
+<!-- readme: collaborators,contributors -start -->
+<!-- readme: collaborators,contributors -end -->
 
 ### END 
 

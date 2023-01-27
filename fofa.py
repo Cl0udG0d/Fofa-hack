@@ -186,7 +186,7 @@ class Fofa:
         timelist = self.getTimeList(rep.text)
         print(urllist)
         for i in urllist:
-            with open('test.txt', 'a+') as f:
+            with open('spider_result.txt', 'a+') as f:
                 f.write(i + "\n")
         host_list.extend(urllist)
         timestamp_list.extend(timelist)
