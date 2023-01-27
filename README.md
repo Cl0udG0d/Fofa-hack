@@ -58,6 +58,23 @@ pip install -r requirements.txt
 ### 贡献者
 
 <!-- readme: collaborators,contributors -start -->
+<table>
+<tr>
+    <td align="center">
+        <a href="https://github.com/Cl0udG0d">
+            <img src="https://avatars.githubusercontent.com/u/45556496?v=4" width="100;" alt="Cl0udG0d"/>
+            <br />
+            <sub><b>潘一二三</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/wanswu">
+            <img src="https://avatars.githubusercontent.com/u/49047734?v=4" width="100;" alt="wanswu"/>
+            <br />
+            <sub><b>Wans</b></sub>
+        </a>
+    </td></tr>
+</table>
 <!-- readme: collaborators,contributors -end -->
 
 ### END 
