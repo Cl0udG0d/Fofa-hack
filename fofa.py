@@ -13,15 +13,21 @@ from urllib.parse import quote_plus
 import config
 from urllib.parse import quote
 
+import fofa_useragent
+
 host_list = []
 timestamp_list = []
+
+filename=""
+
+
 
 import re, requests
 
 from lxml import etree
 
 headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.9 Safari/537.36',
+    'User-Agent': fofa_useragent.getFakeUserAgent(),
     'Host': 'i.nosec.org',
     'Referer': 'https://i.nosec.org/login',
     'sec-ch-ua': '"Chromium";v="106", "Microsoft Edge";v="106", "Not;A=Brand";v="99"',
@@ -38,85 +44,67 @@ class Fofa:
         |__|  \____/|__| /__/\__\    
              _   _   ____   ____  __  __ 
             | |_| | / () \ / (__`|  |/  /
-            |_| |_|/__/\__\\\\____)|__|\__\\
-        ''')
+            |_| |_|/__/\__\\\\____)|__|\__\\ V{}
+        '''.format(config.VERSION_NUM))
 
     def fofa_captcha(self, src):
         import ddddocr
         ocr = ddddocr.DdddOcr(show_ad=False)
-        fofa_headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.9 Safari/537.36',
-            'Host': 'i.nosec.org',
-            'Referer': 'https://i.nosec.org/login',
-            'sec-ch-ua': '"Chromium";v="106", "Microsoft Edge";v="106", "Not;A=Brand";v="99"',
-            'sec-ch-ua-platform': '"Windows"',
-        }
+
         captcha_api = f'https://i.nosec.org{src}'
-        resp = self.session.get(url=captcha_api, headers=fofa_headers)
+        resp = self.session.get(url=captcha_api, headers=fofa_useragent.getFofaCaptchaHeaders())
         return ocr.classification(resp.content)
 
     def fofa_login(self, fofa_username, fofa_password):
         print('尝试登录')
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.9 Safari/537.36',
-            'Referer': 'https://i.nosec.org/login?service=https://fofa.info/f_login',
-            'Host': 'i.nosec.org',
-            'Origin': 'https://i.nosec.org',
-            'sec-ch-ua': '"Chromium";v="106", "Microsoft Edge";v="106", "Not;A=Brand";v="99"',
-            'sec-ch-ua-platform': '"Windows"',
-        }
+        TEMP_RETRY_NUM=0
+        while TEMP_RETRY_NUM<config.MAX_LOGIN_RETRY_NUM:
+            try:
+                authen = self.session.get(url='https://i.nosec.org/login?service=https://fofa.info/f_login', headers=fofa_useragent.getFofaLoginHeaders())
+                src = re.findall('class="rucaptcha-image" src="(.*?)"', authen.text)[0]
 
-        authen = self.session.get(url='https://i.nosec.org/login?service=https://fofa.info/f_login', headers=headers)
-        src = re.findall('class="rucaptcha-image" src="(.*?)"', authen.text)[0]
-
-        captcha = self.fofa_captcha(src)
-        authenticity_token = re.findall('"csrf-token" content="(.*?)" /', authen.text)[0]
-        lt = re.findall('id="lt" value="(.*?)" /', authen.text)[0]
-        data = {
-            'utf8': '%E2%9C%93',
-            'authenticity_token': authenticity_token,
-            'lt': lt,
-            'service': 'https://fofa.info/f_login',
-            'username': fofa_username,
-            'password': fofa_password,
-            '_rucaptcha': captcha,
-            'rememberMe': '1',
-            'button': '',
-            'fofa_service': '1',
-        }
-        user_login_api = 'https://i.nosec.org/login'
-        res_login = self.session.post(url=user_login_api, data=data)
-        if '登录验证码错误' in res_login.text:
-            print("验证码错误，重新运行脚本")
-            return 0
-        elif '用户名或密码错误' in res_login.text:
-            print('用户名或密码错误,请检查账户名和密码后重试')
-            return 0
-        else:
-            print("登录成功")
-            tempstr = ''
-            for key, value in self.session.cookies.get_dict().items():
-                tempstr += key + "=" + value + "; "
-            print(tempstr)
-            with open('fofa_cookie.txt', 'w') as f:
-                f.write(tempstr)
-            return self.session.cookies, 1
+                captcha = self.fofa_captcha(src)
+                authenticity_token = re.findall('"csrf-token" content="(.*?)" /', authen.text)[0]
+                lt = re.findall('id="lt" value="(.*?)" /', authen.text)[0]
+                data = {
+                    'utf8': '%E2%9C%93',
+                    'authenticity_token': authenticity_token,
+                    'lt': lt,
+                    'service': 'https://fofa.info/f_login',
+                    'username': fofa_username,
+                    'password': fofa_password,
+                    '_rucaptcha': captcha,
+                    'rememberMe': '1',
+                    'button': '',
+                    'fofa_service': '1',
+                }
+                user_login_api = 'https://i.nosec.org/login'
+                res_login = self.session.post(url=user_login_api, data=data)
+                if '登录验证码错误' in res_login.text:
+                    print("验证码错误，重新运行脚本")
+                    raise
+                elif '用户名或密码错误' in res_login.text:
+                    print('用户名或密码错误,请检查账户名和密码后重试')
+                    raise
+                else:
+                    print("登录成功")
+                    tempstr = ''
+                    for key, value in self.session.cookies.get_dict().items():
+                        tempstr += key + "=" + value + "; "
+                    print(tempstr)
+                    with open('fofa_cookie.txt', 'w') as f:
+                        f.write(tempstr)
+                    return self.session.cookies, 1
+            except:
+                TEMP_RETRY_NUM+=1
+                print('[-] 第{}次尝试登录'.format(TEMP_RETRY_NUM))
+                pass
+        print('[-] FOFA登录失败，请检查相关配置，即将退出程序')
+        exit(0)
 
     def check_login(self, cookies):
-        self.check_headers = {
-            'Host': 'fofa.info',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.9 Safari/537.36',
-            'sec-ch-ua': '"Chromium";v="106", "Microsoft Edge";v="106", "Not;A=Brand";v="99"',
-            'sec-ch-ua-platform': '"Windows"',
-            'Sec-Fetch-Dest': 'document',
-            'Sec-Fetch-Mode': 'navigate',
-            'DNT': '1',
-            'Referer': 'https://fofa.info/',
-            'Connection': 'keep-alive',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-            'Cookie': cookies,
-        }
-        resp = requests.get(url='https://fofa.info/result?qbase64=MQ==&page=2&page_size=10', headers=self.check_headers)
+
+        resp = requests.get(url='https://fofa.info/result?qbase64=MQ==&page=2&page_size=10', headers=fofa_useragent.getCheckHeaders(cookies))
         tree = etree.HTML(resp.text)
         urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
         return len(urllist), cookies
@@ -131,9 +119,8 @@ class Fofa:
             return cookies if cookies!='' else ''
 
     def headers(self,cookie):
-        user_agent_use = config.user_agent[random.randint(0, len(config.user_agent) - 1)]
         headers_use = {
-            'User-Agent': user_agent_use,
+            'User-Agent': fofa_useragent.getFakeUserAgent(),
             'Accept': 'application/json, text/plain, */*',
             "cookie": cookie.encode("utf-8").decode("latin1")
         }
@@ -143,6 +130,8 @@ class Fofa:
     def init(self):
         config.TimeSleep = int(input('[*] 请输入爬取每一页等待的秒数，防止IP被ban\n'))
         config.SearchKEY = input('[*] 请输入fofa搜索关键字 \n')
+        global filename
+        filename = "{}_{}.txt".format(config.SearchKEY, int(time.time()))
         return
 
     def get_page_num(self, search_key,cookie):
@@ -174,8 +163,7 @@ class Fofa:
         # 获取
         global host_list
         global timestamp_list
-        searchurl = quote_plus(search_key)  # searchurl是search_key url encode
-        searchurl = searchurl.replace('%28', '(').replace('%29', ')')
+
         print("[*] 正在爬取第" + str(5 * int(turn_num) + int(page)) + "页")
         request_url = 'https://fofa.info/result?qbase64=' + searchbs64 + '&full=false&page=' + str(
             page) + "&page_size=10"
@@ -185,8 +173,9 @@ class Fofa:
         urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
         timelist = self.getTimeList(rep.text)
         print(urllist)
+
         for i in urllist:
-            with open('spider_result.txt', 'a+') as f:
+            with open(filename, 'a+') as f:
                 f.write(i + "\n")
         host_list.extend(urllist)
         timestamp_list.extend(timelist)

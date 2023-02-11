@@ -38,3 +38,8 @@ user_agent = [
     'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Avant Browser)',
     'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
 ]
+
+# Fofa-hack 版本号
+VERSION_NUM="1.2.0"
+# 登录最大重试次数
+MAX_LOGIN_RETRY_NUM=3

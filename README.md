@@ -4,7 +4,7 @@
 
 基于[fofa_spider-1.0.5](https://github.com/FightingForWhat/fofa_spider-1.0.5) - 非付费会员，fofa数据无限抓取版 的梅开二度，配置普通用户cookie即可使用
 
-截止至 `2023-1-27` 日 ，亲测可用，如果项目不行了欢迎联系我
+截止至 `2023-2-12` 日 ，亲测可用，如果项目不行了欢迎联系我
 
 
 
@@ -30,7 +30,7 @@ pip install -r requirements.txt
 
 > python3 fofa.py
 
-爬取的结果会存储到`spider_result.txt`文件中
+爬取的结果会存储到`搜索关键字_运行时间戳.txt`文件中
 
 
 
@@ -42,18 +42,7 @@ pip install -r requirements.txt
 
 ### 更新日志
 
-只记录比较重要的更新
-
-+ 2023-1-27，合入[wanswu](https://github.com/wanswu)师傅提交的代码，通过账号密码进行登录
-
-+ 2022-12-19，添加cookie的预判断
-
-+ 2022-11-12，更新爬取规则
-
-+ 2022-9-17，修改时间戳获取规则，项目整体趋于稳定
-
-+ 2022-9-15，创建项目并修改适用于目前fofa的规则
-
+详情请见[CHANGELOG](CHANGELOG.md)
 
 ### 贡献者
 
