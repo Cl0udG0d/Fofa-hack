@@ -2,11 +2,9 @@
 
 ### 简介
 
-基于[fofa_spider-1.0.5](https://github.com/FightingForWhat/fofa_spider-1.0.5) - 非付费会员，fofa数据无限抓取版 的梅开二度，配置普通用户cookie即可使用
+基于[fofa_spider-1.0.5](https://github.com/FightingForWhat/fofa_spider-1.0.5) - 非付费会员，fofa数据无限抓取版 的梅开二度，配置普通用户账号密码即可使用
 
 截止至 `2023-2-12` 日 ，亲测可用，如果项目不行了欢迎联系我
-
-
 
 ### 使用
 
@@ -20,9 +18,19 @@ git clone https://github.com/Cl0udG0d/Fofa-hack
 pip install -r requirements.txt
 ```
 
-配置`config.py`中的
-+ fofa_username = ""
-+ fofa_password = ""
+配置`config.py`中的`fofa_account`，支持多账号
+```json
+fofa_account=[
+    {
+        "fofa_username" : "test@email.com",
+        "fofa_password" : "12345678"
+    },
+  {
+        "fofa_username" : "test1@email.com",
+        "fofa_password" : "12345678"
+    }
+]
+```
 
 也就是你的FOFA账号密码(老版本的直接复制cookie的方式弃用)
 
@@ -32,13 +40,36 @@ pip install -r requirements.txt
 
 爬取的结果会存储到`搜索关键字_运行时间戳.txt`文件中
 
-
+### 参数
+<details>
+<summary>config参数详情</summary>
+<table >
+  <tr>
+    <td>参数值</td>
+    <td>释义</td>
+  </tr>
+  <tr>
+    <td>VERSION_NUM</td>
+    <td>Fofa-hack 版本号</td>
+  </tr>
+<tr>
+    <td>MAX_LOGIN_RETRY_NUM</td>
+    <td>登录最大重试次数</td>
+  </tr>
+<tr>
+    <td>MAX_MATCH_RETRY_NUM</td>
+    <td>页面URL获取最大重试次数</td>
+  </tr>
+</table>
+</details>
 
 ### 测试
 
 输入 搜索关键字 `app="ThinkPHP"`，等待秒数为5的情况下，下载1-50页数据经过测试无问题，经过自动去重之后剩余497条
 
+### 使用问题集合
 
+详情请见[QUESTIONS](QUESTIONS.md)
 
 ### 更新日志
 

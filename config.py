@@ -6,8 +6,13 @@
 # @Github: https://github.com/Cl0udG0d
 
 
-fofa_username = ""
-fofa_password = ""
+fofa_account=[
+    {
+        "fofa_username" : "test@email.com",
+        "fofa_password" : "12345678"
+    },
+]
+
 
 
 SearchKEY = ""
@@ -40,6 +45,8 @@ user_agent = [
 ]
 
 # Fofa-hack 版本号
-VERSION_NUM="1.2.0"
+VERSION_NUM="1.2.1"
 # 登录最大重试次数
 MAX_LOGIN_RETRY_NUM=3
+# 页面URL获取最大重试次数
+MAX_MATCH_RETRY_NUM=3

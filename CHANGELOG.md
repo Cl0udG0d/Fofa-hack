@@ -1,5 +1,12 @@
 # CHANGELOG 代码变更记录
 
+### 1.2.1
+
++ 添加`QUESTIONS.md`问题集合文件
++ 增加断点重连机制，重连最大次数为3,提高系统运行稳定性
++ 增加多账户
++ 部分文件的微小更新(fofa_useragent.py、README.md....)
+
 ### 1.2.0
 
 + 添加CHANGELOG文件

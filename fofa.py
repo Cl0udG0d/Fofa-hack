@@ -20,6 +20,11 @@ timestamp_list = []
 
 filename=""
 
+# 账户指针
+ACCOUNT_INDEX=0
+
+
+
 
 
 import re, requests
@@ -48,14 +53,25 @@ class Fofa:
         '''.format(config.VERSION_NUM))
 
     def fofa_captcha(self, src):
+        """
+        识别FOFA登录界面验证码
+        :param src:
+        :return:
+        """
         import ddddocr
-        ocr = ddddocr.DdddOcr(show_ad=False)
+        ocr = ddddocr.DdddOcr()
 
         captcha_api = f'https://i.nosec.org{src}'
         resp = self.session.get(url=captcha_api, headers=fofa_useragent.getFofaCaptchaHeaders())
         return ocr.classification(resp.content)
 
     def fofa_login(self, fofa_username, fofa_password):
+        """
+        使用FOFA账号密码进行登录
+        :param fofa_username:
+        :param fofa_password:
+        :return:
+        """
         print('尝试登录')
         TEMP_RETRY_NUM=0
         while TEMP_RETRY_NUM<config.MAX_LOGIN_RETRY_NUM:
@@ -95,15 +111,20 @@ class Fofa:
                     with open('fofa_cookie.txt', 'w') as f:
                         f.write(tempstr)
                     return self.session.cookies, 1
-            except:
+            except Exception as e:
+                # print(e)
                 TEMP_RETRY_NUM+=1
                 print('[-] 第{}次尝试登录'.format(TEMP_RETRY_NUM))
                 pass
-        print('[-] FOFA登录失败，请检查相关配置，即将退出程序')
-        exit(0)
+        print('[-] FOFA登录失败,即将切换账号进行尝试')
+        raise
 
     def check_login(self, cookies):
-
+        """
+        检测cookie是否生效
+        :param cookies:
+        :return:
+        """
         resp = requests.get(url='https://fofa.info/result?qbase64=MQ==&page=2&page_size=10', headers=fofa_useragent.getCheckHeaders(cookies))
         tree = etree.HTML(resp.text)
         urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
@@ -136,7 +157,7 @@ class Fofa:
 
     def get_page_num(self, search_key,cookie):
         # 获取页码
-        headers_use = self.headers(cookie)
+        headers_use = fofa_useragent.getFofaPageNumHeaders(cookie)
         searchbs64 = base64.b64encode(f'{search_key}'.encode()).decode()
         print("[*] 爬取页面为:https://fofa.info/result?qbase64=" + searchbs64)
         html = requests.get(url="https://fofa.info/result?qbase64=" + searchbs64, headers=headers_use).text
@@ -160,28 +181,81 @@ class Fofa:
         return timelist
 
     def fofa_spider_page(self, page, search_key, searchbs64, headers_use, turn_num):
-        # 获取
+        """
+        获取某一页内的URL数据
+        :rtype: object
+        """
         global host_list
         global timestamp_list
-
+        TEMP_RETRY_NUM=0
         print("[*] 正在爬取第" + str(5 * int(turn_num) + int(page)) + "页")
-        request_url = 'https://fofa.info/result?qbase64=' + searchbs64 + '&full=false&page=' + str(
-            page) + "&page_size=10"
-        # print(f'request_url:{request_url}')
-        rep = requests.get(request_url, headers=headers_use)
-        tree = etree.HTML(rep.text)
-        urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
-        timelist = self.getTimeList(rep.text)
-        print(urllist)
+        global ACCOUNT_INDEX
+        while ACCOUNT_INDEX < len(config.fofa_account):
+            temp_headers=headers_use if ACCOUNT_INDEX==0 else self.getNewHeaders()
+            while TEMP_RETRY_NUM < config.MAX_MATCH_RETRY_NUM:
+                try:
+                    request_url = 'https://fofa.info/result?qbase64=' + searchbs64 + '&full=false&page=' + str(
+                        page) + "&page_size=10"
+                    # print(f'request_url:{request_url}')
+                    rep = requests.get(request_url, headers=temp_headers)
+                    tree = etree.HTML(rep.text)
+                    urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
+                    timelist = self.getTimeList(rep.text)
+                    print(urllist)
 
-        for i in urllist:
-            with open(filename, 'a+') as f:
-                f.write(i + "\n")
-        host_list.extend(urllist)
-        timestamp_list.extend(timelist)
+                    for i in urllist:
+                        with open(filename, 'a+') as f:
+                            f.write(i + "\n")
+                    host_list.extend(urllist)
+                    timestamp_list.extend(timelist)
 
-        time.sleep(config.TimeSleep)
-        return
+                    time.sleep(config.TimeSleep)
+                    return
+                except:
+                    TEMP_RETRY_NUM+=1
+                    print('[-] 第{}次尝试获取页面URL'.format(TEMP_RETRY_NUM))
+                    pass
+            self.refresh_cookie()
+
+        print('[-] FOFA资源获取重试超过最大次数,程序退出')
+        exit(0)
+
+
+
+    def refresh_cookie(self):
+        """
+        当前获取不到数据的时候,该方法会重置cookie数据进行账号切换
+        1.重置cookie文件
+        2.切换账号重新获取cookie
+        3.返回新的cookie以供爬取
+        :return:
+        """
+        global ACCOUNT_INDEX
+        ACCOUNT_INDEX += 1
+
+        while ACCOUNT_INDEX < len(config.fofa_account):
+            username = config.fofa_account[ACCOUNT_INDEX]["fofa_username"]
+            password = config.fofa_account[ACCOUNT_INDEX]["fofa_password"]
+            # print("username:{};password:{}".format(username, password))
+            try:
+                if self.fofa_login(username, password)[1] == 1:
+                    cookie=self.cookie_info()
+                    return fofa_useragent.getFofaPageNumHeaders(cookie)
+            except Exception as e:
+                print(e)
+                ACCOUNT_INDEX += 1
+                if ACCOUNT_INDEX < len(config.fofa_account):
+                    print("[*] 切换账号:{}".format(config.fofa_account[ACCOUNT_INDEX]["fofa_username"]))
+                    pass
+                else:
+                    break
+        print("[-] 账号无法登录,程序退出")
+        exit(0)
+
+    def getNewHeaders(self):
+        cookie = self.cookie_info()
+        return fofa_useragent.getFofaPageNumHeaders(cookie)
+
 
     def fofa_spider(self, search_key, searchbs64, headers_use):
         global host_list
@@ -264,12 +338,27 @@ class Fofa:
         urllist, cookie = self.check_login(self.cookie_info())
         if urllist == 0:
             print("未登录")
-            if self.fofa_login(config.fofa_username, config.fofa_password)[1] == 1:
-                print('开始搜索')
-                self.run(self.cookie_info())
-                print('退出')
-            else:
-                exit(0)
+            global ACCOUNT_INDEX
+            while ACCOUNT_INDEX < len(config.fofa_account):
+                username=config.fofa_account[ACCOUNT_INDEX]["fofa_username"]
+                password = config.fofa_account[ACCOUNT_INDEX]["fofa_password"]
+                # print("username:{};password:{}".format(username,password))
+                try:
+                    if self.fofa_login(username,password)[1] == 1:
+                        print('[*] 开始搜索')
+                        self.run(self.cookie_info())
+                        print('[*] 运行结束')
+                        exit(0)
+                except Exception as e:
+                    print(e)
+                    ACCOUNT_INDEX += 1
+                    if ACCOUNT_INDEX < len(config.fofa_account):
+                        print("[*] 切换账号:{}".format(config.fofa_account[ACCOUNT_INDEX]["fofa_username"]))
+                        pass
+                    else:
+                        break
+            print("[-] 账号无法登录,程序退出")
+            exit(0)
         else:
             print('已经登录')
             self.run(cookie)

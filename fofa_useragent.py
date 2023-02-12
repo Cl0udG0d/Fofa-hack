@@ -63,3 +63,12 @@ def getCheckHeaders(cookies):
         'Cookie': cookies,
     }
     return check_headers
+
+
+def getFofaPageNumHeaders(cookie):
+    headers_use = {
+        'User-Agent': getFakeUserAgent(),
+        'Accept': 'application/json, text/plain, */*',
+        "cookie": cookie.encode("utf-8").decode("latin1")
+    }
+    return headers_use
