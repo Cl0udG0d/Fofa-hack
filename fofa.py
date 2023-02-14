@@ -6,7 +6,7 @@
 # @Github: https://github.com/Cl0udG0d
 from datetime import datetime
 from datetime import timedelta
-import random
+import hashlib
 import base64
 import time
 from urllib.parse import quote_plus
@@ -152,7 +152,7 @@ class Fofa:
         config.TimeSleep = int(input('[*] 请输入爬取每一页等待的秒数，防止IP被ban\n'))
         config.SearchKEY = input('[*] 请输入fofa搜索关键字 \n')
         global filename
-        filename = "{}_{}.txt".format(config.SearchKEY, int(time.time()))
+        filename = "{}_{}.txt".format(md5(config.SearchKEY), int(time.time()))
         return
 
     def get_page_num(self, search_key,cookie):
@@ -211,7 +211,8 @@ class Fofa:
 
                     time.sleep(config.TimeSleep)
                     return
-                except:
+                except Exception as e:
+                    print(e)
                     TEMP_RETRY_NUM+=1
                     print('[-] 第{}次尝试获取页面URL'.format(TEMP_RETRY_NUM))
                     pass
@@ -366,6 +367,14 @@ class Fofa:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.session.close()
 
+
+
+
+def md5(str):
+    m = hashlib.md5()
+    m.update(str.encode("utf8"))
+    print(m.hexdigest())
+    return m.hexdigest()
 
 if __name__ == '__main__':
     fofa = Fofa()

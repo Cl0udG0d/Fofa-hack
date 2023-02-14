@@ -38,7 +38,7 @@ fofa_account=[
 
 > python3 fofa.py
 
-爬取的结果会存储到`搜索关键字_运行时间戳.txt`文件中
+爬取的结果会存储到`md5(搜索关键字)_运行时间戳.txt`文件中
 
 ### 参数
 <details>
