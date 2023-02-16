@@ -32,16 +32,11 @@ import re, requests
 
 from lxml import etree
 
-headers = {
-    'User-Agent': fofa_useragent.getFakeUserAgent(),
-    'Host': 'i.nosec.org',
-    'Referer': 'https://i.nosec.org/login',
-    'sec-ch-ua': '"Chromium";v="106", "Microsoft Edge";v="106", "Not;A=Brand";v="99"',
-    'sec-ch-ua-platform': '"Windows"',
-}
 
 
 class Fofa:
+    headers_use=""
+
     def __init__(self):
         self.session = requests.session()
         print('''
@@ -108,7 +103,7 @@ class Fofa:
                     tempstr = ''
                     for key, value in self.session.cookies.get_dict().items():
                         tempstr += key + "=" + value + "; "
-                    print(tempstr)
+                    # print(tempstr)
                     with open('fofa_cookie.txt', 'w') as f:
                         f.write(tempstr)
                     return self.session.cookies, 1
@@ -192,13 +187,13 @@ class Fofa:
         print("[*] 正在爬取第" + str(5 * int(turn_num) + int(page)) + "页")
         global ACCOUNT_INDEX
         while ACCOUNT_INDEX < len(config.fofa_account):
-            temp_headers=headers_use if ACCOUNT_INDEX==0 else self.getNewHeaders()
+
             while TEMP_RETRY_NUM < config.MAX_MATCH_RETRY_NUM:
                 try:
                     request_url = 'https://fofa.info/result?qbase64=' + searchbs64 + '&full=false&page=' + str(
                         page) + "&page_size=10"
                     # print(f'request_url:{request_url}')
-                    rep = requests.get(request_url, headers=temp_headers)
+                    rep = requests.get(request_url, headers=self.headers_use)
                     tree = etree.HTML(rep.text)
                     urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
                     timelist = self.getTimeList(rep.text)
@@ -217,7 +212,8 @@ class Fofa:
                     TEMP_RETRY_NUM+=1
                     print('[-] 第{}次尝试获取页面URL'.format(TEMP_RETRY_NUM))
                     pass
-            self.refresh_cookie()
+
+            self.headers_use=self.refresh_cookie()
 
         print('[-] FOFA资源获取重试超过最大次数,程序退出')
         exit(0)
@@ -233,8 +229,6 @@ class Fofa:
         :return:
         """
         global ACCOUNT_INDEX
-        ACCOUNT_INDEX += 1
-
         while ACCOUNT_INDEX < len(config.fofa_account):
             username = config.fofa_account[ACCOUNT_INDEX]["fofa_username"]
             password = config.fofa_account[ACCOUNT_INDEX]["fofa_password"]
@@ -253,6 +247,7 @@ class Fofa:
                     break
         print("[-] 账号无法登录,程序退出")
         exit(0)
+
 
     def getNewHeaders(self):
         cookie = self.cookie_info()
@@ -329,10 +324,11 @@ class Fofa:
 
         return search_key_modify, searchbs64_modify
 
+
     def run(self, cookie):
         self.init()
-        searchbs64, headers_use = self.get_page_num(config.SearchKEY,cookie)
-        self.fofa_spider(config.SearchKEY, searchbs64, headers_use)
+        searchbs64, self.headers_use = self.get_page_num(config.SearchKEY,cookie)
+        self.fofa_spider(config.SearchKEY, searchbs64, self.headers_use)
         print('[+] 抓取结束，共抓取数据 ' + str(len(host_list)) + ' 条\n')
 
     def main(self):
