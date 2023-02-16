@@ -14,6 +14,7 @@ import config
 from urllib.parse import quote
 
 import fofa_useragent
+import unit
 
 host_list = []
 timestamp_list = []
@@ -112,7 +113,7 @@ class Fofa:
                         f.write(tempstr)
                     return self.session.cookies, 1
             except Exception as e:
-                # print(e)
+                print(e)
                 TEMP_RETRY_NUM+=1
                 print('[-] 第{}次尝试登录'.format(TEMP_RETRY_NUM))
                 pass
@@ -152,7 +153,7 @@ class Fofa:
         config.TimeSleep = int(input('[*] 请输入爬取每一页等待的秒数，防止IP被ban\n'))
         config.SearchKEY = input('[*] 请输入fofa搜索关键字 \n')
         global filename
-        filename = "{}_{}.txt".format(md5(config.SearchKEY), int(time.time()))
+        filename = "{}_{}.txt".format(unit.md5(config.SearchKEY), int(time.time()))
         return
 
     def get_page_num(self, search_key,cookie):
@@ -370,11 +371,7 @@ class Fofa:
 
 
 
-def md5(str):
-    m = hashlib.md5()
-    m.update(str.encode("utf8"))
-    print(m.hexdigest())
-    return m.hexdigest()
+
 
 if __name__ == '__main__':
     fofa = Fofa()

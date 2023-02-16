@@ -4,7 +4,7 @@
 
 基于[fofa_spider-1.0.5](https://github.com/FightingForWhat/fofa_spider-1.0.5) - 非付费会员，fofa数据无限抓取版 的梅开二度，配置普通用户账号密码即可使用
 
-截止至 `2023-2-12` 日 ，亲测可用，如果项目不行了欢迎联系我
+截止至 `2023-2-16` 日 ，亲测可用，如果项目不行了欢迎联系我
 
 ### 使用
 
@@ -32,7 +32,13 @@ fofa_account=[
 ]
 ```
 
-也就是你的FOFA账号密码(老版本的直接复制cookie的方式弃用)
+也就是你的FOFA账号密码
+
+> 因为有朋友说ddddocr这个库在不同版本的操作系统上会有各种运行的错误,为了避免完全用不了Fofa-hack(蒽,或许我就是宠你们吧)
+> 
+> 现在将老版本的方式重新给出,如果账号密码登录不了,或者单纯不想用账号密码登录的时候,可以直接复制cookie登录
+
+[ddddocr出现问题跳转此处查看](docs/QUESTIONS.md#ddddocr错误解决)
 
 运行`fofa.py`
 
@@ -69,11 +75,11 @@ fofa_account=[
 
 ### 使用问题集合
 
-详情请见[QUESTIONS](QUESTIONS.md)
+详情请见[QUESTIONS](docs/QUESTIONS.md)
 
 ### 更新日志
 
-详情请见[CHANGELOG](CHANGELOG.md)
+详情请见[CHANGELOG](docs/CHANGELOG.md)
 
 ### 贡献者
 
