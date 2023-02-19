@@ -8,8 +8,8 @@
 
 fofa_account=[
     {
-        "fofa_username" : "2585614464@qq.com",
-        "fofa_password" : "829312123P@nYi"
+        "fofa_username" : "test@test.com",
+        "fofa_password" : "test123"
     },
 ]
 
