@@ -112,8 +112,6 @@ fofa_account=[
 </table>
 </details>
 
-详情请见[CHANGELOG](docs/CHANGELOG.md)
-
 ### 贡献者
 
 <!-- readme: collaborators,contributors -start -->
