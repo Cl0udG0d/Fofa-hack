@@ -81,6 +81,39 @@ fofa_account=[
 
 详情请见[CHANGELOG](docs/CHANGELOG.md)
 
+### TODO List
+<details>
+<summary>TODO</summary>
+<table >
+  <tr>
+    <td>名称</td>
+    <td>简介</td>
+  </tr>
+  <tr>
+    <td>支持输入参数</td>
+    <td>支持 --proxy这种输入参数的形式运行脚本</td>
+  </tr>
+<tr>
+    <td>支持代理池</td>
+    <td>使用代理池的方式防止FOFA断开连接</td>
+  </tr>
+<tr>
+    <td>支持多种导出格式</td>
+    <td>支持json、txt、excel等方式导出结果</td>
+  </tr>
+<tr>
+    <td>支持多种爬取内容</td>
+    <td>添加支持title、status、headers等内容</td>
+  </tr>
+<tr>
+    <td>增加程序稳定性</td>
+    <td>防止程序因为各种情况运行失败或者被ban的情况</td>
+  </tr>
+</table>
+</details>
+
+详情请见[CHANGELOG](docs/CHANGELOG.md)
+
 ### 贡献者
 
 <!-- readme: collaborators,contributors -start -->
@@ -104,6 +137,11 @@ fofa_account=[
 <!-- readme: collaborators,contributors -end -->
 
 ### END 
+
+网络乞丐在线乞讨
+<div>
+    <img  alt="PNG" src="./images/sponsor.png"  width="280px" />
+</div>
 
 建了一个微信的安全交流群，欢迎添加我微信备注`进群`，一起来聊天吹水哇，以及一个会发布安全相关内容的公众号，欢迎关注 :)
 

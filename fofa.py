@@ -257,21 +257,21 @@ class Fofa:
     def fofa_spider(self, search_key, searchbs64, headers_use):
         global host_list
 
-        start_page = input("[*] 请输入开始页码: ")
+        # start_page = input("[*] 请输入开始页码: ")
         want_page = input("[*] 请输入终止页码: ")
         if int(want_page) <= 5 and int(want_page) > 0:
             stop_page = want_page
-            for page in range(int(start_page), int(stop_page) + 1):
+            for page in range(1, int(stop_page) + 1):
                 self.fofa_spider_page(page, search_key, searchbs64, headers_use, turn_num=0)
         elif int(want_page) > 5:
             if int(want_page) % 5 == 0:
-                start_page = start_page
+                # start_page = start_page
                 stop_page = 5
                 for turn_num in range(int(int(want_page) / 5)):
                     global timestamp_list
                     # print('[*] 第 ' + str(turn_num + 1) + ' turn抓取')
                     timestamp_list.clear()
-                    for page in range(int(start_page), int(stop_page) + 1):
+                    for page in range(1, int(stop_page) + 1):
                         self.fofa_spider_page(page, search_key, searchbs64, headers_use, turn_num)
 
                     search_key_modify, searchbs64_modify = self.modify_search_url(search_key)
@@ -281,11 +281,11 @@ class Fofa:
                 turn_sum = int(want_page) // 5
                 page_last = int(want_page) % 5
                 for turn_num in range(int(want_page) // 5):
-                    start_page = start_page
+                    # start_page = start_page
                     stop_page = 5
                     # print('[*] 第 ' + str(turn_num + 1) + ' turn抓取')
                     timestamp_list.clear()
-                    for page in range(int(start_page), int(stop_page) + 1):
+                    for page in range(1, int(stop_page) + 1):
                         self.fofa_spider_page(page, search_key, searchbs64, headers_use, turn_num)
 
                     search_key_modify, searchbs64_modify = self.modify_search_url(search_key)

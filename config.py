@@ -8,21 +8,19 @@
 
 fofa_account=[
     {
-        "fofa_username" : "test@email.com",
-        "fofa_password" : "12345678"
+        "fofa_username" : "2585614464@qq.com",
+        "fofa_password" : "829312123P@nYi"
     },
 ]
 
 
 SearchKEY = ""
-StopPage = ""
-StartPage = ""
 TimeSleep = 5
 
 
 
 # Fofa-hack 版本号
-VERSION_NUM="1.2.5"
+VERSION_NUM="1.2.6"
 # 登录最大重试次数
 MAX_LOGIN_RETRY_NUM=3
 # 页面URL获取最大重试次数
