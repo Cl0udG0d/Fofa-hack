@@ -73,6 +73,10 @@ fofa_account=[
 
 输入 搜索关键字 `app="ThinkPHP"`，等待秒数为5的情况下，下载1-50页数据经过测试无问题，经过自动去重之后剩余497条
 
+### 赞赏列表
+
+详情请见[SPONSOR](docs/SPONSOR.md)
+
 ### 使用问题集合
 
 详情请见[QUESTIONS](docs/QUESTIONS.md)
