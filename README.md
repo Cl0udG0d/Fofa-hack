@@ -2,11 +2,11 @@
 
 ### 简介
 
-基于[fofa_spider-1.0.5](https://github.com/FightingForWhat/fofa_spider-1.0.5) - 非付费会员，fofa数据无限抓取版 的梅开二度，配置普通用户账号密码即可使用
+非付费会员，fofa数据无限抓取版 , 配置FoFa普通用户账号密码即可使用
 
-截止至 `2023-2-16` 日 ，亲测可用，如果项目不行了欢迎联系我
+截止至 `2023-2-21` 日 ，亲测可用，如果项目不行了欢迎联系我
 
-### 使用
+### 安装
 
 ```shell
 git clone https://github.com/Cl0udG0d/Fofa-hack
@@ -18,6 +18,14 @@ git clone https://github.com/Cl0udG0d/Fofa-hack
 pip install -r requirements.txt
 ```
 
+### 配置
+有三种方式配置登录账号
+
+#### 1.运行传值
+传入`--username` 和 `--password` 参数
+> Fofa-hack>python fofa.py --username fofa_hack_test --password Test123
+
+#### 2.配置config.py
 配置`config.py`中的`fofa_account`，支持多账号
 ```json
 fofa_account=[
@@ -34,40 +42,52 @@ fofa_account=[
 
 也就是你的FOFA账号密码
 
-> 因为有朋友说ddddocr这个库在不同版本的操作系统上会有各种运行的错误,为了避免完全用不了Fofa-hack
-> 
-> 现在将老版本的方式重新给出,如果账号密码登录不了,或者单纯不想用账号密码登录的时候,可以直接复制cookie登录
+#### 3.配置fofa_cookie.txt文件
+将下图中的cookie直接复制到`fofa_cookie.txt`文件里,这样在启动的时候Fofa-hack就会识别到并且直接使用cookie爬取了
 
-[ddddocr出现问题跳转此处查看](docs/QUESTIONS.md#ddddocr错误解决)
+注意不是`Authorization`
 
-运行`fofa.py`
+`cookie`的位置如下
+  ![](https://github.com/Cl0udG0d/Fofa-script/blob/master/images/2.png)
 
-> python3 fofa.py
+### 运行
+
+运行`fofa.py` , `-k`或`--keyword` 参数传入搜索关键字
+
+更多参数查看 `--help`
+
+> python3 fofa.py --help
+
+```shell
+Fofa-hack>python fofa.py --help                                         
+
+         ____  ____  ____  ____          
+        | ===|/ () \| ===|/ () \         
+        |__|  \____/|__| /__/\__\        
+             _   _   ____   ____  __  __ 
+            | |_| | / () \ / (__`|  |/  /
+            |_| |_|/__/\__\\____)|__|\__\ V1.2.7
+
+usage: fofa.py [-h] [--timesleep TIMESLEEP] [--keyword KEYWORD]
+               [--username USERNAME] [--password PASSWORD] [--endpage ENDPAGE]
+
+Fofa-hack v1.2.7 使用说明
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --timesleep TIMESLEEP, -t TIMESLEEP
+                        爬取每一页等待秒数,防止IP被Ban,默认为3
+  --keyword KEYWORD, -k KEYWORD
+                        fofa搜索关键字,默认为test
+  --username USERNAME, -u USERNAME
+                        fofa用户名
+  --password PASSWORD, -p PASSWORD
+                        fofa密码
+  --endpage ENDPAGE, -e ENDPAGE
+                        爬取结束页码
+```
 
 爬取的结果会存储到`md5(搜索关键字)_运行时间戳.txt`文件中
-
-### 参数
-<details>
-<summary>config参数详情</summary>
-<table >
-  <tr>
-    <td>参数值</td>
-    <td>释义</td>
-  </tr>
-  <tr>
-    <td>VERSION_NUM</td>
-    <td>Fofa-hack 版本号</td>
-  </tr>
-<tr>
-    <td>MAX_LOGIN_RETRY_NUM</td>
-    <td>登录最大重试次数</td>
-  </tr>
-<tr>
-    <td>MAX_MATCH_RETRY_NUM</td>
-    <td>页面URL获取最大重试次数</td>
-  </tr>
-</table>
-</details>
 
 ### 测试
 
@@ -92,10 +112,6 @@ fofa_account=[
   <tr>
     <td>名称</td>
     <td>简介</td>
-  </tr>
-  <tr>
-    <td>支持输入参数</td>
-    <td>支持 --proxy这种输入参数的形式运行脚本</td>
   </tr>
 <tr>
     <td>支持代理池</td>

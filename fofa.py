@@ -15,6 +15,7 @@ from urllib.parse import quote
 
 import fofa_useragent
 import unit
+import argparse
 
 host_list = []
 timestamp_list = []
@@ -38,6 +39,7 @@ class Fofa:
     headers_use=""
 
     def __init__(self):
+        self.want_page = None
         self.session = requests.session()
         print('''
          ____  ____  ____  ____      
@@ -68,7 +70,7 @@ class Fofa:
         :param fofa_password:
         :return:
         """
-        print('尝试登录')
+        print('[*] 尝试登录')
         TEMP_RETRY_NUM=0
         while TEMP_RETRY_NUM<config.MAX_LOGIN_RETRY_NUM:
             try:
@@ -93,13 +95,17 @@ class Fofa:
                 user_login_api = 'https://i.nosec.org/login'
                 res_login = self.session.post(url=user_login_api, data=data)
                 if '登录验证码错误' in res_login.text:
-                    print("验证码错误，重新运行脚本")
+                    print("[-] 验证码错误，重新运行脚本")
                     raise
                 elif '用户名或密码错误' in res_login.text:
-                    print('用户名或密码错误,请检查账户名和密码后重试')
+                    print('[-] 用户名或密码错误,请检查账户名和密码后重试')
+                    raise
+                elif '账号未激活' in res_login.text:
+                    print('[-] 账号未激活，继续操作前请先确认激活您的帐号')
                     raise
                 else:
-                    print("登录成功")
+                    # print(res_login.text)
+                    print("[*] 登录成功")
                     tempstr = ''
                     for key, value in self.session.cookies.get_dict().items():
                         tempstr += key + "=" + value + "; "
@@ -108,7 +114,7 @@ class Fofa:
                         f.write(tempstr)
                     return self.session.cookies, 1
             except Exception as e:
-                print(e)
+                print("[-] error:{}".format(e))
                 TEMP_RETRY_NUM+=1
                 print('[-] 第{}次尝试登录'.format(TEMP_RETRY_NUM))
                 pass
@@ -145,10 +151,33 @@ class Fofa:
 
 
     def init(self):
-        config.TimeSleep = int(input('[*] 请输入爬取每一页等待的秒数，防止IP被ban\n'))
-        config.SearchKEY = input('[*] 请输入fofa搜索关键字 \n')
+        parser = argparse.ArgumentParser(description='Fofa-hack v{} 使用说明'.format(config.VERSION_NUM))
+        parser.add_argument('--timesleep', '-t', help='爬取每一页等待秒数,防止IP被Ban,默认为3',default=3)
+        parser.add_argument('--keyword', '-k', help='fofa搜索关键字,默认为test', default="test")
+        parser.add_argument('--username', '-u', help='fofa用户名')
+        parser.add_argument('--password', '-p', help='fofa密码')
+        parser.add_argument('--endpage', '-e', help='爬取结束页码')
+        args = parser.parse_args()
+        config.TimeSleep = int(args.timesleep)
+        print("[*] 爬取延时: {}s".format(config.TimeSleep))
+        config.SearchKEY = args.keyword
+        print("[*] 爬取关键字: {}".format(config.SearchKEY))
+        if args.username and args.password:
+            config.fofa_account[0]["fofa_username"]=args.username
+            config.fofa_account[0]["fofa_password"] = args.password
+            print("[*] 使用账号: {}".format(args.username))
+        elif args.username and not args.password:
+            print("[-] 请输入 [ {} ] 账号对应密码".format(args.username))
+            exit(0)
+        elif args.password and not args.username:
+            print("[-] 请输入账号")
+            exit(0)
+        if args.endpage:
+            self.want_page=args.endpage
+            print("[*] 爬取页码数: {}".format(self.want_page))
         global filename
         filename = "{}_{}.txt".format(unit.md5(config.SearchKEY), int(time.time()))
+        print("[*] 存储文件名: {}".format(filename))
         return
 
     def get_page_num(self, search_key,cookie):
@@ -161,7 +190,7 @@ class Fofa:
         try:
             pagenum = tree.xpath('//li[@class="number"]/text()')[-1]
         except Exception as e:
-            print(e)
+            print("[-] error:{}".format(e))
             pagenum = '0'
             pass
         print("[*] 存在页码:" + pagenum)
@@ -197,7 +226,7 @@ class Fofa:
                     tree = etree.HTML(rep.text)
                     urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
                     timelist = self.getTimeList(rep.text)
-                    print(urllist)
+                    print("[*] 当页数据:"+str(urllist))
 
                     for i in urllist:
                         with open(filename, 'a+') as f:
@@ -208,7 +237,7 @@ class Fofa:
                     time.sleep(config.TimeSleep)
                     return
                 except Exception as e:
-                    print(e)
+                    print("[-] error:{}".format(e))
                     TEMP_RETRY_NUM+=1
                     print('[-] 第{}次尝试获取页面URL'.format(TEMP_RETRY_NUM))
                     pass
@@ -238,7 +267,7 @@ class Fofa:
                     cookie=self.cookie_info()
                     return fofa_useragent.getFofaPageNumHeaders(cookie)
             except Exception as e:
-                print(e)
+                print("[-] error:{}".format(e))
                 ACCOUNT_INDEX += 1
                 if ACCOUNT_INDEX < len(config.fofa_account):
                     print("[*] 切换账号:{}".format(config.fofa_account[ACCOUNT_INDEX]["fofa_username"]))
@@ -258,16 +287,20 @@ class Fofa:
         global host_list
 
         # start_page = input("[*] 请输入开始页码: ")
-        want_page = input("[*] 请输入终止页码: ")
-        if int(want_page) <= 5 and int(want_page) > 0:
-            stop_page = want_page
+        if not self.want_page:
+            self.want_page = input("[*] 请输入终止页码: ")
+        if self.want_page==None:
+            print("[+] 终止页码设置为默认值 20")
+            self.want_page=20
+        if int(self.want_page) <= 5 and int(self.want_page) > 0:
+            stop_page = self.want_page
             for page in range(1, int(stop_page) + 1):
                 self.fofa_spider_page(page, search_key, searchbs64, headers_use, turn_num=0)
-        elif int(want_page) > 5:
-            if int(want_page) % 5 == 0:
+        elif int(self.want_page) > 5:
+            if int(self.want_page) % 5 == 0:
                 # start_page = start_page
                 stop_page = 5
-                for turn_num in range(int(int(want_page) / 5)):
+                for turn_num in range(int(int(self.want_page) / 5)):
                     global timestamp_list
                     # print('[*] 第 ' + str(turn_num + 1) + ' turn抓取')
                     timestamp_list.clear()
@@ -278,9 +311,9 @@ class Fofa:
                     search_key = search_key_modify
                     searchbs64 = searchbs64_modify
             else:
-                turn_sum = int(want_page) // 5
-                page_last = int(want_page) % 5
-                for turn_num in range(int(want_page) // 5):
+                turn_sum = int(self.want_page) // 5
+                page_last = int(self.want_page) % 5
+                for turn_num in range(int(self.want_page) // 5):
                     # start_page = start_page
                     stop_page = 5
                     # print('[*] 第 ' + str(turn_num + 1) + ' turn抓取')
@@ -326,16 +359,17 @@ class Fofa:
 
 
     def run(self, cookie):
-        self.init()
+
         searchbs64, self.headers_use = self.get_page_num(config.SearchKEY,cookie)
         self.fofa_spider(config.SearchKEY, searchbs64, self.headers_use)
-        print('[+] 抓取结束，共抓取数据 ' + str(len(host_list)) + ' 条\n')
+        print('[*] 抓取结束，共抓取数据 ' + str(len(host_list)) + ' 条\n')
 
     def main(self):
-        print('检测是否登录')
+        self.init()
+        print('[*] 账户检测')
         urllist, cookie = self.check_login(self.cookie_info())
         if urllist == 0:
-            print("未登录")
+            print("[-] 未登录")
             global ACCOUNT_INDEX
             while ACCOUNT_INDEX < len(config.fofa_account):
                 username=config.fofa_account[ACCOUNT_INDEX]["fofa_username"]
@@ -348,7 +382,7 @@ class Fofa:
                         print('[*] 运行结束')
                         exit(0)
                 except Exception as e:
-                    print(e)
+                    print("[-] error:{}".format(e))
                     ACCOUNT_INDEX += 1
                     if ACCOUNT_INDEX < len(config.fofa_account):
                         print("[*] 切换账号:{}".format(config.fofa_account[ACCOUNT_INDEX]["fofa_username"]))
@@ -358,7 +392,7 @@ class Fofa:
             print("[-] 账号无法登录,程序退出")
             exit(0)
         else:
-            print('已经登录')
+            print('[*] 已登录')
             self.run(cookie)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
