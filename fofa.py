@@ -153,7 +153,7 @@ class Fofa:
     def init(self):
         parser = argparse.ArgumentParser(description='Fofa-hack v{} 使用说明'.format(config.VERSION_NUM))
         parser.add_argument('--timesleep', '-t', help='爬取每一页等待秒数,防止IP被Ban,默认为3',default=3)
-        parser.add_argument('--keyword', '-k', help='fofa搜索关键字,默认为test', default="test")
+        parser.add_argument('--keyword', '-k', help='fofa搜索关键字,默认为test', required=True)
         parser.add_argument('--username', '-u', help='fofa用户名')
         parser.add_argument('--password', '-p', help='fofa密码')
         parser.add_argument('--endpage', '-e', help='爬取结束页码')
