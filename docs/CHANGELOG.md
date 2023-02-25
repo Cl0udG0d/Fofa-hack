@@ -1,5 +1,14 @@
 # CHANGELOG 代码变更记录
 
+### 1.3.0
+
++ `README`添加示例运行参考
++ 新增工具文件夹`tookit`,创建`levelData`等级模板文件
++ 新增 `--level`参数,内容明细如下
+  + level=1 [ url ]
+  + level=2 [ url , port , title , ip ]
+  + level=3 [ url , port , title , ip , city , asn , organization , server , rep ]
+
 ### 1.2.8
 
 + 修改keyword为必须参数

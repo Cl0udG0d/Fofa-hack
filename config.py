@@ -8,8 +8,8 @@
 
 fofa_account=[
     {
-        "fofa_username" : "test@test.com",
-        "fofa_password" : "test123"
+        "fofa_username" : "fofa_hack_test",
+        "fofa_password" : "Test123456"
     },
 ]
 
@@ -20,7 +20,7 @@ TimeSleep = 5
 
 
 # Fofa-hack 版本号
-VERSION_NUM="1.2.8"
+VERSION_NUM="1.3.0"
 # 登录最大重试次数
 MAX_LOGIN_RETRY_NUM=3
 # 页面URL获取最大重试次数

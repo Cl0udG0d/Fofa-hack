@@ -6,16 +6,16 @@
 # @Github: https://github.com/Cl0udG0d
 from datetime import datetime
 from datetime import timedelta
-import hashlib
 import base64
 import time
 from urllib.parse import quote_plus
 import config
-from urllib.parse import quote
 
 import fofa_useragent
-import unit
+from tookit import unit, levelData
 import argparse
+
+from tookit.levelData import LevelData
 
 host_list = []
 timestamp_list = []
@@ -37,6 +37,7 @@ from lxml import etree
 
 class Fofa:
     headers_use=""
+    level=0
 
     def __init__(self):
         self.want_page = None
@@ -157,6 +158,7 @@ class Fofa:
         parser.add_argument('--username', '-u', help='fofa用户名')
         parser.add_argument('--password', '-p', help='fofa密码')
         parser.add_argument('--endpage', '-e', help='爬取结束页码')
+        parser.add_argument('--level', '-l', help='爬取等级: 1-3 ,数字越大内容越详细,默认为 1')
         args = parser.parse_args()
         config.TimeSleep = int(args.timesleep)
         print("[*] 爬取延时: {}s".format(config.TimeSleep))
@@ -175,6 +177,8 @@ class Fofa:
         if args.endpage:
             self.want_page=args.endpage
             print("[*] 爬取页码数: {}".format(self.want_page))
+        self.level=args.level if args.level else "1"
+        self.levelData=LevelData(self.level)
         global filename
         filename = "{}_{}.txt".format(unit.md5(config.SearchKEY), int(time.time()))
         print("[*] 存储文件名: {}".format(filename))
@@ -223,15 +227,17 @@ class Fofa:
                         page) + "&page_size=10"
                     # print(f'request_url:{request_url}')
                     rep = requests.get(request_url, headers=self.headers_use)
-                    tree = etree.HTML(rep.text)
-                    urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
-                    timelist = self.getTimeList(rep.text)
-                    print("[*] 当页数据:"+str(urllist))
+                    self.levelData.startSpider(rep)
 
-                    for i in urllist:
-                        with open(filename, 'a+') as f:
-                            f.write(i + "\n")
-                    host_list.extend(urllist)
+                    # tree = etree.HTML(rep.text)
+                    # urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
+                    timelist = self.getTimeList(rep.text)
+                    print("[*] 当页数据:"+str(self.levelData.formatData))
+
+                    for i in self.levelData.formatData:
+                        with open(filename, 'a+', encoding="utf-8") as f:
+                            f.write(str(i) + "\n")
+                    host_list.extend(self.levelData.formatData)
                     timestamp_list.extend(timelist)
 
                     time.sleep(config.TimeSleep)
@@ -266,6 +272,7 @@ class Fofa:
                 if self.fofa_login(username, password)[1] == 1:
                     cookie=self.cookie_info()
                     return fofa_useragent.getFofaPageNumHeaders(cookie)
+                raise
             except Exception as e:
                 print("[-] error:{}".format(e))
                 ACCOUNT_INDEX += 1

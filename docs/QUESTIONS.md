@@ -2,7 +2,14 @@
 
 > 罗列可能使用过程中遇到的问题
 
-### ERROR: Could not build wheels for opencv-python-headless, which is required to install pyproject.toml-based projects
+### FOFA综合语法使用
+
+> python fofa.py --keyword thinkphp && country="CN"
+
+此时只会识别到 thinkphp,多个关键字的时候需要使用单引号包裹
+> python fofa.py --keyword 'thinkphp && country="CN"'
+
+### opencv-python错误
 
 解决方法
 

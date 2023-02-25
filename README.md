@@ -4,8 +4,10 @@
 
 非付费会员，fofa数据无限抓取版 , 配置FoFa普通用户账号密码即可使用
 
-截止至 `2023-2-21` 日 ，亲测可用，如果项目不行了欢迎联系我
+截止至 `2023-2-25` 日 ，亲测可用，如果项目不行了欢迎联系我
 
+使用示例
+> python fofa.py --username fofa_hack_test --password Test123456 -k app="ThinkPHP" -t 5
 ### 安装
 
 ```shell
@@ -61,17 +63,18 @@ fofa_account=[
 ```shell
 Fofa-hack>python fofa.py --help                                         
 
-         ____  ____  ____  ____          
-        | ===|/ () \| ===|/ () \         
-        |__|  \____/|__| /__/\__\        
-             _   _   ____   ____  __  __ 
-            | |_| | / () \ / (__`|  |/  /
-            |_| |_|/__/\__\\____)|__|\__\ V1.2.7
-
-usage: fofa.py [-h] [--timesleep TIMESLEEP] [--keyword KEYWORD]
+         ____  ____  ____  ____                 
+        | ===|/ () \| ===|/ () \                
+        |__|  \____/|__| /__/\__\               
+             _   _   ____   ____  __  __        
+            | |_| | / () \ / (__`|  |/  /       
+            |_| |_|/__/\__\\____)|__|\__\ V1.3.0
+                                                
+usage: fofa.py [-h] [--timesleep TIMESLEEP] --keyword KEYWORD                 
                [--username USERNAME] [--password PASSWORD] [--endpage ENDPAGE]
+               [--level LEVEL]                                                
 
-Fofa-hack v1.2.7 使用说明
+Fofa-hack v1.3.0 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -85,6 +88,8 @@ optional arguments:
                         fofa密码
   --endpage ENDPAGE, -e ENDPAGE
                         爬取结束页码
+  --level LEVEL, -l LEVEL
+                        爬取等级: 1-3 ,数字越大内容越详细,默认为 1
 ```
 
 爬取的结果会存储到`md5(搜索关键字)_运行时间戳.txt`文件中
@@ -100,6 +105,10 @@ optional arguments:
 ### 使用问题集合
 
 详情请见[QUESTIONS](docs/QUESTIONS.md)
+
++ [ERROR: Could not build wheels for opencv-python-headless, which is required to install pyproject.toml-based projects](docs/QUESTIONS.md#opencv-python错误)
++ [ddddocr错误解决](docs/QUESTIONS.md#ddddocr错误解决)
++ [FOFA综合语法使用](docs/QUESTIONS.md#FOFA综合语法使用)
 
 ### 更新日志
 
@@ -124,6 +133,10 @@ optional arguments:
 <tr>
     <td>支持多种爬取内容</td>
     <td>添加支持title、status、headers等内容</td>
+  </tr>
+<tr>
+    <td>编写图形化界面</td>
+    <td>生成可执行文件运行</td>
   </tr>
 <tr>
     <td>增加程序稳定性</td>
