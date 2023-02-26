@@ -66,7 +66,6 @@ class LevelData:
         self.tree = etree.HTML(rep.text)
         self.selectSpiderRule()
 
-        return self.outputData()
 
     def selectSpiderRule(self):
         if self.level == self.PRIMARYDATA:
@@ -154,35 +153,5 @@ class LevelData:
             tempDic["rep"] = rep[0].strip()
             self.formatData.append(tempDic)
 
-    def outputData(self):
-        """
-        返回当页的爬取结果
-        :return:
-        """
-        return
 
-    # def formatDataFunc(self, *args, **kwargs):
-    #     """
-    #     level 1 :
-    #         url
-    #     level 2:
-    #         url status
-    #     level 3:
-    #         url status
-    #     :param args:
-    #     :param kwargs:
-    #     """
-    #     list1 = ["https://www.baidu.com", "https://www.sina.com"]
-    #     list2 = ["200", "302"]
-    #     list3 = ["nginx", "apache"]
-    #     # print(int(time.time()))
-    #     urllength = len(args[0])
-    #     length = len(args)
-    #
-    #     for i in range(urllength):
-    #         tempDic = {}
-    #         tempDic["url"] = args[0][i]
-    #
-    #         self.formatData.append(tempDic)
-    #
-    #     print("[*] 当页数据:" + self.formatData)
+

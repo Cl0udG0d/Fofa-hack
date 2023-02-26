@@ -16,6 +16,7 @@ from tookit import unit, levelData
 import argparse
 
 from tookit.levelData import LevelData
+from tookit.outputData import OutputData
 
 host_list = []
 timestamp_list = []
@@ -159,6 +160,7 @@ class Fofa:
         parser.add_argument('--password', '-p', help='fofa密码')
         parser.add_argument('--endpage', '-e', help='爬取结束页码')
         parser.add_argument('--level', '-l', help='爬取等级: 1-3 ,数字越大内容越详细,默认为 1')
+        parser.add_argument('--output', '-o', help='输出格式:txt、json、csv,默认为txt')
         args = parser.parse_args()
         config.TimeSleep = int(args.timesleep)
         print("[*] 爬取延时: {}s".format(config.TimeSleep))
@@ -179,9 +181,16 @@ class Fofa:
             print("[*] 爬取页码数: {}".format(self.want_page))
         self.level=args.level if args.level else "1"
         self.levelData=LevelData(self.level)
+
+
+        self.output = args.output if args.output else "txt"
+        print("[*] 输出格式为: {}".format(self.output))
+
+
         global filename
-        filename = "{}_{}.txt".format(unit.md5(config.SearchKEY), int(time.time()))
+        filename = "{}_{}.{}".format(unit.md5(config.SearchKEY), int(time.time()),self.output)
         print("[*] 存储文件名: {}".format(filename))
+        self.outputData = OutputData(filename, pattern=self.output)
         return
 
     def get_page_num(self, search_key,cookie):
