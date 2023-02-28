@@ -11,8 +11,7 @@ import time
 from urllib.parse import quote_plus
 import config
 
-import fofa_useragent
-from tookit import unit, levelData
+from tookit import unit, fofa_useragent
 import argparse
 
 from tookit.levelData import LevelData
