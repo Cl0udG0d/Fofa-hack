@@ -8,25 +8,19 @@ import datetime
 import json
 import time
 
+import requests
+from lxml import etree
 
-def outputJson(data):
+def cleanData(urllist):
+    newlist=list()
+    for url in urllist:
+        newlist.append(url.strip())
+    return newlist
 
-    with open("test.json", 'w', encoding="utf-8") as f:
-        dic={"1":"2"}
-        data.append(dic)
-        json.dump(data, f)
+resp = requests.get(url='https://fofa.info/result?qbase64=MQ==&page_size=10')
+tree = etree.HTML(resp.text)
+urllist1 = tree.xpath('//span[@class="hsxa-host"]/text()')
 
-def readAllJsonData():
-    with open("test.json", 'r',encoding="utf-8") as load_f:
-        load_dict = json.load(load_f)
-        print(type(load_dict))
-        print(load_dict)
-    return
+urllist2 = tree.xpath('//span[@class="hsxa-host"]/a/@href')
 
-data=[
-    {"2":"3"}
-]
-
-outputJson(data)
-
-readAllJsonData()
+print(cleanData(urllist1)+urllist2)

@@ -4,7 +4,6 @@
    Author :       Cl0udG0d
    date :         2023/2/12
 """
-import config
 import random
 
 
@@ -68,7 +67,7 @@ def getFofaLoginHeaders():
     }
     return headers
 
-def getCheckHeaders(cookies):
+def getCheckHeaders():
     """
     该headers检测cookies是否有效
     :param cookies:
@@ -85,15 +84,13 @@ def getCheckHeaders(cookies):
         'Referer': 'https://fofa.info/',
         'Connection': 'keep-alive',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-        'Cookie': cookies,
     }
     return check_headers
 
 
-def getFofaPageNumHeaders(cookie):
+def getFofaPageNumHeaders():
     headers_use = {
         'User-Agent': getFakeUserAgent(),
         'Accept': 'application/json, text/plain, */*',
-        "cookie": cookie.encode("utf-8").decode("latin1")
     }
     return headers_use
