@@ -2,12 +2,10 @@
 
 ### 简介
 
-非付费会员，fofa数据无限抓取版 , 配置FoFa普通用户账号密码即可使用
-
-在当前的Fofa机制下,普通用户本月最多只能获取3000条数据,等待`Fofa-hack`的`1.4.0`版本更新吧
+非付费会员,fofa数据无限抓取版,一整个返璞归真
 
 使用示例
-> python fofa.py --username fofa_hack_test --password Test123456 -k app="ThinkPHP" -t 5
+> python fofa.py --keyword thinkphp --endcount 100
 ### 安装
 
 ```shell
@@ -21,36 +19,8 @@ pip install -r requirements.txt
 ```
 
 ### 配置
-有三种方式配置登录账号
 
-#### 1.运行传值
-传入`--username` 和 `--password` 参数
-> Fofa-hack>python fofa.py --username fofa_hack_test --password Test123
-
-#### 2.配置config.py
-配置`config.py`中的`fofa_account`，支持多账号
-```json
-fofa_account=[
-    {
-        "fofa_username" : "test@email.com",
-        "fofa_password" : "12345678"
-    },
-  {
-        "fofa_username" : "test1@email.com",
-        "fofa_password" : "12345678"
-    }
-]
-```
-
-也就是你的FOFA账号密码
-
-#### 3.配置fofa_cookie.txt文件
-将下图中的cookie直接复制到`fofa_cookie.txt`文件里,这样在启动的时候Fofa-hack就会识别到并且直接使用cookie爬取了
-
-注意不是`Authorization`
-
-`cookie`的位置如下
-  ![](https://github.com/Cl0udG0d/Fofa-script/blob/master/images/2.png)
+无需账号直接使用
 
 ### 运行
 
@@ -61,20 +31,19 @@ fofa_account=[
 > python3 fofa.py --help
 
 ```shell
-Fofa-hack>python fofa.py --help                                         
+Fofa-hack>python fofa.py --help
 
          ____  ____  ____  ____                 
         | ===|/ () \| ===|/ () \                
         |__|  \____/|__| /__/\__\               
              _   _   ____   ____  __  __        
             | |_| | / () \ / (__`|  |/  /       
-            |_| |_|/__/\__\\____)|__|\__\ V1.3.0
+            |_| |_|/__/\__\\____)|__|\__\ V2.0.0
                                                 
-usage: fofa.py [-h] [--timesleep TIMESLEEP] --keyword KEYWORD                 
-               [--username USERNAME] [--password PASSWORD] [--endpage ENDPAGE]
-               [--level LEVEL]                                                
-
-Fofa-hack v1.3.0 使用说明
+usage: fofa.py [-h] [--timesleep TIMESLEEP] --keyword KEYWORD         
+               [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT]
+                                                                      
+Fofa-hack v2.0.0 使用说明                                             
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -82,21 +51,23 @@ optional arguments:
                         爬取每一页等待秒数,防止IP被Ban,默认为3
   --keyword KEYWORD, -k KEYWORD
                         fofa搜索关键字,默认为test
-  --username USERNAME, -u USERNAME
-                        fofa用户名
-  --password PASSWORD, -p PASSWORD
-                        fofa密码
-  --endpage ENDPAGE, -e ENDPAGE
-                        爬取结束页码
+  --endcount ENDCOUNT, -e ENDCOUNT
+                        爬取结束数量
   --level LEVEL, -l LEVEL
                         爬取等级: 1-3 ,数字越大内容越详细,默认为 1
+  --output OUTPUT, -o OUTPUT
+                        输出格式:txt、json、csv,默认为txt
 ```
 
 爬取的结果会存储到`md5(搜索关键字)_运行时间戳.txt`文件中
 
 ### 测试
 
-输入 搜索关键字 `app="ThinkPHP"`，等待秒数为5的情况下，下载1-50页数据经过测试无问题，经过自动去重之后剩余497条
+使用命令 
+
+> python fofa.py --keyword thinkphp --endcount 100
+
+爬取一百条数据轻轻松松
 
 ### 赞赏列表
 
@@ -139,8 +110,8 @@ optional arguments:
     <td>防止程序因为各种情况运行失败或者被ban的情况</td>
   </tr>
 <tr>
-    <td>内容去重</td>
-    <td>去除重复的url信息</td>
+    <td>持续突破</td>
+    <td>使用高级语法提高搜索准确率</td>
   </tr>
 </table>
 </details>
