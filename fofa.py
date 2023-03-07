@@ -17,7 +17,6 @@ import argparse
 from tookit.levelData import LevelData
 from tookit.outputData import OutputData
 
-filename=""
 
 
 
@@ -41,6 +40,8 @@ class Fofa:
         self.timestamp_set = set()
         self.oldLength = -1
         self.endcount=0
+        self.filename = ""
+
         print('''
          ____  ____  ____  ____      
         | ===|/ () \| ===|/ () \     
@@ -60,6 +61,14 @@ class Fofa:
         }
         return headers_use
 
+    def logoutInitMsg(self):
+        print('''
+        
+        '''
+        )
+        return
+
+
 
     def init(self):
         parser = argparse.ArgumentParser(description='Fofa-hack v{} 使用说明'.format(config.VERSION_NUM))
@@ -68,6 +77,7 @@ class Fofa:
         parser.add_argument('--endcount', '-e', help='爬取结束数量')
         parser.add_argument('--level', '-l', help='爬取等级: 1-3 ,数字越大内容越详细,默认为 1')
         parser.add_argument('--output', '-o', help='输出格式:txt、json、csv,默认为txt')
+        parser.add_argument('--fuzz', '-f', help='关键字fuzz参数,增加内容获取粒度',action='store_true')
         args = parser.parse_args()
         config.TimeSleep = int(args.timesleep)
         print("[*] 爬取延时: {}s".format(config.TimeSleep))
@@ -81,15 +91,16 @@ class Fofa:
         self.level=args.level if args.level else "1"
         self.levelData=LevelData(self.level)
 
+        self.fuzz=args.fuzz
+        print("[*] 是否FUZZ: {}".format(self.fuzz))
 
         self.output = args.output if args.output else "txt"
         print("[*] 输出格式为: {}".format(self.output))
 
 
-        global filename
-        filename = "{}_{}.{}".format(unit.md5(config.SearchKEY), int(time.time()),self.output)
-        print("[*] 存储文件名: {}".format(filename))
-        self.outputData = OutputData(filename, pattern=self.output)
+        self.filename = "{}_{}.{}".format(unit.md5(config.SearchKEY), int(time.time()),self.output)
+        print("[*] 存储文件名: {}".format(self.filename))
+        self.outputData = OutputData(self.filename, pattern=self.output)
         return
 
     def get_count_num(self, search_key):
@@ -148,7 +159,7 @@ class Fofa:
                 print("[*] 已爬取条数 [{}]: ".format(len(self.host_set))+str(self.levelData.formatData))
 
                 for i in self.levelData.formatData:
-                    with open(filename, 'a+', encoding="utf-8") as f:
+                    with open(self.filename, 'a+', encoding="utf-8") as f:
                         f.write(str(i) + "\n")
                 for url in self.levelData.formatData:
                     self.host_set.add(url)
