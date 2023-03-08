@@ -1,8 +1,9 @@
 # CHANGELOG 代码变更记录
 
 ### 2.0.1
-+ 修改filename为类内部字段
-+ 
++ 修改filename,timeSleep等为类内部变量
++ 新增logoutInitMsg方法输出初始化信息
++ 新增fofa_fuzz_spider方法
 
 ### 2.0.0
 

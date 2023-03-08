@@ -10,29 +10,16 @@ import base64
 import time
 from urllib.parse import quote_plus
 import config
-
 from tookit import unit, fofa_useragent
 import argparse
-
 from tookit.levelData import LevelData
 from tookit.outputData import OutputData
-
-
-
-
-
-
-
-
 import re, requests
-
 from lxml import etree
 
 
 
 class Fofa:
-
-
     def __init__(self):
         self.headers_use = ""
         self.level = 0
@@ -51,8 +38,6 @@ class Fofa:
             |_| |_|/__/\__\\\\____)|__|\__\\ V{}
         '''.format(config.VERSION_NUM))
 
-
-
     def headers(self,cookie):
         headers_use = {
             'User-Agent': fofa_useragent.getFakeUserAgent(),
@@ -62,13 +47,15 @@ class Fofa:
         return headers_use
 
     def logoutInitMsg(self):
-        print('''
-        
-        '''
+        print('''[*] LEVEL = {} , 初始化成功
+[*] 爬取延时: {}s
+[*] 爬取关键字: {}
+[*] 爬取结束数量: {}
+[*] 是否FUZZ: {}
+[*] 输出格式为: {}
+[*] 存储文件名: {}'''.format(self.level,self.timeSleep,self.searchKey,self.endcount,self.fuzz,self.output,self.filename)
         )
         return
-
-
 
     def init(self):
         parser = argparse.ArgumentParser(description='Fofa-hack v{} 使用说明'.format(config.VERSION_NUM))
@@ -79,29 +66,19 @@ class Fofa:
         parser.add_argument('--output', '-o', help='输出格式:txt、json、csv,默认为txt')
         parser.add_argument('--fuzz', '-f', help='关键字fuzz参数,增加内容获取粒度',action='store_true')
         args = parser.parse_args()
-        config.TimeSleep = int(args.timesleep)
-        print("[*] 爬取延时: {}s".format(config.TimeSleep))
-        config.SearchKEY = args.keyword
-        print("[*] 爬取关键字: {}".format(config.SearchKEY))
+        self.timeSleep= int(args.timesleep)
+        self.searchKey= args.keyword
         if args.endcount:
             self.endcount=int(args.endcount)
-            print("[*] 爬取结束数量: {}".format(self.endcount))
         else:
             self.endcount=100
         self.level=args.level if args.level else "1"
         self.levelData=LevelData(self.level)
-
         self.fuzz=args.fuzz
-        print("[*] 是否FUZZ: {}".format(self.fuzz))
-
         self.output = args.output if args.output else "txt"
-        print("[*] 输出格式为: {}".format(self.output))
-
-
-        self.filename = "{}_{}.{}".format(unit.md5(config.SearchKEY), int(time.time()),self.output)
-        print("[*] 存储文件名: {}".format(self.filename))
+        self.filename = "{}_{}.{}".format(unit.md5(self.searchKey), int(time.time()),self.output)
         self.outputData = OutputData(self.filename, pattern=self.output)
-        return
+        self.logoutInitMsg()
 
     def get_count_num(self, search_key):
         """
@@ -120,7 +97,6 @@ class Fofa:
         except Exception as e:
             print("[-] error:{}".format(e))
             countnum = '0'
-            standaloneIpNum = '0'
             pass
         print("[*] 存在数量:" + countnum)
         # print("[*] 独立IP数量:" + standaloneIpNum)
@@ -165,7 +141,7 @@ class Fofa:
                     self.host_set.add(url)
                 for temptime in timelist:
                     self.timestamp_set.add(temptime)
-                time.sleep(config.TimeSleep)
+                time.sleep(self.timeSleep)
                 return
             except Exception as e:
                 print("[-] error:{}".format(e))
@@ -178,20 +154,40 @@ class Fofa:
         exit(0)
 
 
-
-
-    def fofa_spider(self, search_key, searchbs64):
-
+    def fofa_common_spider(self, search_key, searchbs64):
         while len(self.host_set) < self.endcount and self.oldLength !=len(self.host_set):
             self.oldLength=len(self.host_set)
             self.timestamp_set.clear()
             self.fofa_spider_page(searchbs64)
-            search_key_modify, searchbs64_modify = self.modify_search_url(search_key)
+            search_key_modify= self.modify_search_time_url(search_key)
+            searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
             search_key = search_key_modify
             searchbs64 = searchbs64_modify
+        if len(self.host_set) >= self.endcount:
+            print("[*] 数据爬取结束")
+            return
+        if self.oldLength == len(self.host_set):
+            print("[-] 数据无新增,退出爬取")
+            return
 
+    def fofa_fuzz_spider(self, search_key, searchbs64):
+        while len(self.host_set) < self.endcount and self.oldLength !=len(self.host_set):
+            self.oldLength=len(self.host_set)
+            self.timestamp_set.clear()
+            self.fofa_spider_page(searchbs64)
+            search_key_modify = self.modify_search_time_url(search_key)
 
-    def modify_search_url(self, search_key):
+            searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
+            search_key = search_key_modify
+            searchbs64 = searchbs64_modify
+        if len(self.host_set) >= self.endcount:
+            print("[*] 数据爬取结束")
+            return
+        if self.oldLength == len(self.host_set):
+            print("[-] 数据无新增,退出爬取")
+            return
+
+    def modify_search_time_url(self, search_key):
         """
         根据时间修订搜索值
         :param search_key:
@@ -217,23 +213,23 @@ class Fofa:
             search_key = search_key + ' && ' + 'before="' + str(time_before) + '"'
         search_key_modify = search_key
 
-        searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
+
         # print('[*] 搜索词： ' + search_key_modify)
 
-        return search_key_modify, searchbs64_modify
-
+        return search_key_modify
 
     def run(self):
-        searchbs64 = self.get_count_num(config.SearchKEY)
-        self.fofa_spider(config.SearchKEY, searchbs64)
+        searchbs64 = self.get_count_num(self.searchKey)
+        if not self.fuzz:
+            self.fofa_common_spider(self.searchKey, searchbs64)
+        else:
+            self.fofa_fuzz_spider(self.searchKey, searchbs64)
         print('[*] 抓取结束，共抓取数据 ' + str(len(self.host_set)) + ' 条\n')
 
     def main(self):
         self.init()
         print('[*] 开始运行')
         self.run()
-
-
 
 if __name__ == '__main__':
     fofa = Fofa()
