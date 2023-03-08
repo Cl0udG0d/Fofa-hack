@@ -1,5 +1,10 @@
 # CHANGELOG 代码变更记录
 
+### 2.0.1
++ 修改filename,timeSleep等为类内部变量
++ 新增logoutInitMsg方法输出初始化信息
++ 新增fofa_fuzz_spider方法
+
 ### 2.0.0
 
 + 返璞归真,去除账号登录,直接使用时间戳来在第一页进行爬取

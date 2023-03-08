@@ -5,14 +5,8 @@
 # @File    : config.py
 # @Github: https://github.com/Cl0udG0d
 
-
-SearchKEY = ""
-TimeSleep = 5
-
-
-
 # Fofa-hack 版本号
-VERSION_NUM="2.0.0"
+VERSION_NUM="2.0.1"
 # 登录最大重试次数
 MAX_LOGIN_RETRY_NUM=3
 # 页面URL获取最大重试次数

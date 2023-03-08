@@ -38,11 +38,7 @@ class LevelData:
     formatData = []
 
     def __init__(self, level="1"):
-
         self.level = level if self.checkLevelStandard(level) else "1"
-        print("[*] LEVEL = {} , 初始化成功".format(self.level))
-
-        return
 
     def checkLevelStandard(self, level):
         """
