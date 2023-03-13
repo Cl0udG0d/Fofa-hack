@@ -1,5 +1,8 @@
 # CHANGELOG 代码变更记录
 
+### 2.0.2
++ 修复fofa多个查询条件下出现的错误
+
 ### 2.0.1
 + 修改filename,timeSleep等为类内部变量
 + 新增logoutInitMsg方法输出初始化信息

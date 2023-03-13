@@ -67,7 +67,7 @@ class Fofa:
         parser.add_argument('--fuzz', '-f', help='关键字fuzz参数,增加内容获取粒度',action='store_true')
         args = parser.parse_args()
         self.timeSleep= int(args.timesleep)
-        self.searchKey= args.keyword
+        self.searchKey= args.keyword.replace("'",'"')
         if args.endcount:
             self.endcount=int(args.endcount)
         else:
