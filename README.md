@@ -56,7 +56,7 @@ optional arguments:
   --level LEVEL, -l LEVEL
                         爬取等级: 1-3 ,数字越大内容越详细,默认为 1
   --output OUTPUT, -o OUTPUT
-                        输出格式:txt、json、csv,默认为txt
+                        输出格式:txt、json,默认为txt
 ```
 
 爬取的结果会存储到`md5(搜索关键字)_运行时间戳.txt`文件中
@@ -98,10 +98,6 @@ optional arguments:
     <td>使用代理池的方式防止FOFA断开连接</td>
   </tr>
 <tr>
-    <td>支持多种导出格式</td>
-    <td>支持json、txt、excel等方式导出结果</td>
-  </tr>
-<tr>
     <td>编写图形化界面</td>
     <td>生成可执行文件运行</td>
   </tr>
@@ -113,12 +109,15 @@ optional arguments:
     <td>持续突破</td>
     <td>使用高级语法提高搜索准确率</td>
   </tr>
+<tr>
+    <td>同步key</td>
+    <td>导出key跟FOFA同步</td>
+  </tr>
 </table>
 </details>
 
 ### 贡献者
 
-<!-- readme: collaborators,contributors -start -->
 <table>
 <tr>
     <td align="center">
@@ -136,7 +135,6 @@ optional arguments:
         </a>
     </td></tr>
 </table>
-<!-- readme: collaborators,contributors -end -->
 
 ### END 
 

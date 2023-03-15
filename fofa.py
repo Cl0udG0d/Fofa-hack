@@ -69,7 +69,7 @@ class Fofa:
         parser.add_argument('--keyword', '-k', help='fofa搜索关键字,默认为test', required=True)
         parser.add_argument('--endcount', '-e', help='爬取结束数量')
         parser.add_argument('--level', '-l', help='爬取等级: 1-3 ,数字越大内容越详细,默认为 1')
-        parser.add_argument('--output', '-o', help='输出格式:txt、json、csv,默认为txt')
+        parser.add_argument('--output', '-o', help='输出格式:txt、json,默认为txt')
         parser.add_argument('--fuzz', '-f', help='关键字fuzz参数,增加内容获取粒度',action='store_true')
         args = parser.parse_args()
         self.timeSleep= int(args.timesleep)
