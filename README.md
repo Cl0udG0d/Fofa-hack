@@ -133,7 +133,15 @@ optional arguments:
             <br />
             <sub><b>Wans</b></sub>
         </a>
-    </td></tr>
+    </td>
+    <td align="center">
+        <a href="https://github.com/tastypear">
+            <img src="https://avatars.githubusercontent.com/u/1382667?v=4" width="100;" alt="wanswu"/>
+            <br />
+            <sub><b>tastypear</b></sub>
+        </a>
+    </td>
+</tr>
 </table>
 
 ### END 

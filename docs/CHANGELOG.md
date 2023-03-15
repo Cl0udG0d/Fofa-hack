@@ -1,5 +1,9 @@
 # CHANGELOG 代码变更记录
 
+### 2.0.5
++ 新增贡献者 tastypear
++ 尝试优化时间戳逻辑
+
 ### 2.0.4
 + 删除.github文件夹
 + 新增TODO List

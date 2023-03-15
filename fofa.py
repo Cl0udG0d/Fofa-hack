@@ -202,17 +202,21 @@ class Fofa:
         """
         timestamp_list=list(self.timestamp_set)
         timestamp_list.sort()
+        # print(timestamp_list)
         # timestamp_length = len(timestamp_list)
         if timestamp_list[-1] == timestamp_list[0]:
             time_before = timestamp_list[-1].strip('\n').strip()
         else:
             time_last = timestamp_list[-1].split(' ')[0].strip('\n').strip()
             # print(time_last)
+            # print(timestamp_list)
             time_last_time = datetime.strptime(time_last, "%Y-%m-%d").date()
             # print(str(time_last_time))
-            time_before = (time_last_time - timedelta(days=1))
+            time_before = time_last_time-timedelta(days=1)
             # print('time_before' + str(time_before))
+        # print(time_before)
         if 'before' in search_key:
+            print(search_key)
             search_key = search_key.split('&& before')[0]
             search_key = search_key.strip(' ')
             search_key = search_key + ' && ' + 'before="' + str(time_before) + '"'
