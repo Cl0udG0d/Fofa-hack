@@ -57,6 +57,12 @@ class Fofa:
         )
         return
 
+    def initKeyWord(self,keyword):
+        tempkey=keyword.replace("'",'"')
+        if '"' not in tempkey and ' ' not in tempkey:
+            tempkey='"{}"'.format(tempkey)
+        return tempkey
+
     def init(self):
         parser = argparse.ArgumentParser(description='Fofa-hack v{} 使用说明'.format(config.VERSION_NUM))
         parser.add_argument('--timesleep', '-t', help='爬取每一页等待秒数,防止IP被Ban,默认为3',default=3)
@@ -67,7 +73,7 @@ class Fofa:
         parser.add_argument('--fuzz', '-f', help='关键字fuzz参数,增加内容获取粒度',action='store_true')
         args = parser.parse_args()
         self.timeSleep= int(args.timesleep)
-        self.searchKey= args.keyword.replace("'",'"')
+        self.searchKey=self.initKeyWord(args.keyword)
         if args.endcount:
             self.endcount=int(args.endcount)
         else:
@@ -160,6 +166,7 @@ class Fofa:
             self.timestamp_set.clear()
             self.fofa_spider_page(searchbs64)
             search_key_modify= self.modify_search_time_url(search_key)
+            # print(search_key_modify)
             searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
             search_key = search_key_modify
             searchbs64 = searchbs64_modify
