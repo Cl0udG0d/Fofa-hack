@@ -207,12 +207,12 @@ class Fofa:
         if timestamp_list[-1] == timestamp_list[0]:
             time_before = timestamp_list[-1].strip('\n').strip()
         else:
-            time_last = timestamp_list[-1].split(' ')[0].strip('\n').strip()
-            # print(time_last)
+            time_first = timestamp_list[0].split(' ')[0].strip('\n').strip()
+            # print(time_first)
             # print(timestamp_list)
-            time_last_time = datetime.strptime(time_last, "%Y-%m-%d").date()
-            # print(str(time_last_time))
-            time_before = time_last_time-timedelta(days=1)
+            time_first_time = datetime.strptime(time_first, "%Y-%m-%d").date()
+            # print(str(time_first_time))
+            time_before = time_first_time+timedelta(days=1)
             # print('time_before' + str(time_before))
         # print(time_before)
         if 'before' in search_key:
