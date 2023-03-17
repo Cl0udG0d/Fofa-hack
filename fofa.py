@@ -66,6 +66,7 @@ class Fofa:
     def init(self):
         parser = argparse.ArgumentParser(description='Fofa-hack v{} 使用说明'.format(config.VERSION_NUM))
         parser.add_argument('--timesleep', '-t', help='爬取每一页等待秒数,防止IP被Ban,默认为3',default=3)
+        parser.add_argument('--timeout', '-to', help='爬取每一页的超时时间',default=10)
         parser.add_argument('--keyword', '-k', help='fofa搜索关键字,默认为test', required=True)
         parser.add_argument('--endcount', '-e', help='爬取结束数量')
         parser.add_argument('--level', '-l', help='爬取等级: 1-3 ,数字越大内容越详细,默认为 1')
@@ -73,6 +74,7 @@ class Fofa:
         parser.add_argument('--fuzz', '-f', help='关键字fuzz参数,增加内容获取粒度',action='store_true')
         args = parser.parse_args()
         self.timeSleep= int(args.timesleep)
+        self.timeout = int(args.timeout)
         self.searchKey=self.initKeyWord(args.keyword)
         if args.endcount:
             self.endcount=int(args.endcount)
@@ -95,7 +97,7 @@ class Fofa:
         headers_use = fofa_useragent.getFofaPageNumHeaders()
         searchbs64 = base64.b64encode(f'{search_key}'.encode()).decode()
         print("[*] 爬取页面为:https://fofa.info/result?qbase64=" + searchbs64)
-        html = requests.get(url="https://fofa.info/result?qbase64=" + searchbs64, headers=headers_use).text
+        html = requests.get(url="https://fofa.info/result?qbase64=" + searchbs64, headers=headers_use, timeout=self.timeout).text
         tree = etree.HTML(html)
         try:
             countnum = tree.xpath('//span[@class="hsxa-highlight-color"]/text()')[0]
@@ -132,7 +134,7 @@ class Fofa:
             try:
                 request_url = 'https://fofa.info/result?qbase64=' + searchbs64 + "&full=false&page_size=10"
                 # print(f'request_url:{request_url}')
-                rep = requests.get(request_url, headers=self.headers_use)
+                rep = requests.get(request_url, headers=self.headers_use, timeout=self.timeout)
                 self.levelData.startSpider(rep)
 
                 # tree = etree.HTML(rep.text)
@@ -200,21 +202,28 @@ class Fofa:
         :param search_key:
         :return:
         """
+        
+        # get before_time in search_key.
+        # if there is no before_time, set tomorrow_time as default
+        before_time_in_search_key = (datetime.today()+timedelta(days=1)).strftime('%Y-%m-%d')
+        if "before=" in search_key:
+            pattern = r'before="([^"]+)"'
+            match = re.search(pattern, search_key)
+            before_time_in_search_key = match.group(1)
+        time_before_time_in_search_key = datetime.strptime(before_time_in_search_key, "%Y-%m-%d").date()
+        
+        # regard the_earliest_time.tomorrow as optimized time_before
         timestamp_list=list(self.timestamp_set)
         timestamp_list.sort()
-        # print(timestamp_list)
-        # timestamp_length = len(timestamp_list)
-        if timestamp_list[-1] == timestamp_list[0]:
-            time_before = timestamp_list[-1].strip('\n').strip()
-        else:
-            time_first = timestamp_list[0].split(' ')[0].strip('\n').strip()
-            # print(time_first)
-            # print(timestamp_list)
-            time_first_time = datetime.strptime(time_first, "%Y-%m-%d").date()
-            # print(str(time_first_time))
-            time_before = time_first_time+timedelta(days=1)
-            # print('time_before' + str(time_before))
-        # print(time_before)
+        time_first = timestamp_list[0].split(' ')[0].strip('\n').strip()
+        time_first_time = datetime.strptime(time_first, "%Y-%m-%d").date()
+        time_before = time_first_time+timedelta(days=1)
+        
+        # check if optimized time_before can be used
+        if time_before>=time_before_time_in_search_key:
+            time_before = time_before_time_in_search_key - timedelta(days=1)
+ 
+        #print(time_before)
         if 'before' in search_key:
             print(search_key)
             search_key = search_key.split('&& before')[0]
@@ -223,7 +232,6 @@ class Fofa:
         else:
             search_key = search_key + ' && ' + 'before="' + str(time_before) + '"'
         search_key_modify = search_key
-
 
         # print('[*] 搜索词： ' + search_key_modify)
 
