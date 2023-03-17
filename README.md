@@ -31,24 +31,25 @@ pip install -r requirements.txt
 > python3 fofa.py --help
 
 ```shell
-Fofa-hack>python fofa.py --help
+Fofa-hack>python fofa.py -h
 
-         ____  ____  ____  ____                 
-        | ===|/ () \| ===|/ () \                
-        |__|  \____/|__| /__/\__\               
-             _   _   ____   ____  __  __        
-            | |_| | / () \ / (__`|  |/  /       
-            |_| |_|/__/\__\\____)|__|\__\ V2.0.0
-                                                
-usage: fofa.py [-h] [--timesleep TIMESLEEP] --keyword KEYWORD         
-               [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT]
-                                                                      
-Fofa-hack v2.0.0 使用说明                                             
+         ____  ____  ____  ____      
+        | ===|/ () \| ===|/ () \     
+        |__|  \____/|__| /__/\__\    
+             _   _   ____   ____  __  __ 
+            | |_| | / () \ / (__`|  |/  /
+            |_| |_|/__/\__\\____)|__|\__\ V2.0.6
+        
+usage: fofa.py [-h] [--timesleep TIMESLEEP] [--timeout TIMEOUT] --keyword KEYWORD [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz]
+
+Fofa-hack v2.0.6 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
   --timesleep TIMESLEEP, -t TIMESLEEP
                         爬取每一页等待秒数,防止IP被Ban,默认为3
+  --timeout TIMEOUT, -to TIMEOUT
+                        爬取每一页的超时时间
   --keyword KEYWORD, -k KEYWORD
                         fofa搜索关键字,默认为test
   --endcount ENDCOUNT, -e ENDCOUNT
@@ -57,6 +58,7 @@ optional arguments:
                         爬取等级: 1-3 ,数字越大内容越详细,默认为 1
   --output OUTPUT, -o OUTPUT
                         输出格式:txt、json,默认为txt
+  --fuzz, -f            关键字fuzz参数,增加内容获取粒度
 ```
 
 爬取的结果会存储到`md5(搜索关键字)_运行时间戳.txt`文件中
