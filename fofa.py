@@ -215,6 +215,7 @@ class Fofa:
         # regard the_earliest_time.tomorrow as optimized time_before
         timestamp_list=list(self.timestamp_set)
         timestamp_list.sort()
+
         time_first = timestamp_list[0].split(' ')[0].strip('\n').strip()
         time_first_time = datetime.strptime(time_first, "%Y-%m-%d").date()
         time_before = time_first_time+timedelta(days=1)
@@ -224,6 +225,7 @@ class Fofa:
             time_before = time_before_time_in_search_key - timedelta(days=1)
  
         #print(time_before)
+
         if 'before' in search_key:
             print(search_key)
             search_key = search_key.split('&& before')[0]
