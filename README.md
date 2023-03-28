@@ -38,11 +38,11 @@ Fofa-hack>python fofa.py -h
         |__|  \____/|__| /__/\__\    
              _   _   ____   ____  __  __ 
             | |_| | / () \ / (__`|  |/  /
-            |_| |_|/__/\__\\____)|__|\__\ V2.0.6
+            |_| |_|/__/\__\\____)|__|\__\ V2.1.0
         
 usage: fofa.py [-h] [--timesleep TIMESLEEP] [--timeout TIMEOUT] --keyword KEYWORD [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz]
 
-Fofa-hack v2.0.6 使用说明
+Fofa-hack v2.1.0 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -58,7 +58,6 @@ optional arguments:
                         爬取等级: 1-3 ,数字越大内容越详细,默认为 1
   --output OUTPUT, -o OUTPUT
                         输出格式:txt、json,默认为txt
-  --fuzz, -f            关键字fuzz参数,增加内容获取粒度
 ```
 
 爬取的结果会存储到`md5(搜索关键字)_运行时间戳.txt`文件中
@@ -156,6 +155,6 @@ optional arguments:
 建了一个微信的安全交流群，欢迎添加我微信备注`进群`，一起来聊天吹水哇，以及一个会发布安全相关内容的公众号，欢迎关注 :)
 
 <div>
-    <img  alt="GIF" src="https://springbird.oss-cn-beijing.aliyuncs.com/img/mmqrcode1632325540724.png"  width="280px" />
-    <img  alt="GIF" src="https://springbird.oss-cn-beijing.aliyuncs.com/img/qrcode_for_gh_cead8e1080d6_344.jpg"  width="280px" />
+    <img  alt="JPG" src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/1a1f7894a170bec207e61bf86a01592.jpg"  width="280px" />
+    <img  alt="JPG" src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/qrcode_for_gh_cead8e1080d6_430.jpg"  width="280px" />
 </div>

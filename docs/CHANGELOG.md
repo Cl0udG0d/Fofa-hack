@@ -1,6 +1,13 @@
 # CHANGELOG 代码变更记录
 
+### 2.1.0
+
++ 删除多余images
++ 修改readme图片
++ 添加country 自动化fuzz
+
 ### 2.0.6
+
 + 修改README等文件
 + 合并代码 - 优化时间戳逻辑
 

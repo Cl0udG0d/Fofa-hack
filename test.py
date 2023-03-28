@@ -11,7 +11,11 @@ import time
 import requests
 from lxml import etree
 
-data=[1,2,3,4,5,6,7,8,9]
-result=[]
+from tookit.bypass import ByPass
 
-key='"thinkphp" && before="2023-03-14"'
+request_url = 'https://fofa.info/result?qbase64=InRoaW5rcGhwIg%3D%3D'
+# print(f'request_url:{request_url}')
+rep = requests.get(request_url,  timeout=5)
+# print(rep.text)
+bypass = ByPass(rep.text)
+bypass.bypassCountry()
