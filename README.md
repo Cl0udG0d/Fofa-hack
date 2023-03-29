@@ -31,24 +31,25 @@ pip install -r requirements.txt
 > python3 fofa.py --help
 
 ```shell
-Fofa-hack>python fofa.py --help
+Fofa-hack>python fofa.py -h
 
-         ____  ____  ____  ____                 
-        | ===|/ () \| ===|/ () \                
-        |__|  \____/|__| /__/\__\               
-             _   _   ____   ____  __  __        
-            | |_| | / () \ / (__`|  |/  /       
-            |_| |_|/__/\__\\____)|__|\__\ V2.0.0
-                                                
-usage: fofa.py [-h] [--timesleep TIMESLEEP] --keyword KEYWORD         
-               [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT]
-                                                                      
-Fofa-hack v2.0.0 使用说明                                             
+         ____  ____  ____  ____      
+        | ===|/ () \| ===|/ () \     
+        |__|  \____/|__| /__/\__\    
+             _   _   ____   ____  __  __ 
+            | |_| | / () \ / (__`|  |/  /
+            |_| |_|/__/\__\\____)|__|\__\ V2.1.0
+        
+usage: fofa.py [-h] [--timesleep TIMESLEEP] [--timeout TIMEOUT] --keyword KEYWORD [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz]
+
+Fofa-hack v2.1.0 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
   --timesleep TIMESLEEP, -t TIMESLEEP
                         爬取每一页等待秒数,防止IP被Ban,默认为3
+  --timeout TIMEOUT, -to TIMEOUT
+                        爬取每一页的超时时间
   --keyword KEYWORD, -k KEYWORD
                         fofa搜索关键字,默认为test
   --endcount ENDCOUNT, -e ENDCOUNT
@@ -56,7 +57,7 @@ optional arguments:
   --level LEVEL, -l LEVEL
                         爬取等级: 1-3 ,数字越大内容越详细,默认为 1
   --output OUTPUT, -o OUTPUT
-                        输出格式:txt、json、csv,默认为txt
+                        输出格式:txt、json,默认为txt
 ```
 
 爬取的结果会存储到`md5(搜索关键字)_运行时间戳.txt`文件中
@@ -98,10 +99,6 @@ optional arguments:
     <td>使用代理池的方式防止FOFA断开连接</td>
   </tr>
 <tr>
-    <td>支持多种导出格式</td>
-    <td>支持json、txt、excel等方式导出结果</td>
-  </tr>
-<tr>
     <td>编写图形化界面</td>
     <td>生成可执行文件运行</td>
   </tr>
@@ -113,12 +110,15 @@ optional arguments:
     <td>持续突破</td>
     <td>使用高级语法提高搜索准确率</td>
   </tr>
+<tr>
+    <td>同步key</td>
+    <td>导出key跟FOFA同步</td>
+  </tr>
 </table>
 </details>
 
 ### 贡献者
 
-<!-- readme: collaborators,contributors -start -->
 <table>
 <tr>
     <td align="center">
@@ -134,9 +134,16 @@ optional arguments:
             <br />
             <sub><b>Wans</b></sub>
         </a>
-    </td></tr>
+    </td>
+    <td align="center">
+        <a href="https://github.com/tastypear">
+            <img src="https://avatars.githubusercontent.com/u/1382667?v=4" width="100;" alt="wanswu"/>
+            <br />
+            <sub><b>tastypear</b></sub>
+        </a>
+    </td>
+</tr>
 </table>
-<!-- readme: collaborators,contributors -end -->
 
 ### END 
 
@@ -148,6 +155,6 @@ optional arguments:
 建了一个微信的安全交流群，欢迎添加我微信备注`进群`，一起来聊天吹水哇，以及一个会发布安全相关内容的公众号，欢迎关注 :)
 
 <div>
-    <img  alt="GIF" src="https://springbird.oss-cn-beijing.aliyuncs.com/img/mmqrcode1632325540724.png"  width="280px" />
-    <img  alt="GIF" src="https://springbird.oss-cn-beijing.aliyuncs.com/img/qrcode_for_gh_cead8e1080d6_344.jpg"  width="280px" />
+    <img  alt="JPG" src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/1a1f7894a170bec207e61bf86a01592.jpg"  width="280px" />
+    <img  alt="JPG" src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/qrcode_for_gh_cead8e1080d6_430.jpg"  width="280px" />
 </div>

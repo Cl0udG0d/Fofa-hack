@@ -1,5 +1,31 @@
 # CHANGELOG 代码变更记录
 
+### 2.1.0
+
++ 删除多余images
++ 修改readme图片
++ 添加country 自动化fuzz
+
+### 2.0.6
+
++ 修改README等文件
++ 合并代码 - 优化时间戳逻辑
+
+### 2.0.5
++ 新增贡献者 tastypear
++ 尝试优化时间戳逻辑
+
+### 2.0.4
++ 删除.github文件夹
++ 新增TODO List
++ 删除csv导出
+
+### 2.0.3
++ 修复fofa单关键字下第二页错误情况
+
+### 2.0.2
++ 修复fofa多个查询条件下出现的错误
+
 ### 2.0.1
 + 修改filename,timeSleep等为类内部变量
 + 新增logoutInitMsg方法输出初始化信息

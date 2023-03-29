@@ -6,9 +6,8 @@
 
 > python fofa.py --keyword thinkphp && country="CN"
 
-此时只会识别到 thinkphp,多个关键字的时候需要使用单引号包裹
-> python fofa.py --keyword 'thinkphp && country="CN"'
-
+此时只会识别到 thinkphp,多个关键字的时候需要使用双引号包裹,内部的关键字用单引号包裹,示例如下
+> python fofa.py --keyword "thinkphp && country='CN'"
 ### opencv-python错误
 
 解决方法
