@@ -18,4 +18,3 @@ request_url = 'https://fofa.info/result?qbase64=InRoaW5rcGhwIg%3D%3D'
 rep = requests.get(request_url,  timeout=5)
 # print(rep.text)
 bypass = ByPass(rep.text)
-bypass.bypassCountry()
