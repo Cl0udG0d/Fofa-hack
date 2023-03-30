@@ -77,6 +77,8 @@ class Fofa:
 
     def initKeyWord(self,keyword):
         tempkey=keyword.replace("'",'"')
+        # print(tempkey)
+
         if '"' not in tempkey and ' ' not in tempkey:
             tempkey='"{}"'.format(tempkey)
         return tempkey
@@ -93,6 +95,7 @@ class Fofa:
         args = parser.parse_args()
         self.timeSleep= int(args.timesleep)
         self.timeout = int(args.timeout)
+        # print(args.keyword)
         self.searchKey=self.initKeyWord(args.keyword)
         if args.endcount:
             self.endcount=int(args.endcount)
@@ -221,78 +224,25 @@ class Fofa:
         searchbs64=searchbs64.replace("%3D","=")
         # init_search_key = base64.b64decode(searchbs64).decode()
         init_search_key=search_key
-        print(init_search_key)
+        print("now search key: "+init_search_key)
         TEMP_RETRY_NUM=0
 
         while TEMP_RETRY_NUM < config.MAX_MATCH_RETRY_NUM:
-            # try:
-            #     request_url = 'https://fofa.info/result?qbase64=' + searchbs64 + "&full=false&page_size=10"
-            #     # print(f'request_url:{request_url}')
-            #     rep = requests.get(request_url, headers=self.headers_use, timeout=self.timeout)
-            #     timelist = self.getTimeList(rep.text)
-            #     # print(timelist)
-            #     for temptime in timelist:
-            #         self.timestamp_list[timestampIndex].add(temptime)
-
+            try:
                 rep=self.setIndexTimestamp(searchbs64,timestampIndex)
                 self.saveData(rep)
                 for url in self.levelData.formatData:
                     self.host_set.add(url)
 
                 time.sleep(self.timeSleep)
-                '''
-                fuzz部分
-                '''
-                # self.bypass = ByPass(rep.text)
-                if "country" not in init_search_key:
-                    countryList=self.bypassCountry(rep.text)
-                    for country in countryList:
-                        search_key = init_search_key+ ' && country="' + str(country) + '"'
-                        # print(search_key)
-                        searchbs64_modify = quote_plus(base64.b64encode(search_key.encode("utf-8")))
-                        self.timestampIndex+=1
-                        self.timestamp_list.append(set())
-                        self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
-                        # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
-                        self.fofa_common_spider(search_key,searchbs64_modify,self.timestampIndex)
-                # if "org" not in init_search_key:
-                #     orgList=self.bypassOrg(rep.text)
-                #     for org in orgList:
-                #         search_key = init_search_key+ ' && org="' + str(org) + '"'
-                #         # print(search_key)
-                #         searchbs64_modify = quote_plus(base64.b64encode(search_key.encode("utf-8")))
-                #         self.timestampIndex+=1
-                #         self.timestamp_list.append(set())
-                #         # self.fofa_common_spider(search_key,searchbs64_modify,self.timestampIndex)
-                #         self.fofa_spider_page(search_key,searchbs64_modify, self.timestampIndex)
-                #         search_key_modify = self.modify_search_time_url(search_key, index)
-                #         print(search_key_modify)
-                #         searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
-                #         search_key = search_key_modify
-                #         searchbs64 = searchbs64_modify
-                #         self.fofa_common_spider(search_key, searchbs64_modify, self.timestampIndex)
-                # if "asn" not in init_search_key:
-                #     asnList=self.bypassAsn(rep.text)
-                #     for asn in asnList:
-                #         search_key = init_search_key+ ' && asn="' + str(asn) + '"'
-                #         # print(search_key)
-                #         searchbs64_modify = quote_plus(base64.b64encode(search_key.encode("utf-8")))
-                #         self.timestampIndex+=1
-                #         self.timestamp_list.append(set())
-                #         self.fofa_spider_page(search_key,searchbs64_modify, self.timestampIndex)
-                #         self.fofa_common_spider(search_key,searchbs64_modify,self.timestampIndex)
 
-                search_key_modify = self.modify_search_time_url(search_key, timestampIndex)
-                print(search_key_modify)
-                searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
-                search_key = search_key_modify
-                searchbs64 = searchbs64_modify
-                return
-            # except Exception as e:
-            #     print("[-] error:{}".format(e))
-            #     TEMP_RETRY_NUM+=1
-            #     print('[-] 第{}次尝试获取页面URL'.format(TEMP_RETRY_NUM))
-            #     pass
+                return rep.text
+
+            except Exception as e:
+                print("[-] error:{}".format(e))
+                TEMP_RETRY_NUM+=1
+                print('[-] 第{}次尝试获取页面URL'.format(TEMP_RETRY_NUM))
+                pass
 
 
         print('[-] FOFA资源获取重试超过最大次数,程序退出')
@@ -321,37 +271,76 @@ class Fofa:
         """
         return self.oldLength !=len(self.host_set)
 
-    def spiderItem(self, search_key, searchbs64,index):
-        self.oldLength = len(self.host_set)
+
+    def fofa_common_spider(self, search_key, searchbs64,index):
+        # while len(self.host_set) < self.endcount and self.oldLength !=len(self.host_set):
+
+        self.oldLength=len(self.host_set)
         self.timestamp_list[index].clear()
-        self.fofa_spider_page(search_key, searchbs64, index)
-        # 获取fuzz key
-        # 获取时间戳 key
-        # 递归
-        if self.checkDataIsUpdate():
-            pass
-            # self.spiderItem()
+        context=self.fofa_spider_page(search_key,searchbs64,index)
+
+        if len(self.host_set) >= self.endcount:
+            print("[*] 在{}节点,数据爬取结束".format(index))
+            exit(0)
         if self.oldLength == len(self.host_set):
             print("[-] {}节点数据无新增,该节点枯萎".format(index))
             return
 
+        '''
+            fuzz部分
+        '''
+        # self.bypass = ByPass(rep.text)
+        if "country" not in search_key:
+            countryList = self.bypassCountry(context)
+            for country in countryList:
+                new_key = search_key + ' && country="' + str(country) + '"'
 
-    def fofa_common_spider(self, search_key, searchbs64,index):
-        while len(self.host_set) < self.endcount and self.oldLength !=len(self.host_set):
-            self.oldLength=len(self.host_set)
-            self.timestamp_list[index].clear()
-            self.fofa_spider_page(search_key,searchbs64,index)
-            # search_key_modify= self.modify_search_time_url(search_key,index)
+                # print("new_key: "+new_key)
+                searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
+                self.timestampIndex += 1
+                self.timestamp_list.append(set())
+                self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
+                # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
+                self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
+        if "org" not in search_key:
+            orgList=self.bypassOrg(context)
+            for org in orgList:
+                new_key = search_key+ ' && org="' + str(org) + '"'
+                # print(search_key)
+                searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
+                self.timestampIndex+=1
+                self.timestamp_list.append(set())
+                self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
+                # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
+                self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
+        if "asn" not in search_key:
+            asnList=self.bypassAsn(context)
+            for asn in asnList:
+                new_key = search_key+ ' && asn="' + str(asn) + '"'
+                # print(search_key)
+                searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
+                self.timestampIndex+=1
+                self.timestamp_list.append(set())
+                self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
+                # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
+                self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
+
+        search_key_modify = self.modify_search_time_url(search_key, index)
+        # print(search_key_modify)
+        searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
+        # search_key = search_key_modify
+        # searchbs64 = searchbs64_modify
+        self.fofa_common_spider(search_key_modify,searchbs64_modify,index)
+
+
+
+
+        # search_key_modify= self.modify_search_time_url(search_key,index)
             # print(search_key_modify)
             # searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
             # search_key = search_key_modify
             # searchbs64 = searchbs64_modify
-        if len(self.host_set) >= self.endcount:
-            # print("[*] 在{}节点,数据爬取结束".format(index))
-            return
-        if self.oldLength == len(self.host_set):
-            print("[-] {}节点数据无新增,该节点枯萎".format(index))
-            return
+
 
     # def fofa_fuzz_spider(self, search_key, searchbs64):
     #     """
@@ -387,8 +376,8 @@ class Fofa:
         time_before_time_in_search_key = datetime.strptime(before_time_in_search_key, "%Y-%m-%d").date()
         # print(self.timestamp_list)
         # print(index)
-        print("self.timestamp_list :"+str(self.timestamp_list))
-        print("index: "+str(index)+" ; self.timestamp_list[index]: "+str(self.timestamp_list[index]))
+        # print("self.timestamp_list :"+str(self.timestamp_list))
+        # print("index: "+str(index)+" ; self.timestamp_list[index]: "+str(self.timestamp_list[index]))
         # regard the_earliest_time.tomorrow as optimized time_before
         timestamp_list=list(self.timestamp_list[index])
         timestamp_list.sort()
