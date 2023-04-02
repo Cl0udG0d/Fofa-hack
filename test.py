@@ -8,13 +8,22 @@ import datetime
 import json
 import time
 
-import requests
-from lxml import etree
+# import requests
+# from lxml import etree
+#
+# from tookit.bypass import ByPass
+#
+# request_url = 'https://fofa.info/result?qbase64=InRoaW5rcGhwIg%3D%3D'
+# # print(f'request_url:{request_url}')
+# rep = requests.get(request_url,  timeout=5)
+# # print(rep.text)
+# bypass = ByPass(rep.text)
+import click
 
-from tookit.bypass import ByPass
+@click.command()
+@click.option('--n', default="aaa")
+def dots(n):
+    click.echo(n)
 
-request_url = 'https://fofa.info/result?qbase64=InRoaW5rcGhwIg%3D%3D'
-# print(f'request_url:{request_url}')
-rep = requests.get(request_url,  timeout=5)
-# print(rep.text)
-bypass = ByPass(rep.text)
+if __name__ == '__main__':
+    dots()

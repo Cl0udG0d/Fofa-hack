@@ -80,7 +80,10 @@ class Fofa:
         # print(tempkey)
 
         if '"' not in tempkey and ' ' not in tempkey:
-            tempkey='"{}"'.format(tempkey)
+            if "=" in tempkey:
+                tempkey=tempkey.split("=")[0]+'="'+tempkey.split("=")[1]+'"'
+            else:
+                tempkey='"{}"'.format(tempkey)
         return tempkey
 
     def init(self):
@@ -95,7 +98,7 @@ class Fofa:
         args = parser.parse_args()
         self.timeSleep= int(args.timesleep)
         self.timeout = int(args.timeout)
-        # print(args.keyword)
+        print("input: "+args.keyword)
         self.searchKey=self.initKeyWord(args.keyword)
         if args.endcount:
             self.endcount=int(args.endcount)
