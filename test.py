@@ -6,6 +6,7 @@
 """
 import datetime
 import json
+import re
 import time
 
 # import requests
@@ -18,12 +19,7 @@ import time
 # rep = requests.get(request_url,  timeout=5)
 # # print(rep.text)
 # bypass = ByPass(rep.text)
-import click
-
-@click.command()
-@click.option('--n', default="aaa")
-def dots(n):
-    click.echo(n)
-
-if __name__ == '__main__':
-    dots()
+searchKey='host="aaaa" && aaa="aaa"'
+if "host" in searchKey:
+    result1 = re.findall('host="(.*?)"', searchKey)
+    print(result1)

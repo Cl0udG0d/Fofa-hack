@@ -29,10 +29,12 @@ class Fofa:
     CITY_RULE = 'p[3]/a/@href'
     ASN_RULE = 'p[4]/a/text()'
     ORG_RULE='p[5]/a/text()'
+    PORT_RULE='//a[@class="hsxa-port"]/text()'
 
     CITY_SET = set()
     ASN_SET=set()
     ORG_SET=set()
+    PORT_SET=set()
 
 
 
@@ -190,6 +192,20 @@ class Fofa:
         print(countryList)
         return countryList
 
+    def bypassPort(self,context):
+        tree = etree.HTML(context)
+        dataList = tree.xpath(self.PORT_RULE)
+        portList = list()
+        for port in dataList:
+            port=port.strip()
+            if port not in self.PORT_SET and port != None:
+                # print(self.PORT_SET)
+                self.PORT_SET.add(port)
+                portList.append(port)
+        print(portList)
+        return portList
+
+
     def filterKeyword(self,keyURL,key):
         # print(keyURL)
         if "qbase64=" in keyURL:
@@ -327,6 +343,17 @@ class Fofa:
                 self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
                 # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
                 self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
+        if "port" not in search_key and self.checkHostPort():
+            portList=self.bypassPort(context)
+            for port in portList:
+                new_key = search_key+ ' && port="' + str(port) + '"'
+                # print(search_key)
+                searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
+                self.timestampIndex+=1
+                self.timestamp_list.append(set())
+                self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
+                # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
+                self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
 
         search_key_modify = self.modify_search_time_url(search_key, index)
         # print(search_key_modify)
@@ -336,6 +363,21 @@ class Fofa:
         self.fofa_common_spider(search_key_modify,searchbs64_modify,index)
 
 
+    def checkHostPort(self):
+        """
+        检测输入关键字是否包含了port,目前看来有两种情况：
+            1、"116.63.67.65:8009"
+            2、host="116.63.67.65:8009"
+        @return:
+        """
+        if " " not in self.searchKey:
+            if ":" in self.searchKey:
+                return False
+        if "host" in self.searchKey:
+            result = re.findall('host="(.*?)"', self.searchKey)
+            if len(result)>0 and ":" in result:
+                return False
+        return True
 
 
         # search_key_modify= self.modify_search_time_url(search_key,index)
