@@ -1,5 +1,9 @@
 # CHANGELOG 代码变更记录
 
+### 2.1.4
+
++ 修复 https://github.com/Cl0udG0d/Fofa-hack/issues/13 ISSUE BUG
+
 ### 2.1.3
 
 + 添加 port 自动化fuzz

@@ -89,35 +89,8 @@ optional arguments:
 详情请见[CHANGELOG](docs/CHANGELOG.md)
 
 ### TODO List
-<details>
-<summary>TODO</summary>
-<table >
-  <tr>
-    <td>名称</td>
-    <td>简介</td>
-  </tr>
-<tr>
-    <td>支持代理池</td>
-    <td>使用代理池的方式防止FOFA断开连接</td>
-  </tr>
-<tr>
-    <td>编写图形化界面</td>
-    <td>生成可执行文件运行</td>
-  </tr>
-<tr>
-    <td>增加程序稳定性</td>
-    <td>防止程序因为各种情况运行失败或者被ban的情况</td>
-  </tr>
-<tr>
-    <td>持续突破</td>
-    <td>使用高级语法提高搜索准确率</td>
-  </tr>
-<tr>
-    <td>同步key</td>
-    <td>导出key跟FOFA同步</td>
-  </tr>
-</table>
-</details>
+
+详情请见[CHANGELOG](docs/TODO.md)
 
 ### 贡献者
 

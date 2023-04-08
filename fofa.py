@@ -83,7 +83,8 @@ class Fofa:
 
         if '"' not in tempkey and ' ' not in tempkey:
             if "=" in tempkey:
-                tempkey=tempkey.split("=")[0]+'="'+tempkey.split("=")[1]+'"'
+                # print("=".join(tempkey.split("=")[1:]))
+                tempkey=tempkey.split("=")[0]+'="'+"".join(tempkey.split("=")[1:])+'"'
             else:
                 tempkey='"{}"'.format(tempkey)
         return tempkey
