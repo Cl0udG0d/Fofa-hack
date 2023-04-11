@@ -1,5 +1,12 @@
 # CHANGELOG 代码变更记录
 
+### 2.1.5
+
++ 删除config.py文件,合并内容到fofa.py
++ 每次递归的时候的关键字列表应当与下标对应，而不是统一SET
++ 运行测试 python fofa.py -k index --endcount 1000
++ 合并FUZZ关键字并进行递归
+
 ### 2.1.4
 
 + 修复 https://github.com/Cl0udG0d/Fofa-hack/issues/13 ISSUE BUG

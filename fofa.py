@@ -9,7 +9,6 @@ from datetime import timedelta
 import base64
 import time
 from urllib.parse import quote_plus
-import config
 from tookit import unit, fofa_useragent
 import argparse
 
@@ -31,10 +30,7 @@ class Fofa:
     ORG_RULE='p[5]/a/text()'
     PORT_RULE='//a[@class="hsxa-port"]/text()'
 
-    CITY_SET = set()
-    ASN_SET=set()
-    ORG_SET=set()
-    PORT_SET=set()
+
 
 
 
@@ -44,11 +40,26 @@ class Fofa:
         self.level = 0
         self.host_set = set()
         self.timestamp_list=[set()]
+
+        self.city_list=[set()]
+        self.asn_list=[set()]
+        self.org_list=[set()]
+        self.port_list=[set()]
+        CITY_SET = set()
+        ASN_SET = set()
+        ORG_SET = set()
+        PORT_SET = set()
         self.oldLength = -1
         self.endcount=0
         self.filename = ""
         self.countryList=[]
         self.timestampIndex=0
+        # Fofa-hack 版本号
+        self.VERSION_NUM = "2.1.4"
+        # 登录最大重试次数
+        self.MAX_LOGIN_RETRY_NUM = 3
+        # 页面URL获取最大重试次数
+        self.MAX_MATCH_RETRY_NUM = 3
 
         print('''
          ____  ____  ____  ____      
@@ -57,7 +68,7 @@ class Fofa:
              _   _   ____   ____  __  __ 
             | |_| | / () \ / (__`|  |/  /
             |_| |_|/__/\__\\\\____)|__|\__\\ V{}
-        '''.format(config.VERSION_NUM))
+        '''.format(self.VERSION_NUM))
 
     def headers(self,cookie):
         headers_use = {
@@ -90,7 +101,7 @@ class Fofa:
         return tempkey
 
     def init(self):
-        parser = argparse.ArgumentParser(description='Fofa-hack v{} 使用说明'.format(config.VERSION_NUM))
+        parser = argparse.ArgumentParser(description='Fofa-hack v{} 使用说明'.format(self.VERSION_NUM))
         parser.add_argument('--timesleep', '-t', help='爬取每一页等待秒数,防止IP被Ban,默认为3',default=3)
         parser.add_argument('--timeout', '-to', help='爬取每一页的超时时间',default=10)
         parser.add_argument('--keyword', '-k', help='fofa搜索关键字,默认为test', required=True)
@@ -150,7 +161,7 @@ class Fofa:
             timelist.append(temp.replace("<span>", "").replace("</span>", "").strip())
         return timelist
 
-    def bypassAsn(self,context):
+    def bypassAsn(self,context,index):
         tree = etree.HTML(context)
         leftList = tree.xpath(self.LEFT_LIST_RULE)
         asnList = list()
@@ -158,14 +169,14 @@ class Fofa:
             if len(leftList[i].xpath(self.ASN_RULE)) > 0:
                 asnData = leftList[i].xpath(self.ASN_RULE)[0].strip()
                 # city = self.filterKeyword(cityURL, "country")
-                if asnData not in self.ASN_SET and asnData != None:
-                    self.ASN_SET.add(asnData)
+                if asnData not in self.asn_list[index] and asnData != None:
+                    self.asn_list[index].add(asnData)
                     asnList.append(asnData)
         print(asnList)
 
         return asnList
 
-    def bypassOrg(self,context):
+    def bypassOrg(self,context,index):
         tree = etree.HTML(context)
         leftList = tree.xpath(self.LEFT_LIST_RULE)
         orgList = list()
@@ -173,13 +184,13 @@ class Fofa:
             if len(leftList[i].xpath(self.ORG_RULE)) > 0:
                 orgData = leftList[i].xpath(self.ORG_RULE)[0].strip()
                 # city = self.filterKeyword(cityURL, "country")
-                if orgData not in self.ORG_SET and orgData != None:
-                    self.ORG_SET.add(orgData)
+                if orgData not in self.org_list[index] and orgData != None:
+                    self.org_list[index].add(orgData)
                     orgList.append(orgData)
         print(orgList)
         return orgList
 
-    def bypassCountry(self,context):
+    def bypassCountry(self,context,index):
         tree = etree.HTML(context)
         leftList = tree.xpath(self.LEFT_LIST_RULE)
         countryList=list()
@@ -187,21 +198,21 @@ class Fofa:
             if len(leftList[i].xpath(self.CITY_RULE))>0:
                 cityURL = leftList[i].xpath(self.CITY_RULE)[0].strip()
                 city=self.filterKeyword(cityURL,"country")
-                if city not in self.CITY_SET and city!=None:
-                    self.CITY_SET.add(city)
+                if city not in self.city_list[index] and city!=None:
+                    self.city_list[index].add(city)
                     countryList.append(city)
         print(countryList)
         return countryList
 
-    def bypassPort(self,context):
+    def bypassPort(self,context,index):
         tree = etree.HTML(context)
         dataList = tree.xpath(self.PORT_RULE)
         portList = list()
         for port in dataList:
             port=port.strip()
-            if port not in self.PORT_SET and port != None:
+            if port not in self.port_list[index] and port != None:
                 # print(self.PORT_SET)
-                self.PORT_SET.add(port)
+                self.port_list[index].add(port)
                 portList.append(port)
         print(portList)
         return portList
@@ -247,9 +258,10 @@ class Fofa:
         print("now search key: "+init_search_key)
         TEMP_RETRY_NUM=0
 
-        while TEMP_RETRY_NUM < config.MAX_MATCH_RETRY_NUM:
+        while TEMP_RETRY_NUM < self.MAX_MATCH_RETRY_NUM:
             try:
                 rep=self.setIndexTimestamp(searchbs64,timestampIndex)
+                print(rep.text)
                 self.saveData(rep)
                 for url in self.levelData.formatData:
                     self.host_set.add(url)
@@ -305,56 +317,7 @@ class Fofa:
         if self.oldLength == len(self.host_set):
             print("[-] {}节点数据无新增,该节点枯萎".format(index))
             return
-
-        '''
-            fuzz部分
-        '''
-        # self.bypass = ByPass(rep.text)
-        if "country" not in search_key:
-            countryList = self.bypassCountry(context)
-            for country in countryList:
-                new_key = search_key + ' && country="' + str(country) + '"'
-
-                # print("new_key: "+new_key)
-                searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
-                self.timestampIndex += 1
-                self.timestamp_list.append(set())
-                self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
-                # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
-                self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
-        if "org" not in search_key:
-            orgList=self.bypassOrg(context)
-            for org in orgList:
-                new_key = search_key+ ' && org="' + str(org) + '"'
-                # print(search_key)
-                searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
-                self.timestampIndex+=1
-                self.timestamp_list.append(set())
-                self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
-                # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
-                self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
-        if "asn" not in search_key:
-            asnList=self.bypassAsn(context)
-            for asn in asnList:
-                new_key = search_key+ ' && asn="' + str(asn) + '"'
-                # print(search_key)
-                searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
-                self.timestampIndex+=1
-                self.timestamp_list.append(set())
-                self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
-                # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
-                self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
-        if "port" not in search_key and self.checkHostPort():
-            portList=self.bypassPort(context)
-            for port in portList:
-                new_key = search_key+ ' && port="' + str(port) + '"'
-                # print(search_key)
-                searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
-                self.timestampIndex+=1
-                self.timestamp_list.append(set())
-                self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
-                # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
-                self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
+        self.fofa_fuzz_spider(search_key,context,index)
 
         search_key_modify = self.modify_search_time_url(search_key, index)
         # print(search_key_modify)
@@ -387,22 +350,89 @@ class Fofa:
             # search_key = search_key_modify
             # searchbs64 = searchbs64_modify
 
+    def fuzzListAdd(self):
+        self.timestampIndex += 1
+        self.timestamp_list.append(set())
+        self.city_list.append(set())
+        self.asn_list.append(set())
+        self.org_list.append(set())
+        self.port_list.append(set())
 
-    # def fofa_fuzz_spider(self, search_key, searchbs64):
-    #     """
-    #     递归调用 fofa_common_spider 方法不断 fuzz
-    #     @param search_key:
-    #     @param searchbs64:
-    #     @return:
-    #     """
-    #     FUZZ_LIST=["country","port","server","protocol","title"]
-    #     for key in FUZZ_LIST:
-    #         if key not in search_key:
-    #             results=self.bypass.switchBypass(key)
-    #             for result in results:
-    #                 search_key = search_key + ' && ' + key +'="' + str(result) + '"'
-    #                 searchbs64_modify = quote_plus(base64.b64encode(search_key.encode()))
-    #                 self.fofa_common_spider(search_key,searchbs64_modify)
+    def fofa_fuzz_spider(self, search_key, context, index):
+        """
+        递归调用 fofa_common_spider 方法不断 fuzz
+        @param search_key:
+        @param searchbs64:
+        @return:
+        """
+
+        '''
+            fuzz部分
+        '''
+        FUZZ_LIST = ["country", "org", "asn", "port"]
+        for fuzzKey in FUZZ_LIST:
+            if fuzzKey not in search_key:
+                if fuzzKey == "country":
+                    dataList=self.bypassCountry(context, index)
+                elif fuzzKey == "org":
+                    dataList=self.bypassOrg(context, index)
+                elif fuzzKey == "asn":
+                    dataList=self.bypassAsn(context, index)
+                elif fuzzKey == "port" and self.checkHostPort():
+                    dataList = self.bypassPort(context, index)
+                else:
+                    dataList=[]
+                # countryList = self.bypassCountry(context, index)
+                for data in dataList:
+                    new_key = search_key + ' && {}="{}"'.format(fuzzKey,data)
+                    # print("new_key: "+new_key)
+                    searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
+                    self.fuzzListAdd()
+                    self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
+                    # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
+                    self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
+
+        # if "country" not in search_key:
+        #     countryList = self.bypassCountry(context, index)
+        #     for country in countryList:
+        #         new_key = search_key + ' && country="' + str(country) + '"'
+        #
+        #         # print("new_key: "+new_key)
+        #         searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
+        #         self.fuzzListAdd()
+        #         self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
+        #         # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
+        #         self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
+        # if "org" not in search_key:
+        #     orgList = self.bypassOrg(context, index)
+        #     for org in orgList:
+        #         new_key = search_key + ' && org="' + str(org) + '"'
+        #         # print(search_key)
+        #         searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
+        #         self.fuzzListAdd()
+        #         self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
+        #         # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
+        #         self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
+        # if "asn" not in search_key:
+        #     asnList = self.bypassAsn(context, index)
+        #     for asn in asnList:
+        #         new_key = search_key + ' && asn="' + str(asn) + '"'
+        #         # print(search_key)
+        #         searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
+        #         self.fuzzListAdd()
+        #         self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
+        #         # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
+        #         self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
+        # if "port" not in search_key and self.checkHostPort():
+        #     portList = self.bypassPort(context, index)
+        #     for port in portList:
+        #         new_key = search_key + ' && port="' + str(port) + '"'
+        #         # print(search_key)
+        #         searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
+        #         self.fuzzListAdd()
+        #         self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
+        #         # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
+        #         self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
 
 
     def modify_search_time_url(self, search_key,index):
