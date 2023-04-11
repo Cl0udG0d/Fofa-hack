@@ -1,5 +1,10 @@
 # CHANGELOG 代码变更记录
 
+### 2.1.6
+
++ 删除测试 print
++ 新增 != fuzz 逻辑
+
 ### 2.1.5
 
 + 删除config.py文件,合并内容到fofa.py

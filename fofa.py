@@ -45,17 +45,13 @@ class Fofa:
         self.asn_list=[set()]
         self.org_list=[set()]
         self.port_list=[set()]
-        CITY_SET = set()
-        ASN_SET = set()
-        ORG_SET = set()
-        PORT_SET = set()
         self.oldLength = -1
         self.endcount=0
         self.filename = ""
         self.countryList=[]
         self.timestampIndex=0
         # Fofa-hack 版本号
-        self.VERSION_NUM = "2.1.5"
+        self.VERSION_NUM = "2.1.6"
         # 登录最大重试次数
         self.MAX_LOGIN_RETRY_NUM = 3
         # 页面URL获取最大重试次数
@@ -261,7 +257,7 @@ class Fofa:
         while TEMP_RETRY_NUM < self.MAX_MATCH_RETRY_NUM:
             try:
                 rep=self.setIndexTimestamp(searchbs64,timestampIndex)
-                print(rep.text)
+                # print(rep.text)
                 self.saveData(rep)
                 for url in self.levelData.formatData:
                     self.host_set.add(url)
@@ -385,6 +381,15 @@ class Fofa:
                 # countryList = self.bypassCountry(context, index)
                 for data in dataList:
                     new_key = search_key + ' && {}="{}"'.format(fuzzKey,data)
+                    # print("new_key: "+new_key)
+                    searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
+                    self.fuzzListAdd()
+                    self.setIndexTimestamp(searchbs64_modify, self.timestampIndex)
+                    # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
+                    self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
+
+                for data in dataList:
+                    new_key = search_key + ' && {}!="{}"'.format(fuzzKey,data)
                     # print("new_key: "+new_key)
                     searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
                     self.fuzzListAdd()

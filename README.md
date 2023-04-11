@@ -40,11 +40,11 @@ Fofa-hack>python fofa.py -h
         |__|  \____/|__| /__/\__\    
              _   _   ____   ____  __  __ 
             | |_| | / () \ / (__`|  |/  /
-            |_| |_|/__/\__\\____)|__|\__\ V2.1.0
+            |_| |_|/__/\__\\____)|__|\__\ V2.1.6
         
 usage: fofa.py [-h] [--timesleep TIMESLEEP] [--timeout TIMEOUT] --keyword KEYWORD [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz]
 
-Fofa-hack v2.1.0 使用说明
+Fofa-hack v2.1.6 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
