@@ -5,8 +5,8 @@
    date :         2023/2/12
 """
 
-f = open("1.txt")
-lines = f.readlines()
+import requests
 
-
-f.close()
+url="https://fofa.info/result?qbase64=InRlc3Qi"
+rep=requests.get(url)
+print(rep.text)

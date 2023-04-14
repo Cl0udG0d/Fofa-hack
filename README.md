@@ -6,8 +6,10 @@
 
 非付费会员,fofa数据无限抓取版,一整个返璞归真
 
+`-f` 参数开启关键字fuzz
+
 使用示例
-> python fofa.py --keyword thinkphp --endcount 100
+> python fofa.py --keyword thinkphp --endcount 100 -f
 ### 安装
 
 ```shell
@@ -40,11 +42,11 @@ Fofa-hack>python fofa.py -h
         |__|  \____/|__| /__/\__\    
              _   _   ____   ____  __  __ 
             | |_| | / () \ / (__`|  |/  /
-            |_| |_|/__/\__\\____)|__|\__\ V2.1.6
+            |_| |_|/__/\__\\____)|__|\__\ V2.1.7
         
 usage: fofa.py [-h] [--timesleep TIMESLEEP] [--timeout TIMEOUT] --keyword KEYWORD [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz]
 
-Fofa-hack v2.1.6 使用说明
+Fofa-hack v2.1.7 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -60,6 +62,7 @@ optional arguments:
                         爬取等级: 1-3 ,数字越大内容越详细,默认为 1
   --output OUTPUT, -o OUTPUT
                         输出格式:txt、json,默认为txt
+  --fuzz, -f            关键字fuzz参数,增加内容获取粒度
 ```
 
 爬取的结果会存储到`md5(搜索关键字)_运行时间戳.txt`文件中

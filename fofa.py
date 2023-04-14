@@ -51,7 +51,7 @@ class Fofa:
         self.countryList=[]
         self.timestampIndex=0
         # Fofa-hack 版本号
-        self.VERSION_NUM = "2.1.6"
+        self.VERSION_NUM = "2.1.7"
         # 登录最大重试次数
         self.MAX_LOGIN_RETRY_NUM = 3
         # 页面URL获取最大重试次数
@@ -66,13 +66,6 @@ class Fofa:
             |_| |_|/__/\__\\\\____)|__|\__\\ V{}
         '''.format(self.VERSION_NUM))
 
-    def headers(self,cookie):
-        headers_use = {
-            'User-Agent': fofa_useragent.getFakeUserAgent(),
-            'Accept': 'application/json, text/plain, */*',
-            "cookie": cookie.encode("utf-8").decode("latin1")
-        }
-        return headers_use
 
     def logoutInitMsg(self):
         print('''[*] LEVEL = {} , 初始化成功
@@ -80,7 +73,8 @@ class Fofa:
 [*] 爬取关键字: {}
 [*] 爬取结束数量: {}
 [*] 输出格式为: {}
-[*] 存储文件名: {}'''.format(self.level,self.timeSleep,self.searchKey,self.endcount,self.output,self.filename)
+[*] 存储文件名: {}
+[*] 是否开启关键字fuzz: {}'''.format(self.level,self.timeSleep,self.searchKey,self.endcount,self.output,self.filename,self.fuzz)
         )
         return
 
@@ -104,7 +98,7 @@ class Fofa:
         parser.add_argument('--endcount', '-e', help='爬取结束数量')
         parser.add_argument('--level', '-l', help='爬取等级: 1-3 ,数字越大内容越详细,默认为 1')
         parser.add_argument('--output', '-o', help='输出格式:txt、json,默认为txt')
-        # parser.add_argument('--fuzz', '-f', help='关键字fuzz参数,增加内容获取粒度',action='store_true')
+        parser.add_argument('--fuzz', '-f', help='关键字fuzz参数,增加内容获取粒度',action='store_true')
         args = parser.parse_args()
         self.timeSleep= int(args.timesleep)
         self.timeout = int(args.timeout)
@@ -116,7 +110,7 @@ class Fofa:
             self.endcount=100
         self.level=args.level if args.level else "1"
         self.levelData=LevelData(self.level)
-        # self.fuzz=args.fuzz
+        self.fuzz=args.fuzz
         self.output = args.output if args.output else "txt"
         self.filename = "{}_{}.{}".format(unit.md5(self.searchKey), int(time.time()),self.output)
         self.outputData = OutputData(self.filename, pattern=self.output)
@@ -128,10 +122,9 @@ class Fofa:
         :param search_key:
         :return:
         """
-        headers_use = fofa_useragent.getFofaPageNumHeaders()
         searchbs64 = base64.b64encode(f'{search_key}'.encode()).decode()
         print("[*] 爬取页面为:https://fofa.info/result?qbase64=" + searchbs64)
-        html = requests.get(url="https://fofa.info/result?qbase64=" + searchbs64, headers=headers_use, timeout=self.timeout).text
+        html = requests.get(url="https://fofa.info/result?qbase64=" + searchbs64, headers=fofa_useragent.getFofaPageNumHeaders(), timeout=self.timeout).text
         tree = etree.HTML(html)
         try:
             countnum = tree.xpath('//span[@class="hsxa-highlight-color"]/text()')[0]
@@ -230,7 +223,8 @@ class Fofa:
         try:
             request_url = 'https://fofa.info/result?qbase64=' + searchbs64 + "&full=false&page_size=10"
             # print(f'request_url:{request_url}')
-            rep = requests.get(request_url, headers=self.headers_use, timeout=self.timeout)
+            rep = requests.get(request_url, headers=fofa_useragent.getFofaPageNumHeaders(), timeout=self.timeout)
+            # print(rep.text)
             timelist = self.getTimeList(rep.text)
             # print(timelist)
             for temptime in timelist:
@@ -257,7 +251,6 @@ class Fofa:
         while TEMP_RETRY_NUM < self.MAX_MATCH_RETRY_NUM:
             try:
                 rep=self.setIndexTimestamp(searchbs64,timestampIndex)
-                # print(rep.text)
                 self.saveData(rep)
                 for url in self.levelData.formatData:
                     self.host_set.add(url)
@@ -313,7 +306,9 @@ class Fofa:
         if self.oldLength == len(self.host_set):
             print("[-] {}节点数据无新增,该节点枯萎".format(index))
             return
-        self.fofa_fuzz_spider(search_key,context,index)
+
+        if self.fuzz:
+            self.fofa_fuzz_spider(search_key,context,index)
 
         search_key_modify = self.modify_search_time_url(search_key, index)
         # print(search_key_modify)
