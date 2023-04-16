@@ -302,6 +302,8 @@ class Fofa:
 
         if len(self.host_set) >= self.endcount:
             print("[*] 在{}节点,数据爬取结束".format(index))
+            finalint = self.remove_duplicate()
+            print('[*] 去重结束，最终数据 ' + str(finalint) + ' 条\n')
             exit(0)
         if self.oldLength == len(self.host_set):
             print("[-] {}节点数据无新增,该节点枯萎".format(index))
@@ -309,14 +311,12 @@ class Fofa:
 
         if self.fuzz:
             self.fofa_fuzz_spider(search_key,context,index)
-
-        search_key_modify = self.modify_search_time_url(search_key, index)
-        # print(search_key_modify)
-        searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
-        # search_key = search_key_modify
-        # searchbs64 = searchbs64_modify
-        self.fofa_common_spider(search_key_modify,searchbs64_modify,index)
-
+            search_key_modify = self.modify_search_time_url(search_key, index)
+            # print(search_key_modify)
+            searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
+            # search_key = search_key_modify
+            # searchbs64 = searchbs64_modify
+            self.fofa_common_spider(search_key_modify,searchbs64_modify,index)
 
     def checkHostPort(self):
         """
@@ -482,6 +482,28 @@ class Fofa:
 
         return search_key_modify
 
+    def remove_duplicate(self):
+        f = open(self.filename, "r", encoding='utf-8')
+        text_list = []
+        s = set()
+        document = f.readlines()
+        document_num = int(len(document))
+        content = [x.strip() for x in document]
+        for x in range(0, len(content)):
+            text = content[x]
+            if text not in s:
+                s.add(text)
+                text_list.append(text)
+        with open("final_" + str(self.filename), 'a+', encoding='utf-8') as final:
+            for i in range(len(text_list)):
+                # s = str(i).split()
+                s = str(text_list[i])
+                s = s + '\n'
+                final.write(s)
+        f.close()
+        final.close()
+        return int(len(text_list))
+        
     def main(self):
         self.init()
         print('[*] 开始运行')
