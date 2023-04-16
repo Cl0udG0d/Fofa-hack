@@ -311,12 +311,13 @@ class Fofa:
 
         if self.fuzz:
             self.fofa_fuzz_spider(search_key,context,index)
-            search_key_modify = self.modify_search_time_url(search_key, index)
-            # print(search_key_modify)
-            searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
-            # search_key = search_key_modify
-            # searchbs64 = searchbs64_modify
-            self.fofa_common_spider(search_key_modify,searchbs64_modify,index)
+       
+        search_key_modify = self.modify_search_time_url(search_key, index)
+        # print(search_key_modify)
+        searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
+        # search_key = search_key_modify
+        # searchbs64 = searchbs64_modify
+        self.fofa_common_spider(search_key_modify,searchbs64_modify,index)
 
     def checkHostPort(self):
         """
