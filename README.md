@@ -120,6 +120,13 @@ optional arguments:
             <sub><b>tastypear</b></sub>
         </a>
     </td>
+    <td align="center">
+        <a href="https://github.com/KawaiiSh1zuku">
+            <img src="https://avatars.githubusercontent.com/u/51824296?v=4" width="100;" alt="wanswu"/>
+            <br />
+            <sub><b>KawaiiSh1zuku</b></sub>
+        </a>
+    </td>
 </tr>
 </table>
 

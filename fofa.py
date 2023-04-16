@@ -51,7 +51,7 @@ class Fofa:
         self.countryList=[]
         self.timestampIndex=0
         # Fofa-hack 版本号
-        self.VERSION_NUM = "2.1.7"
+        self.VERSION_NUM = "2.1.8"
         # 登录最大重试次数
         self.MAX_LOGIN_RETRY_NUM = 3
         # 页面URL获取最大重试次数
