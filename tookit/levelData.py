@@ -17,6 +17,7 @@ class LevelData:
     爬取规则
     '''
     URLLIST_RULE = '//span[@class="hsxa-host"]/a/@href'
+    URLLIST_RULE_TWO='//span[@class="hsxa-host"]/text()'
     TITLE_RULE='//p[@class="hsxa-two-line"]/text()'
     IP_RULE="p[2]/a/text()"
     CITY_RULE='p[3]/a/text()'
@@ -77,8 +78,10 @@ class LevelData:
             url
         :return:
         """
-        urllist = self.tree.xpath(self.URLLIST_RULE)
-        self.formatData = urllist
+        urllist1 = self.tree.xpath(self.URLLIST_RULE)
+        urllist2 = self.cleanUrlListSpeace(self.tree.xpath(self.URLLIST_RULE_TWO))
+
+        self.formatData = urllist1+urllist2
 
     def spiderMiddleData(self):
         """
@@ -89,7 +92,10 @@ class LevelData:
             ip
         :return:
         """
-        urllist = self.tree.xpath(self.URLLIST_RULE)
+        urllist1 = self.tree.xpath(self.URLLIST_RULE)
+        urllist2 = self.cleanUrlListSpeace(self.tree.xpath(self.URLLIST_RULE_TWO))
+        urllist = urllist1 + urllist2
+        # urllist = self.tree.xpath(self.URLLIST_RULE)
         portlist=self.tree.xpath(self.PORTLIST_RULE)
         leftList=self.tree.xpath(self.LEFT_LIST_RULE)
         titleList=self.tree.xpath(self.TITLE_RULE)
@@ -122,7 +128,9 @@ class LevelData:
             rep
         :return:
         """
-        urllist = self.tree.xpath(self.URLLIST_RULE)
+        urllist1 = self.tree.xpath(self.URLLIST_RULE)
+        urllist2 = self.cleanUrlListSpeace(self.tree.xpath(self.URLLIST_RULE_TWO))
+        urllist = urllist1 + urllist2
         portlist = self.tree.xpath(self.PORTLIST_RULE)
         leftList = self.tree.xpath(self.LEFT_LIST_RULE)
         rightList = self.tree.xpath(self.RIGHT_LIST_RULE)
@@ -149,5 +157,10 @@ class LevelData:
             tempDic["rep"] = rep[0].strip()
             self.formatData.append(tempDic)
 
-
+    def cleanUrlListSpeace(self,dataList):
+        newList=list()
+        for data in dataList:
+            data=data.strip()
+            newList.append(data)
+        return newList
 

@@ -5,8 +5,6 @@
    date :         2023/2/12
 """
 
-import requests
-
-url="https://fofa.info/result?qbase64=InRlc3Qi"
-rep=requests.get(url)
-print(rep.text)
+list1=[1,2,3]
+list2=[3,4,5]
+print(list1+list2)

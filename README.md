@@ -46,7 +46,7 @@ Fofa-hack>python fofa.py -h
         
 usage: fofa.py [-h] [--timesleep TIMESLEEP] [--timeout TIMEOUT] --keyword KEYWORD [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz]
 
-Fofa-hack v2.1.7 使用说明
+Fofa-hack v2.1.9 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -65,7 +65,7 @@ optional arguments:
   --fuzz, -f            关键字fuzz参数,增加内容获取粒度
 ```
 
-爬取的结果会存储到`md5(搜索关键字)_运行时间戳.txt`文件中
+爬取的去重结果会存储到`final_md5(搜索关键字)_运行时间戳.txt`文件中
 
 ### 测试
 
