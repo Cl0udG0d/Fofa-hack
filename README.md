@@ -1,6 +1,6 @@
 # Fofa-hack
 
-![Fofa-hack](https://socialify.git.ci/Cl0udG0d/Fofa-hack/image?language=1&name=1&owner=1&stargazers=1&theme=Light)
+![Fofa-hack](./images/logo.png)
 
 ### 简介
 

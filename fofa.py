@@ -51,7 +51,7 @@ class Fofa:
         self.countryList=[]
         self.timestampIndex=0
         # Fofa-hack 版本号
-        self.VERSION_NUM = "2.1.8"
+        self.VERSION_NUM = "2.1.10"
         # 登录最大重试次数
         self.MAX_LOGIN_RETRY_NUM = 3
         # 页面URL获取最大重试次数
@@ -64,6 +64,8 @@ class Fofa:
              _   _   ____   ____  __  __ 
             | |_| | / () \ / (__`|  |/  /
             |_| |_|/__/\__\\\\____)|__|\__\\ V{}
+            
+            公众号: 黑糖安全
         '''.format(self.VERSION_NUM))
 
 
