@@ -7,6 +7,7 @@ __pycache__/
 # C extensions
 *.so
 /venv
+*.json
 
 debug.log
 # Distribution / packaging

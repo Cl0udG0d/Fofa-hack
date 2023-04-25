@@ -115,7 +115,7 @@ class Fofa:
         self.fuzz=args.fuzz
         self.output = args.output if args.output else "txt"
         self.filename = "{}_{}.{}".format(unit.md5(self.searchKey), int(time.time()),self.output)
-        self.outputData = OutputData(self.filename, pattern=self.output)
+        self.outputData = OutputData(self.filename,self.level, pattern=self.output)
         self.logoutInitMsg()
 
     def get_count_num(self, search_key):
@@ -281,9 +281,10 @@ class Fofa:
         # urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
         print("[*] 已爬取条数 [{}]: ".format(len(self.host_set)) + str(self.levelData.formatData))
 
-        for i in self.levelData.formatData:
-            with open(self.filename, 'a+', encoding="utf-8") as f:
-                f.write(str(i) + "\n")
+        self.outputData.output(self.levelData.formatData)
+        # for i in self.levelData.formatData:
+        #     with open(self.filename, 'a+', encoding="utf-8") as f:
+        #         f.write(str(i) + "\n")
 
     def checkDataIsUpdate(self):
         """

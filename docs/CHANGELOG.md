@@ -1,5 +1,10 @@
 # CHANGELOG 代码变更记录
 
+### 2.1.11
+
++ 修订 python maximum recursion depth exceeded错误
++ json文件输出BUG修改
+
 ### 2.1.10
 
 + 修改logo
