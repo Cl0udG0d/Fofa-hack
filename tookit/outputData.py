@@ -18,6 +18,7 @@ class OutputData:
         self.filename=filename
         self.pattern = pattern if self.checkPatternStandard(pattern) else "txt"
         self.level=level
+        self.path=os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))),self.filename)
 
 
     def checkPatternStandard(self, pattern):
@@ -51,15 +52,16 @@ class OutputData:
         return
 
     def outputJson(self,newdata):
-        print(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
-        with open(os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))),self.filename), 'w+', encoding=self.ENCODING_TYPE) as load_f:
-            load_f.seek(0)
-            # print(len(load_f.readlines()))
-            if(len(load_f.readlines())==0):
+        print(self.path)
+        with open(self.path, 'w+', encoding=self.ENCODING_TYPE) as load_f:
+            # load_f.seek(0)
+            print(os.path.getsize(self.path))
+            if os.path.getsize(self.path)==0:
                 load_dict={}
             else:
                 load_dict = json.load(load_f)
-            # print(type(load_dict))
+            print(load_dict)
+
             for i in newdata:
                 if self.level=="1":
                     load_dict[i] = i
@@ -81,11 +83,13 @@ class OutputData:
                     load_dict[i]["server"] = i["server"]
                     load_dict[i]["rep"] = i["rep"]
             print(load_dict)
+
+            json.dump(load_dict, load_f, indent=4, ensure_ascii=False)
         load_f.close()
-        print("../{}".format(self.filename))
-        with open(os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))),self.filename), 'w+', encoding=self.ENCODING_TYPE) as r:
-            json.dump(load_dict, r, indent=4, ensure_ascii=False)
-        r.close()
+        # print(os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))),self.filename))
+        # with open(self.path, 'w+', encoding=self.ENCODING_TYPE) as r:
+        #
+        # r.close()
 
     def outputCsv(self):
         return
