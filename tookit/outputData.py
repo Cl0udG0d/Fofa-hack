@@ -18,8 +18,11 @@ class OutputData:
         self.filename=filename
         self.pattern = pattern if self.checkPatternStandard(pattern) else "txt"
         self.level=level
-        self.path=os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))),self.filename)
+        # self.path=os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))),self.filename)
 
+    def initFile(self):
+
+        return
 
     def checkPatternStandard(self, pattern):
         """
@@ -45,47 +48,54 @@ class OutputData:
 
 
     def readAllJsonData(self):
-        with open("../{}".format(self.filename), 'a+', encoding=self.ENCODING_TYPE) as load_f:
-            if load_f:
-                load_dict = json.load(load_f)
-                print(load_dict)
-        return
+        # print(os.path.exists(self.filename))
+        if os.path.exists(self.filename)==False or os.path.getsize(self.filename)==0:
+            return {}
+        else:
+            with open(self.filename, 'r+', encoding=self.ENCODING_TYPE) as load_f:
+                if load_f:
+                    load_dict = json.load(load_f)
+                    return load_dict
+        return {}
 
     def outputJson(self,newdata):
-        print(self.path)
-        with open(self.path, 'w+', encoding=self.ENCODING_TYPE) as load_f:
+        data=self.readAllJsonData()
+
+        with open(self.filename, 'w+', encoding=self.ENCODING_TYPE) as load_f:
             # load_f.seek(0)
-            print(os.path.getsize(self.path))
-            if os.path.getsize(self.path)==0:
-                load_dict={}
-            else:
-                load_dict = json.load(load_f)
-            print(load_dict)
+            # print(os.path.getsize(self.filename))
+            # print("lines : " + str(load_f.readlines()))
+            # if os.path.getsize(self.filename)==0:
+            #     load_dict={}
+            # else:
+            #     print("lines : "+str(load_f.readlines()))
+            #     load_dict = json.load(load_f)
+            # print(load_dict)
 
             for i in newdata:
                 if self.level=="1":
-                    load_dict[i] = i
+                    data[i] = i
                 elif self.level=="2":
-                    load_dict[i] = {}
-                    load_dict[i]["url"] = i["url"]
-                    load_dict[i]["port"] = i["port"]
-                    load_dict[i]["title"] = i["title"]
-                    load_dict[i]["ip"] = i["ip"]
+                    data[i] = {}
+                    data[i]["url"] = i["url"]
+                    data[i]["port"] = i["port"]
+                    data[i]["title"] = i["title"]
+                    data[i]["ip"] = i["ip"]
                 else :
-                    load_dict[i] = {}
-                    load_dict[i]["url"] = i["url"]
-                    load_dict[i]["port"] = i["port"]
-                    load_dict[i]["title"] = i["title"]
-                    load_dict[i]["ip"] = i["ip"]
-                    load_dict[i]["city"] = i["city"]
-                    load_dict[i]["asn"] = i["asn"]
-                    load_dict[i]["organization"] = i["organization"]
-                    load_dict[i]["server"] = i["server"]
-                    load_dict[i]["rep"] = i["rep"]
-            print(load_dict)
+                    data[i] = {}
+                    data[i]["url"] = i["url"]
+                    data[i]["port"] = i["port"]
+                    data[i]["title"] = i["title"]
+                    data[i]["ip"] = i["ip"]
+                    data[i]["city"] = i["city"]
+                    data[i]["asn"] = i["asn"]
+                    data[i]["organization"] = i["organization"]
+                    data[i]["server"] = i["server"]
+                    data[i]["rep"] = i["rep"]
+            print(data)
 
-            json.dump(load_dict, load_f, indent=4, ensure_ascii=False)
-        load_f.close()
+            json.dump(data, load_f, indent=4, ensure_ascii=False)
+            load_f.close()
         # print(os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))),self.filename))
         # with open(self.path, 'w+', encoding=self.ENCODING_TYPE) as r:
         #

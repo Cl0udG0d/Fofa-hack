@@ -1,5 +1,9 @@
 # CHANGELOG 代码变更记录
 
+### 2.1.12
+
++ 支持JSON文件输出 -o json
+
 ### 2.1.11
 
 + 修订 python maximum recursion depth exceeded错误
