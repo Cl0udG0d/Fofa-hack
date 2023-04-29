@@ -19,7 +19,6 @@ import re, requests
 from lxml import etree
 
 
-
 class Fofa:
     '''
     FUZZ规则
@@ -27,29 +26,25 @@ class Fofa:
     LEFT_LIST_RULE = '//div[@class="hsxa-meta-data-list-main-left hsxa-fl"]'
     CITY_RULE = 'p[3]/a/@href'
     ASN_RULE = 'p[4]/a/text()'
-    ORG_RULE='p[5]/a/text()'
-    PORT_RULE='//a[@class="hsxa-port"]/text()'
-
-
-
-
+    ORG_RULE = 'p[5]/a/text()'
+    PORT_RULE = '//a[@class="hsxa-port"]/text()'
 
     def __init__(self):
         self.bypass = None
         self.headers_use = ""
         self.level = 0
         self.host_set = set()
-        self.timestamp_list=[set()]
+        self.timestamp_list = [set()]
 
-        self.city_list=[set()]
-        self.asn_list=[set()]
-        self.org_list=[set()]
-        self.port_list=[set()]
+        self.city_list = [set()]
+        self.asn_list = [set()]
+        self.org_list = [set()]
+        self.port_list = [set()]
         self.oldLength = -1
-        self.endcount=0
+        self.endcount = 0
         self.filename = ""
-        self.countryList=[]
-        self.timestampIndex=0
+        self.countryList = []
+        self.timestampIndex = 0
         # Fofa-hack 版本号
         self.VERSION_NUM = "2.1.12"
         # 登录最大重试次数
@@ -64,58 +59,77 @@ class Fofa:
              _   _   ____   ____  __  __ 
             | |_| | / () \ / (__`|  |/  /
             |_| |_|/__/\__\\\\____)|__|\__\\ V{}
-            
+
             公众号: 黑糖安全
         '''.format(self.VERSION_NUM))
 
-
     def logoutInitMsg(self):
-        print('''[*] LEVEL = {} , 初始化成功
-[*] 爬取延时: {}s
-[*] 爬取关键字: {}
-[*] 爬取结束数量: {}
-[*] 输出格式为: {}
-[*] 存储文件名: {}
-[*] 是否开启关键字fuzz: {}'''.format(self.level,self.timeSleep,self.searchKey,self.endcount,self.output,self.filename,self.fuzz)
-        )
+        print(f'''[*] LEVEL = {self.level} , 初始化成功
+[*] 爬取延时: {self.timeSleep}s
+[*] 爬取关键字: {self.searchKey}
+[*] 爬取结束数量: {self.endcount}
+ [*] 输出格式为: {self.output}
+[*] 存储文件名: {self.filename}
+[*] 是否开启关键字fuzz: {self.fuzz}
+[*] 是否开启代理: {self.isProxy}
+'''
+              )
         return
 
-    def initKeyWord(self,keyword):
-        tempkey=keyword.replace("'",'"')
+    def setProxy(self, proxy):
+        """
+        设置代理
+        """
+        proxies = {}
+        if proxy:
+            proxies = {
+                'http': 'http://' + proxy,
+                'https': 'http://' + proxy
+            }
+            self.isProxy = True
+            return proxies
+        else:
+            self.isProxy = False
+            return proxies
+
+    def initKeyWord(self, keyword):
+        tempkey = keyword.replace("'", '"')
         # print(tempkey)
 
         if '"' not in tempkey and ' ' not in tempkey:
             if "=" in tempkey:
                 # print("=".join(tempkey.split("=")[1:]))
-                tempkey=tempkey.split("=")[0]+'="'+"=".join(tempkey.split("=")[1:])+'"'
+                tempkey = tempkey.split("=")[0] + '="' + "=".join(tempkey.split("=")[1:]) + '"'
             else:
-                tempkey='"{}"'.format(tempkey)
+                tempkey = '"{}"'.format(tempkey)
         return tempkey
 
     def init(self):
         parser = argparse.ArgumentParser(description='Fofa-hack v{} 使用说明'.format(self.VERSION_NUM))
-        parser.add_argument('--timesleep', '-t', help='爬取每一页等待秒数,防止IP被Ban,默认为3',default=3)
-        parser.add_argument('--timeout', '-to', help='爬取每一页的超时时间',default=10)
+        parser.add_argument('--timesleep', '-t', help='爬取每一页等待秒数,防止IP被Ban,默认为3', default=3)
+        parser.add_argument('--timeout', '-to', help='爬取每一页的超时时间', default=10)
         parser.add_argument('--keyword', '-k', help='fofa搜索关键字,默认为test', required=True)
         parser.add_argument('--endcount', '-e', help='爬取结束数量')
         parser.add_argument('--level', '-l', help='爬取等级: 1-3 ,数字越大内容越详细,默认为 1')
         parser.add_argument('--output', '-o', help='输出格式:txt、json,默认为txt')
-        parser.add_argument('--fuzz', '-f', help='关键字fuzz参数,增加内容获取粒度',action='store_true')
+        parser.add_argument('--fuzz', '-f', help='关键字fuzz参数,增加内容获取粒度', action='store_true')
+        parser.add_argument('--proxy', help="指定代理，代理格式 --proxy '127.0.0.1:7890'")
         args = parser.parse_args()
-        self.timeSleep= int(args.timesleep)
+        self.timeSleep = int(args.timesleep)
         self.timeout = int(args.timeout)
-        print("input: "+args.keyword)
-        self.searchKey=self.initKeyWord(args.keyword)
+        print("input: " + args.keyword)
+        self.searchKey = self.initKeyWord(args.keyword)
         if args.endcount:
-            self.endcount=int(args.endcount)
+            self.endcount = int(args.endcount)
         else:
-            self.endcount=100
-        self.level=args.level if args.level else "1"
-        self.levelData=LevelData(self.level)
-        self.fuzz=args.fuzz
+            self.endcount = 100
+        self.level = args.level if args.level else "1"
+        self.levelData = LevelData(self.level)
+        self.fuzz = args.fuzz
         self.output = args.output if args.output else "txt"
-        self.filename = "{}_{}.{}".format(unit.md5(self.searchKey), int(time.time()),self.output)
-        self.outputData = OutputData(self.filename,self.level, pattern=self.output)
+        self.filename = "{}_{}.{}".format(unit.md5(self.searchKey), int(time.time()), self.output)
+        self.outputData = OutputData(self.filename, self.level, pattern=self.output)
+        self.proxy = self.setProxy(args.proxy)
         self.logoutInitMsg()
 
     def get_count_num(self, search_key):
@@ -126,7 +140,8 @@ class Fofa:
         """
         searchbs64 = base64.b64encode(f'{search_key}'.encode()).decode()
         print("[*] 爬取页面为:https://fofa.info/result?qbase64=" + searchbs64)
-        html = requests.get(url="https://fofa.info/result?qbase64=" + searchbs64, headers=fofa_useragent.getFofaPageNumHeaders(), timeout=self.timeout).text
+        html = requests.get(url="https://fofa.info/result?qbase64=" + searchbs64,
+                            headers=fofa_useragent.getFofaPageNumHeaders(), timeout=self.timeout,proxies=self.proxy).text
         tree = etree.HTML(html)
         try:
             countnum = tree.xpath('//span[@class="hsxa-highlight-color"]/text()')[0]
@@ -152,7 +167,7 @@ class Fofa:
             timelist.append(temp.replace("<span>", "").replace("</span>", "").strip())
         return timelist
 
-    def bypassAsn(self,context,index):
+    def bypassAsn(self, context, index):
         tree = etree.HTML(context)
         leftList = tree.xpath(self.LEFT_LIST_RULE)
         asnList = list()
@@ -167,7 +182,7 @@ class Fofa:
 
         return asnList
 
-    def bypassOrg(self,context,index):
+    def bypassOrg(self, context, index):
         tree = etree.HTML(context)
         leftList = tree.xpath(self.LEFT_LIST_RULE)
         orgList = list()
@@ -181,26 +196,26 @@ class Fofa:
         print(orgList)
         return orgList
 
-    def bypassCountry(self,context,index):
+    def bypassCountry(self, context, index):
         tree = etree.HTML(context)
         leftList = tree.xpath(self.LEFT_LIST_RULE)
-        countryList=list()
+        countryList = list()
         for i in range(len(leftList)):
-            if len(leftList[i].xpath(self.CITY_RULE))>0:
+            if len(leftList[i].xpath(self.CITY_RULE)) > 0:
                 cityURL = leftList[i].xpath(self.CITY_RULE)[0].strip()
-                city=self.filterKeyword(cityURL,"country")
-                if city not in self.city_list[index] and city!=None:
+                city = self.filterKeyword(cityURL, "country")
+                if city not in self.city_list[index] and city != None:
                     self.city_list[index].add(city)
                     countryList.append(city)
         print(countryList)
         return countryList
 
-    def bypassPort(self,context,index):
+    def bypassPort(self, context, index):
         tree = etree.HTML(context)
         dataList = tree.xpath(self.PORT_RULE)
         portList = list()
         for port in dataList:
-            port=port.strip()
+            port = port.strip()
             if port not in self.port_list[index] and port != None:
                 # print(self.PORT_SET)
                 self.port_list[index].add(port)
@@ -208,12 +223,11 @@ class Fofa:
         print(portList)
         return portList
 
-
-    def filterKeyword(self,keyURL,key):
+    def filterKeyword(self, keyURL, key):
         # print(keyURL)
         if "qbase64=" in keyURL:
-            searchbs64=keyURL.split("qbase64=")[1]
-            search_key=base64.b64decode(searchbs64).decode()
+            searchbs64 = keyURL.split("qbase64=")[1]
+            search_key = base64.b64decode(searchbs64).decode()
             if key in search_key:
                 pattern = r'{}="([^"]+)"'.format(key)
                 match = re.search(pattern, search_key)
@@ -221,11 +235,11 @@ class Fofa:
                 return city
         return None
 
-    def setIndexTimestamp(self,searchbs64,timestampIndex):
+    def setIndexTimestamp(self, searchbs64, timestampIndex):
         try:
             request_url = 'https://fofa.info/result?qbase64=' + searchbs64 + "&full=false&page_size=10"
             # print(f'request_url:{request_url}')
-            rep = requests.get(request_url, headers=fofa_useragent.getFofaPageNumHeaders(), timeout=self.timeout)
+            rep = requests.get(request_url, headers=fofa_useragent.getFofaPageNumHeaders(), timeout=self.timeout,proxies=self.proxy)
             # print(rep.text)
             timelist = self.getTimeList(rep.text)
             # print(timelist)
@@ -237,22 +251,20 @@ class Fofa:
             pass
         return None
 
-
-
-    def fofa_spider_page(self, search_key,searchbs64,timestampIndex):
+    def fofa_spider_page(self, search_key, searchbs64, timestampIndex):
         """
         获取一页的数据
         :rtype: object
         """
-        searchbs64=searchbs64.replace("%3D","=")
+        searchbs64 = searchbs64.replace("%3D", "=")
         # init_search_key = base64.b64decode(searchbs64).decode()
-        init_search_key=search_key
-        print("now search key: "+init_search_key)
-        TEMP_RETRY_NUM=0
+        init_search_key = search_key
+        print("now search key: " + init_search_key)
+        TEMP_RETRY_NUM = 0
 
         while TEMP_RETRY_NUM < self.MAX_MATCH_RETRY_NUM:
             try:
-                rep=self.setIndexTimestamp(searchbs64,timestampIndex)
+                rep = self.setIndexTimestamp(searchbs64, timestampIndex)
                 self.saveData(rep)
                 for url in self.levelData.formatData:
                     self.host_set.add(url)
@@ -263,15 +275,14 @@ class Fofa:
 
             except Exception as e:
                 print("[-] error:{}".format(e))
-                TEMP_RETRY_NUM+=1
+                TEMP_RETRY_NUM += 1
                 print('[-] 第{}次尝试获取页面URL'.format(TEMP_RETRY_NUM))
                 pass
-
 
         print('[-] FOFA资源获取重试超过最大次数,程序退出')
         exit(0)
 
-    def saveData(self,rep):
+    def saveData(self, rep):
         """
         数据保存至文件
         @param rep:
@@ -293,15 +304,14 @@ class Fofa:
             未新增为 false
         @return:
         """
-        return self.oldLength !=len(self.host_set)
+        return self.oldLength != len(self.host_set)
 
-
-    def fofa_common_spider(self, search_key, searchbs64,index):
+    def fofa_common_spider(self, search_key, searchbs64, index):
         # while len(self.host_set) < self.endcount and self.oldLength !=len(self.host_set):
 
-        self.oldLength=len(self.host_set)
+        self.oldLength = len(self.host_set)
         self.timestamp_list[index].clear()
-        context=self.fofa_spider_page(search_key,searchbs64,index)
+        context = self.fofa_spider_page(search_key, searchbs64, index)
 
         if len(self.host_set) >= self.endcount:
             print("[*] 在{}节点,数据爬取结束".format(index))
@@ -313,14 +323,14 @@ class Fofa:
             return
 
         if self.fuzz:
-            self.fofa_fuzz_spider(search_key,context,index)
-       
+            self.fofa_fuzz_spider(search_key, context, index)
+
         search_key_modify = self.modify_search_time_url(search_key, index)
         # print(search_key_modify)
         searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
         # search_key = search_key_modify
         # searchbs64 = searchbs64_modify
-        self.fofa_common_spider(search_key_modify,searchbs64_modify,index)
+        self.fofa_common_spider(search_key_modify, searchbs64_modify, index)
 
     def checkHostPort(self):
         """
@@ -334,16 +344,15 @@ class Fofa:
                 return False
         if "host" in self.searchKey:
             result = re.findall('host="(.*?)"', self.searchKey)
-            if len(result)>0 and ":" in result:
+            if len(result) > 0 and ":" in result:
                 return False
         return True
 
-
         # search_key_modify= self.modify_search_time_url(search_key,index)
-            # print(search_key_modify)
-            # searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
-            # search_key = search_key_modify
-            # searchbs64 = searchbs64_modify
+        # print(search_key_modify)
+        # searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
+        # search_key = search_key_modify
+        # searchbs64 = searchbs64_modify
 
     def fuzzListAdd(self):
         self.timestampIndex += 1
@@ -368,18 +377,18 @@ class Fofa:
         for fuzzKey in FUZZ_LIST:
             if fuzzKey not in search_key:
                 if fuzzKey == "country":
-                    dataList=self.bypassCountry(context, index)
+                    dataList = self.bypassCountry(context, index)
                 elif fuzzKey == "org":
-                    dataList=self.bypassOrg(context, index)
+                    dataList = self.bypassOrg(context, index)
                 elif fuzzKey == "asn":
-                    dataList=self.bypassAsn(context, index)
+                    dataList = self.bypassAsn(context, index)
                 elif fuzzKey == "port" and self.checkHostPort():
                     dataList = self.bypassPort(context, index)
                 else:
-                    dataList=[]
+                    dataList = []
                 # countryList = self.bypassCountry(context, index)
                 for data in dataList:
-                    new_key = search_key + ' && {}="{}"'.format(fuzzKey,data)
+                    new_key = search_key + ' && {}="{}"'.format(fuzzKey, data)
                     # print("new_key: "+new_key)
                     searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
                     self.fuzzListAdd()
@@ -388,7 +397,7 @@ class Fofa:
                     self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
 
                 for data in dataList:
-                    new_key = search_key + ' && {}!="{}"'.format(fuzzKey,data)
+                    new_key = search_key + ' && {}!="{}"'.format(fuzzKey, data)
                     # print("new_key: "+new_key)
                     searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
                     self.fuzzListAdd()
@@ -438,17 +447,16 @@ class Fofa:
         #         # self.fofa_spider_page(search_key,searchbs64_modify,self.timestampIndex)
         #         self.fofa_common_spider(new_key, searchbs64_modify, self.timestampIndex)
 
-
-    def modify_search_time_url(self, search_key,index):
+    def modify_search_time_url(self, search_key, index):
         """
         根据时间修订搜索值
         :param search_key:
         :return:
         """
-        
+
         # get before_time in search_key.
         # if there is no before_time, set tomorrow_time as default
-        before_time_in_search_key = (datetime.today()+timedelta(days=1)).strftime('%Y-%m-%d')
+        before_time_in_search_key = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
         if "before=" in search_key:
             pattern = r'before="([^"]+)"'
             match = re.search(pattern, search_key)
@@ -459,19 +467,19 @@ class Fofa:
         # print("self.timestamp_list :"+str(self.timestamp_list))
         # print("index: "+str(index)+" ; self.timestamp_list[index]: "+str(self.timestamp_list[index]))
         # regard the_earliest_time.tomorrow as optimized time_before
-        timestamp_list=list(self.timestamp_list[index])
+        timestamp_list = list(self.timestamp_list[index])
         timestamp_list.sort()
         # print(timestamp_list)
 
         time_first = timestamp_list[0].split(' ')[0].strip('\n').strip()
         time_first_time = datetime.strptime(time_first, "%Y-%m-%d").date()
-        time_before = time_first_time+timedelta(days=1)
-        
+        time_before = time_first_time + timedelta(days=1)
+
         # check if optimized time_before can be used
-        if time_before>=time_before_time_in_search_key:
+        if time_before >= time_before_time_in_search_key:
             time_before = time_before_time_in_search_key - timedelta(days=1)
- 
-        #print(time_before)
+
+        # print(time_before)
 
         if 'before' in search_key:
             # print(search_key)
@@ -507,7 +515,7 @@ class Fofa:
         f.close()
         final.close()
         return int(len(text_list))
-        
+
     def main(self):
         self.init()
         print('[*] 开始运行')
@@ -515,6 +523,7 @@ class Fofa:
         self.fofa_common_spider(self.searchKey, searchbs64, 0)
 
         print('[*] 抓取结束，共抓取数据 ' + str(len(self.host_set)) + ' 条\n')
+
 
 if __name__ == '__main__':
     fofa = Fofa()
