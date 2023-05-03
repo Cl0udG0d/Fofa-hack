@@ -45,6 +45,7 @@ class Fofa:
         self.filename = ""
         self.countryList = []
         self.timestampIndex = 0
+        self.no_new_data_count = 0
         # Fofa-hack 版本号
         self.VERSION_NUM = "2.2.0"
         # 登录最大重试次数
@@ -319,8 +320,12 @@ class Fofa:
             print('[*] 去重结束，最终数据 ' + str(finalint) + ' 条\n')
             exit(0)
         if self.oldLength == len(self.host_set):
-            print("[-] {}节点数据无新增,该节点枯萎".format(index))
-            return
+            self.no_new_data_count += 1
+            if self.no_new_data_count == 2:
+                print("[-] {}节点数据无新增,该节点枯萎".format(index))
+                return
+        else:
+            self.no_new_data_count = 0
 
         if self.fuzz:
             self.fofa_fuzz_spider(search_key, context, index)
