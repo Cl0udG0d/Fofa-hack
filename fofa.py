@@ -47,7 +47,7 @@ class Fofa:
         self.timestampIndex = 0
         self.no_new_data_count = 0
         # Fofa-hack 版本号
-        self.VERSION_NUM = "2.2.0"
+        self.VERSION_NUM = "2.2.1"
         # 登录最大重试次数
         self.MAX_LOGIN_RETRY_NUM = 3
         # 页面URL获取最大重试次数
