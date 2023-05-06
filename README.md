@@ -139,7 +139,6 @@ optional arguments:
 
 建了一个微信的安全交流群，欢迎添加我微信备注`进群`，一起来聊天吹水哇，以及一个会发布安全相关内容的公众号，欢迎关注 :)
 
-<div>
-    <img  alt="JPG" src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/1a1f7894a170bec207e61bf86a01592.jpg"  width="280px" />
-    <img  alt="JPG" src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/qrcode_for_gh_cead8e1080d6_430.jpg"  width="280px" />
-</div>
+|               加我拉你入群               |                                                            黑糖安全公众号                                                             |
+|:----------------------------------------------------------: |:------------------------------------------------------------------------------------------------------------------------------:|
+| <img src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/1a1f7894a170bec207e61bf86a01592.jpg" width="300"/> | <img src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/qrcode_for_gh_cead8e1080d6_430.jpg" width="300"/> |
