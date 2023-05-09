@@ -11,8 +11,6 @@ import time
 from urllib.parse import quote_plus
 from tookit import unit, fofa_useragent
 import argparse
-
-from tookit.bypass import ByPass
 from tookit.levelData import LevelData
 from tookit.outputData import OutputData
 import re, requests
@@ -47,11 +45,12 @@ class Fofa:
         self.timestampIndex = 0
         self.no_new_data_count = 0
         # Fofa-hack 版本号
-        self.VERSION_NUM = "2.2.1"
+        self.VERSION_NUM = "2.2.2"
         # 登录最大重试次数
         self.MAX_LOGIN_RETRY_NUM = 3
         # 页面URL获取最大重试次数
         self.MAX_MATCH_RETRY_NUM = 3
+        self.EXIT_FLAG = False
 
         print('''
          ____  ____  ____  ____      
@@ -69,11 +68,10 @@ class Fofa:
 [*] 爬取延时: {self.timeSleep}s
 [*] 爬取关键字: {self.searchKey}
 [*] 爬取结束数量: {self.endcount}
- [*] 输出格式为: {self.output}
+[*] 输出格式为: {self.output}
 [*] 存储文件名: {self.filename}
 [*] 是否开启关键字fuzz: {self.fuzz}
-[*] 是否开启代理: {self.isProxy}
-'''
+[*] 是否开启代理: {self.isProxy}'''
               )
         return
 
@@ -314,11 +312,15 @@ class Fofa:
         self.timestamp_list[index].clear()
         context = self.fofa_spider_page(search_key, searchbs64, index)
 
+        if self.EXIT_FLAG:
+            return
+
         if len(self.host_set) >= self.endcount:
             print("[*] 在{}节点,数据爬取结束".format(index))
             finalint = self.remove_duplicate()
-            print('[*] 去重结束，最终数据 ' + str(finalint) + ' 条\n')
-            exit(0)
+            print('[*] 去重结束，最终数据 ' + str(finalint) + ' 条')
+            self.EXIT_FLAG = True
+            return
         if self.oldLength == len(self.host_set):
             self.no_new_data_count += 1
             if self.no_new_data_count == 2:
@@ -528,6 +530,50 @@ class Fofa:
         self.fofa_common_spider(self.searchKey, searchbs64, 0)
 
         print('[*] 抓取结束，共抓取数据 ' + str(len(self.host_set)) + ' 条\n')
+
+    def main_call(self,
+                  keyword="test",
+                  timeSleep=3,
+                  timeout=3,
+                  endcount=100,
+                  level="1",
+                  fuzz=False,
+                  output="txt",
+                  proxy=None
+                  ):
+        """
+        外部调用fofa-hack 使用此方法
+
+        返回self.host_set
+
+        :param keyword:
+        :param timeSleep:
+        :param timeout:
+        :param endcount:
+        :param level:
+        :param fuzz:
+        :param output:
+        :param proxy:
+        :return:
+        """
+        self.timeSleep = int(timeSleep)
+        self.timeout = int(timeout)
+        self.searchKey = self.initKeyWord(keyword)
+        self.endcount = int(endcount)
+        self.level = level
+        self.levelData = LevelData(self.level)
+        self.fuzz = fuzz
+        self.output = output
+        self.filename = "{}_{}.{}".format(unit.md5(self.searchKey), int(time.time()), self.output)
+        self.outputData = OutputData(self.filename, self.level, pattern=self.output)
+        self.proxy = self.setProxy(proxy)
+        self.logoutInitMsg()
+        searchbs64 = base64.b64encode(f'{self.searchKey}'.encode()).decode()
+        self.fofa_common_spider(self.searchKey, searchbs64, 0)
+        print('[*] 抓取结束，共抓取数据 ' + str(len(self.host_set)) + ' 条\n')
+        print(self.host_set)
+
+        return self.host_set
 
 
 if __name__ == '__main__':
