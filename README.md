@@ -75,6 +75,15 @@ optional arguments:
 
 爬取一百条数据轻轻松松
 
+### 外部调用
+
+外部调用fofa-hack,返回扫描结果的集合
+
+```python
+fofa = Fofa()
+data=fofa.main_call(keyword='index')
+```
+
 ### 赞赏列表
 
 详情请见[SPONSOR](docs/SPONSOR.md)
