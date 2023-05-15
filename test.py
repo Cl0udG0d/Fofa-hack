@@ -6,5 +6,7 @@
 """
 from tookit.outputData import OutputData
 
-output=OutputData("123","json")
-output.outputJson(["123","456","789"])
+if (1 == 1):
+    print(1)
+output = OutputData("123", "json")
+output.outputJson(["123", "456", "789"])
