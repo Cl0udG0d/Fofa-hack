@@ -36,7 +36,7 @@ class LevelData:
     level = "1"
     tree = None
     rep = None
-    formatData = []
+    format_data = []
 
     def __init__(self, level="1"):
         self.level = level if self.checkLevelStandard(level) else "1"
@@ -58,7 +58,7 @@ class LevelData:
         :param rep:
         :return:
         """
-        self.formatData=[]
+        self.format_data=[]
         self.rep = rep
         self.tree = etree.HTML(rep.text)
         self.selectSpiderRule()
@@ -81,7 +81,7 @@ class LevelData:
         urllist1 = self.tree.xpath(self.URLLIST_RULE)
         urllist2 = self.cleanUrlListSpeace(self.tree.xpath(self.URLLIST_RULE_TWO))
 
-        self.formatData = urllist1+urllist2
+        self.format_data = urllist1+urllist2
 
     def spiderMiddleData(self):
         """
@@ -100,19 +100,19 @@ class LevelData:
         leftList=self.tree.xpath(self.LEFT_LIST_RULE)
         titleList=self.tree.xpath(self.TITLE_RULE)
         for i in range(len(urllist)):
-            tempDic = {}
-            tempDic["url"] = urllist[i].strip()
-            tempDic["port"]=portlist[i].strip()
+            temp_dic = {}
+            temp_dic["url"] = urllist[i].strip()
+            temp_dic["port"]=portlist[i].strip()
             ip = leftList[i].xpath(self.IP_RULE)
-            tempDic["title"]=titleList[i].strip()
-            tempDic["ip"] = ip[0].strip()
-            self.formatData.append(tempDic)
+            temp_dic["title"]=titleList[i].strip()
+            temp_dic["ip"] = ip[0].strip()
+            self.format_data.append(temp_dic)
 
     def stripList(self,data):
-        newData = []
+        new_data = []
         for i in data:
-            newData.append(i.strip())
-        return newData
+            new_data.append(i.strip())
+        return new_data
 
     def spiderHighData(self):
         """
@@ -131,36 +131,36 @@ class LevelData:
         urllist1 = self.tree.xpath(self.URLLIST_RULE)
         urllist2 = self.cleanUrlListSpeace(self.tree.xpath(self.URLLIST_RULE_TWO))
         urllist = urllist1 + urllist2
-        portlist = self.tree.xpath(self.PORTLIST_RULE)
-        leftList = self.tree.xpath(self.LEFT_LIST_RULE)
-        rightList = self.tree.xpath(self.RIGHT_LIST_RULE)
-        titleList = self.tree.xpath(self.TITLE_RULE)
+        port_list = self.tree.xpath(self.PORTLIST_RULE)
+        left_list = self.tree.xpath(self.LEFT_LIST_RULE)
+        right_list = self.tree.xpath(self.RIGHT_LIST_RULE)
+        title_list = self.tree.xpath(self.TITLE_RULE)
 
         for i in range(len(urllist)):
-            tempDic = {}
-            ip = leftList[i].xpath(self.IP_RULE)
-            city = leftList[i].xpath(self.CITY_RULE)
-            asn = leftList[i].xpath(self.ASN_RULE)
-            organization = leftList[i].xpath(self.ORGANIZATION_RULE)
-            server = leftList[i].xpath(self.SERVER_RULE)
-            rep = rightList[i].xpath(self.REP_RULE)
+            temp_dic = {}
+            ip = left_list[i].xpath(self.IP_RULE)
+            city = left_list[i].xpath(self.CITY_RULE)
+            asn = left_list[i].xpath(self.ASN_RULE)
+            organization = left_list[i].xpath(self.ORGANIZATION_RULE)
+            server = left_list[i].xpath(self.SERVER_RULE)
+            rep = right_list[i].xpath(self.REP_RULE)
 
-            tempDic["url"] = urllist[i].strip()
-            tempDic["port"] = portlist[i].strip()
-            tempDic["title"] = titleList[i].strip()
-            tempDic["ip"] = ip[0].strip()
+            temp_dic["url"] = urllist[i].strip()
+            temp_dic["port"] = port_list[i].strip()
+            temp_dic["title"] = title_list[i].strip()
+            temp_dic["ip"] = ip[0].strip()
 
-            tempDic["city"] = city[0].strip()
-            tempDic["asn"] = asn[0].strip()
-            tempDic["organization"] = organization[0].strip()
-            tempDic["server"] = self.stripList(server)
-            tempDic["rep"] = rep[0].strip()
-            self.formatData.append(tempDic)
+            temp_dic["city"] = city[0].strip()
+            temp_dic["asn"] = asn[0].strip()
+            temp_dic["organization"] = organization[0].strip()
+            temp_dic["server"] = self.stripList(server)
+            temp_dic["rep"] = rep[0].strip()
+            self.format_data.append(temp_dic)
 
-    def cleanUrlListSpeace(self,dataList):
-        newList=list()
-        for data in dataList:
+    def cleanUrlListSpeace(self,data_list):
+        new_list=list()
+        for data in data_list:
             data=data.strip()
-            newList.append(data)
-        return newList
+            new_list.append(data)
+        return new_list
 
