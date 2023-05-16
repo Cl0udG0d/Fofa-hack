@@ -48,7 +48,7 @@ class Fofa:
         self.timestamp_index = 0
         self.no_new_data_count = 0
         # Fofa-hack 版本号
-        self.VERSION_NUM = "2.2.3"
+        self.VERSION_NUM = "2.2.4"
         # 登录最大重试次数
         self.MAX_LOGIN_RETRY_NUM = 3
         # 页面URL获取最大重试次数
@@ -311,7 +311,7 @@ class Fofa:
             try:
                 rep = self.setIndexTimestamp(searchbs64, timestamp_index)
                 self.saveDataToFile(rep)
-                for url in self.level_data.formatData:
+                for url in self.level_data.format_data:
                     self.host_set.add(url)
 
                 time.sleep(self.time_sleep)
@@ -335,9 +335,9 @@ class Fofa:
         self.level_data.startSpider(rep)
         # tree = etree.HTML(rep.text)
         # urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
-        print("[*] 已爬取条数 [{}]: ".format(len(self.host_set)) + str(self.level_data.formatData))
+        print("[*] 已爬取条数 [{}]: ".format(len(self.host_set)) + str(self.level_data.format_data))
 
-        self.output_data.output(self.level_data.formatData)
+        self.output_data.output(self.level_data.format_data)
         # for i in self.level_data.formatData:
         #     with open(self.filename, 'a+', encoding="utf-8") as f:
         #         f.write(str(i) + "\n")
