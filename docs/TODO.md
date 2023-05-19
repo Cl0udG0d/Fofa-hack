@@ -7,12 +7,9 @@
 + 添加csv文件支持
 + 挑战fofa-hack极限
 + 修复level = 2,3 情况下的BUG
-+ 编码规范
-  + python方法重命名
-    + 见名知意
-    + 功能和名称对应
-    + 小驼峰
-  + python方法注释补充
-  + 代码格式化
-
++ 从文件批量读取语法
++ 集成fofa-script
++ 集成fofa 公安版
++ -o json 出来还是txt
++ level为3的时候结果不变
 

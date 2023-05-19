@@ -48,7 +48,7 @@ class Fofa:
         self.timestamp_index = 0
         self.no_new_data_count = 0
         # Fofa-hack 版本号
-        self.VERSION_NUM = "2.2.4"
+        self.VERSION_NUM = "2.2.5"
         # 登录最大重试次数
         self.MAX_LOGIN_RETRY_NUM = 3
         # 页面URL获取最大重试次数
@@ -78,6 +78,7 @@ class Fofa:
 [*] 存储文件名: {self.filename}
 [*] 是否开启关键字fuzz: {self.fuzz}
 [*] 是否开启代理: {self.is_proxy}
+[*] {"从"+self.inputfile if self.inputfile else "不从"}文件中读取
 ''')
 
     def setProxy(self, proxy):
@@ -113,11 +114,17 @@ class Fofa:
                 tempkey = '"{}"'.format(tempkey)
         return tempkey
 
+    def readKeywordsFromFile(self):
+        return
+
     def init(self):
         parser = argparse.ArgumentParser(description='Fofa-hack v{} 使用说明'.format(self.VERSION_NUM))
+        group = parser.add_mutually_exclusive_group(required=True)
+        group.add_argument('--keyword', '-k', help='fofa搜索关键字')
+        group.add_argument('--inputfile', '-i', help="指定文件,从文件中批量读取fofa语法")
+
         parser.add_argument('--timesleep', '-t', help='爬取每一页等待秒数,防止IP被Ban,默认为3', default=3)
         parser.add_argument('--timeout', '-to', help='爬取每一页的超时时间', default=10)
-        parser.add_argument('--keyword', '-k', help='fofa搜索关键字,默认为test', required=True)
         parser.add_argument('--endcount', '-e', help='爬取结束数量')
         parser.add_argument('--level', '-l', help='爬取等级: 1-3 ,数字越大内容越详细,默认为 1')
         parser.add_argument('--output', '-o', help='输出格式:txt、json,默认为txt')
@@ -126,19 +133,19 @@ class Fofa:
         args = parser.parse_args()
         self.time_sleep = int(args.timesleep)
         self.timeout = int(args.timeout)
-        print("input: " + args.keyword)
-        self.search_key = self.clipKeyWord(args.keyword)
-        if args.endcount:
-            self.endcount = int(args.endcount)
-        else:
-            self.endcount = 100
+        self.search_key = self.clipKeyWord(args.keyword) if args.keyword else None
+        self.endcount = int(args.endcount) if args.endcount else 100
         self.level = args.level if args.level else "1"
         self.level_data = LevelData(self.level)
         self.fuzz = args.fuzz
         self.output = args.output if args.output else "txt"
-        self.filename = "{}_{}.{}".format(unit.md5(self.search_key), int(time.time()), self.output)
-        self.output_data = OutputData(self.filename, self.level, pattern=self.output)
+        if self.search_key:
+            self.filename = "{}_{}.{}".format(unit.md5(self.search_key), int(time.time()), self.output)
+            self.output_data = OutputData(self.filename, self.level, pattern=self.output)
+        else:
+            self.filename ="暂无"
         self.proxy = self.setProxy(args.proxy)
+        self.inputfile=args.inputfile if args.inputfile else None
         self.outInitMsg()
 
     def getFofaKeywordsCount(self, search_key):
@@ -537,12 +544,39 @@ class Fofa:
         final.close()
         return int(len(text_list))
 
+    def cleanInitParameters(self):
+        """
+        清理初始化参数,将它们都恢复初始状态
+        """
+        self.host_set = set()
+        self.timestamp_list = [set()]
+        self.city_list = [set()]
+        self.asn_list = [set()]
+        self.org_list = [set()]
+        self.port_list = [set()]
+        self.old_length = -1
+        self.country_list = []
+        self.timestamp_index = 0
+        self.no_new_data_count = 0
+        self.EXIT_FLAG = False
+
     def main(self):
         self.init()
         print('[*] 开始运行')
-        searchbs64 = self.getFofaKeywordsCount(self.search_key)
-        self.fofaSpider(self.search_key, searchbs64, 0)
-        print('[*] 抓取结束，共抓取数据 ' + str(len(self.host_set)) + ' 条\n')
+        if self.inputfile:
+            with open(self.inputfile, 'r') as f:
+                for line in f.readlines():
+                    self.cleanInitParameters()
+                    self.search_key = self.clipKeyWord(line.strip())
+                    self.filename = "{}_{}.{}".format(unit.md5(self.search_key), int(time.time()), self.output)
+                    self.output_data = OutputData(self.filename, self.level, pattern=self.output)
+                    searchbs64 = self.getFofaKeywordsCount(self.search_key)
+                    self.fofaSpider(self.search_key, searchbs64, 0)
+                    print(f'[*] 抓取结束，{self.search_key}关键字共抓取数据 ' + str(len(self.host_set)) + ' 条\n')
+        else:
+            searchbs64 = self.getFofaKeywordsCount(self.search_key)
+            self.fofaSpider(self.search_key, searchbs64, 0)
+            print('[*] 抓取结束，共抓取数据 ' + str(len(self.host_set)) + ' 条\n')
 
     def mainCall(self,keyword="test",timeSleep=3,timeout=3,endcount=100,level="1",fuzz=False,
                   output="txt",proxy=None):
