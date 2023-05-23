@@ -9,7 +9,7 @@ from datetime import timedelta
 import base64
 import time
 from urllib.parse import quote_plus
-from tookit import unit, fofa_useragent
+from tookit import unit, fofaUseragent
 import argparse
 from tookit.levelData import LevelData
 from tookit.outputData import OutputData
@@ -157,7 +157,7 @@ class Fofa:
         searchbs64 = base64.b64encode(f'{search_key}'.encode()).decode()
         print("[*] 爬取页面为:https://fofa.info/result?qbase64=" + searchbs64)
         html = requests.get(url="https://fofa.info/result?qbase64=" + searchbs64,
-                            headers=fofa_useragent.getFofaPageNumHeaders(), timeout=self.timeout,proxies=self.proxy)\
+                            headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,proxies=self.proxy)\
                             .text
         tree = etree.HTML(html)
         try:
@@ -290,7 +290,7 @@ class Fofa:
         try:
             request_url = 'https://fofa.info/result?qbase64=' + searchbs64 + "&full=false&page_size=10"
             # print(f'request_url:{request_url}')
-            rep = requests.get(request_url, headers=fofa_useragent.getFofaPageNumHeaders(), timeout=self.timeout,
+            rep = requests.get(request_url, headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,
                                proxies=self.proxy)
             # print(rep.text)
             timelist = self.getTimeList(rep.text)

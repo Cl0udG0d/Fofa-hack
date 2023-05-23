@@ -1,5 +1,5 @@
 """
-   File Name :    fofa_useragent.py
+   File Name :    fofaUseragent.py
    Description :
    Author :       Cl0udG0d
    date :         2023/2/12
@@ -59,7 +59,7 @@ def getFofaLoginHeaders():
     """
     headers = {
         'User-Agent': getFakeUserAgent(),
-        'Referer': 'https://i.nosec.org/login?service=https://fofa.info/f_login',
+        'Referer': 'https://i.nosec.org/login?service=https://octra.fofa.vip/fofaLogin',
         'Host': 'i.nosec.org',
         'Origin': 'https://i.nosec.org',
         'sec-ch-ua': '"Chromium";v="106", "Microsoft Edge";v="106", "Not;A=Brand";v="99"',

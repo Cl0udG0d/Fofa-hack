@@ -2,7 +2,7 @@ import requests
 import re
 from lxml import etree
 
-from tookit.fofa_useragent import getFofaLoginHeaders
+from tookit.fofaUseragent import getFofaLoginHeaders
 
 
 class FofaLogin:
@@ -26,7 +26,7 @@ class FofaLogin:
     def fofaLogin(self,fofa_username, fofa_password):
         print('尝试登录')
 
-        authen = self.session.get(url='https://i.nosec.org/login?service=https://fofa.info/f_login', headers=getFofaLoginHeaders())
+        authen = self.session.get(url='https://i.nosec.org/login?service=https://octra.fofa.vip/fofaLogin', headers=getFofaLoginHeaders())
         src = re.findall('class="rucaptcha-image" src="(.*?)"', authen.text)[0]
 
         captcha = self.fofaCaptcha(src)
@@ -36,7 +36,7 @@ class FofaLogin:
             'utf8': '%E2%9C%93',
             'authenticity_token': authenticity_token,
             'lt': lt,
-            'service': 'https://fofa.info/f_login',
+            'service': 'https://octra.fofa.vip/fofaLogin',
             'username': fofa_username,
             'password': fofa_password,
             '_rucaptcha': captcha,
@@ -82,7 +82,8 @@ class FofaLogin:
 
 
 def main():
-    return
+    fofaLogin=FofaLogin()
+    print(fofaLogin.fofaLogin("",""))
 
 if __name__ == '__main__':
     main()
