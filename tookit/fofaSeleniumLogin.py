@@ -37,8 +37,8 @@ def main():
     captcha=ocr.classification(imgb)
     print(captcha)
 
-    driver.find_element(by=By.ID, value='username').send_keys('Dragonglifes')
-    driver.find_element(by=By.ID, value='password').send_keys('Lxygwqf@2020**')
+    driver.find_element(by=By.ID, value='username').send_keys('')
+    driver.find_element(by=By.ID, value='password').send_keys('')
     driver.find_element(by=By.NAME, value='_rucaptcha').send_keys(captcha)
     driver.find_element(by=By.ID, value='fofa_service').click()
     time.sleep(1)
