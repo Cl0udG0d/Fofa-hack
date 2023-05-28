@@ -20,7 +20,9 @@ class FofaLogin:
             'sec-ch-ua-platform': '"Windows"',
         }
         captcha_api = f'https://i.nosec.org{src}'
+        print(captcha_api)
         resp = self.session.get(url=captcha_api, headers=fofa_headers)
+        print(resp.text)
         return ocr.classification(resp.content)
 
     def fofaLogin(self,fofa_username, fofa_password):
@@ -83,7 +85,7 @@ class FofaLogin:
 
 def main():
     fofaLogin=FofaLogin()
-    print(fofaLogin.fofaLogin("",""))
+    print(fofaLogin.fofaLogin("Dragonglifes","Lxygwqf@2020**"))
 
 if __name__ == '__main__':
     main()

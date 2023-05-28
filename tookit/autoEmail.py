@@ -1,9 +1,3 @@
-"""
-   File Name :    test.py
-   Description :
-   Author :       Cl0udG0d
-   date :         2023/2/12
-"""
 from json import loads
 from re import findall
 from time import sleep
@@ -85,6 +79,7 @@ class Emailnator:
     def __del__(self):
         if self.email:
             self.clear_inbox()
+
 def main():
     mail_client = Emailnator()
     mail_address = mail_client.get_mail()
