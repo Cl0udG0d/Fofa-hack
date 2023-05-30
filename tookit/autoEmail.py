@@ -1,6 +1,7 @@
 from json import loads
 from re import findall
 from time import sleep
+from lxml import etree
 
 from requests import Session
 
@@ -44,6 +45,7 @@ class Emailnator:
         while True:
             sleep(2)
             mail_token = self.client.post("https://www.emailnator.com/message-list", json={"email": self.email})
+            print(mail_token.text)
 
             mail_token = loads(mail_token.text)["messageData"]
 
@@ -75,6 +77,16 @@ class Emailnator:
             json={"email": self.email},
         )
         print("Inbox cleared!")
+
+    def get_confirm_link(self):
+        message = self.get_message()
+        confirm_link = findall(r'href="(.*?)">', message)[0]
+        print(f"Confirm link is : {confirm_link}")
+        return confirm_link
+
+
+    def to_confirm(self):
+        return
 
     def __del__(self):
         if self.email:

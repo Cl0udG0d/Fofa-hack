@@ -8,7 +8,8 @@ from json import loads
 from re import findall
 from time import sleep
 
-from requests import Session
+from requests import Session, RequestException, Response
+from retrying import retry
 
 from tookit.fofaUseragent import getFakeUserAgent
 
@@ -18,6 +19,7 @@ class Emailnator:
         self.client = Session()
         self.client.get("https://www.emailnator.com/", timeout=6)
         self.cookies = self.client.cookies.get_dict()
+        # XSRF_TOKEN=self.__make_request(self.client)
 
         self.client.headers = {
             "authority": "www.emailnator.com",
@@ -85,14 +87,51 @@ class Emailnator:
     def __del__(self):
         if self.email:
             self.clear_inbox()
+
+    @staticmethod
+    @retry(
+        wait_fixed=5000,
+        stop_max_attempt_number=5,
+        retry_on_exception=lambda e: isinstance(e, RequestException),
+    )
+    def __make_request(client: Session) -> Response:
+        client.get(f'https://www.emailnator.com/', timeout=6)
+        if client.cookies.get("XSRF-TOKEN") is None:
+            print('retry')
+            raise RequestException('Unable to get the response from server')
+        return client.cookies.get("XSRF-TOKEN")
+
 def main():
     mail_client = Emailnator()
     mail_address = mail_client.get_mail()
     print(mail_address)
     # 逻辑
     mail_content = mail_client.get_message()
-    mail_token = findall(r';">(\d{6,7})</div>', mail_content)[0]
+    print(mail_content)
+    # mail_token = findall(r';">(\d{6,7})</div>', mail_content)[0]
+
+import math
+
+def haversine(lat1, lon1, lat2, lon2):  # 纬度1，经度1，纬度2,经度2 （十进制度数）
+    """
+    Calculate the great circle distance between two points
+    on the earth (specified in decimal degrees)
+    """
+    dLat = (lat2 - lat1) * math.pi / 180.0
+    dLon = (lon2 - lon1) * math.pi / 180.0
+
+    # convert to radians
+    lat1 = (lat1) * math.pi / 180.0
+    lat2 = (lat2) * math.pi / 180.0
+
+    # apply formulae
+    a = (pow(math.sin(dLat / 2), 2) +
+         pow(math.sin(dLon / 2), 2) *
+         math.cos(lat1) * math.cos(lat2))
+    rad = 6371
+    c = 2 * math.asin(math.sqrt(a))
+    return rad * c
 
 
 if __name__ == '__main__':
-    main()
+    print(haversine(30.3121081,104.0448277,30.3036757,104.0450954),"K.M.")

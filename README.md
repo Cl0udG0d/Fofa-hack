@@ -9,7 +9,7 @@
 `-f` 参数开启关键字fuzz
 
 使用示例
-> python fofa.py --keyword thinkphp --endcount 100 -f
+> python fofa.py --keyword thinkphp --endcount 100
 ### 安装
 
 ```shell
@@ -42,7 +42,7 @@ Fofa-hack>python fofa.py -h
         |__|  \____/|__| /__/\__\               
              _   _   ____   ____  __  __        
             | |_| | / () \ / (__`|  |/  /       
-            |_| |_|/__/\__\\____)|__|\__\ V2.2.5
+            |_| |_|/__/\__\\____)|__|\__\ V2.3.0
                                                 
             公众号: 黑糖安全                    
                                                 
@@ -84,13 +84,9 @@ optional arguments:
 爬取一百条数据轻轻松松
 
 ### 外部调用
+这部分现在还比较复杂,等有空再封装吧
 
-外部调用fofa-hack,返回扫描结果的集合
-
-```python
-fofa = Fofa()
-data=fofa.main_call(keyword='index')
-```
+~~外部调用fofa-hack,返回扫描结果的集合~~
 
 ### 赞赏列表
 
@@ -149,13 +145,8 @@ data=fofa.main_call(keyword='index')
 
 ### END 
 
-网络乞丐在线乞讨
-<div>
-    <img  alt="PNG" src="./images/sponsor.png"  width="280px" />
-</div>
-
 建了一个微信的安全交流群，欢迎添加我微信备注`进群`，一起来聊天吹水哇，以及一个会发布安全相关内容的公众号，欢迎关注 :)
 
-|               加我拉你入群               |                                                            黑糖安全公众号                                                             |
-|:----------------------------------------------------------: |:------------------------------------------------------------------------------------------------------------------------------:|
-| <img src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/1a1f7894a170bec207e61bf86a01592.jpg" width="300"/> | <img src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/qrcode_for_gh_cead8e1080d6_430.jpg" width="300"/> |
+|               加我拉你入群               |                                                            黑糖安全公众号                                                             |                                                          知识星球                                                          |
+|:----------------------------------------------------------: |:------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------:|
+| <img src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/1a1f7894a170bec207e61bf86a01592.jpg" width="300"/> | <img src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/qrcode_for_gh_cead8e1080d6_430.jpg" width="300"/> | <img src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/f15e36e768d83c799cc6bd0f3eff2a1.png" width="300"/> |
