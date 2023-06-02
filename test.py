@@ -4,134 +4,107 @@
    Author :       Cl0udG0d
    date :         2023/2/12
 """
-from json import loads
-from re import findall
-from time import sleep
+import re
+import time
 
-from requests import Session, RequestException, Response
-from retrying import retry
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from datetime import datetime
+from datetime import timedelta
 
-from tookit.fofaUseragent import getFakeUserAgent
+def modifySearchTimeUrl(search_key,timestamp_list):
+    """
+    根据时间修订搜索值
+    :param search_key:
+    :return:
+    """
 
+    # get before_time in search_key.
+    # if there is no before_time, set tomorrow_time as default
+    before_time_in_search_key = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
+    if "before=" in search_key:
+        pattern = r'before="([^"]+)"'
+        match = re.search(pattern, search_key)
+        before_time_in_search_key = match.group(1)
+    time_before_time_in_search_key = datetime.strptime(before_time_in_search_key, "%Y-%m-%d").date()
+    # print(self.timestamp_list)
+    # print(index)
+    # print("self.timestamp_list :"+str(self.timestamp_list))
+    # print("index: "+str(index)+" ; self.timestamp_list[index]: "+str(self.timestamp_list[index]))
+    # regard the_earliest_time.tomorrow as optimized time_before
+    timestamp_list = list(timestamp_list)
+    timestamp_list.sort()
+    # print(timestamp_list)
 
-class Emailnator:
-    def __init__(self) -> None:
-        self.client = Session()
-        self.client.get("https://www.emailnator.com/", timeout=6)
-        self.cookies = self.client.cookies.get_dict()
-        # XSRF_TOKEN=self.__make_request(self.client)
+    time_first = timestamp_list[0].split(' ')[0].strip('\n').strip()
+    time_first_time = datetime.strptime(time_first, "%Y-%m-%d").date()
+    time_before = time_first_time + timedelta(days=1)
 
-        self.client.headers = {
-            "authority": "www.emailnator.com",
-            "origin": "https://www.emailnator.com",
-            "referer": "https://www.emailnator.com/",
-            "user-agent": getFakeUserAgent(),
-            "x-xsrf-token": self.client.cookies.get("XSRF-TOKEN")[:-3] + "=",
-        }
+    # check if optimized time_before can be used
+    if time_before >= time_before_time_in_search_key:
+        time_before = time_before_time_in_search_key - timedelta(days=1)
 
-        self.email = None
+    # print(time_before)
 
-    def get_mail(self):
-        response = self.client.post(
-            "https://www.emailnator.com/generate-email",
-            json={
-                "email": [
-                    "domain",
-                    "plusGmail",
-                    "dotGmail",
-                ]
-            },
-        )
+    if 'before' in search_key:
+        # print(search_key)
+        search_key = search_key.split('&& before')[0]
+        search_key = search_key.strip(' ')
+        search_key = search_key + ' && ' + 'before="' + str(time_before) + '"'
+    else:
+        search_key = search_key + ' && ' + 'before="' + str(time_before) + '"'
+    search_key_modify = search_key
 
-        self.email = loads(response.text)["email"][0]
-        return self.email
+    # print('[*] 搜索词： ' + search_key_modify)
 
-    def get_message(self):
-        print("Waiting for message...")
+    return search_key_modify
 
-        while True:
-            sleep(2)
-            mail_token = self.client.post("https://www.emailnator.com/message-list", json={"email": self.email})
-
-            mail_token = loads(mail_token.text)["messageData"]
-
-            if len(mail_token) == 2:
-                print("Message received!")
-                print(mail_token[1]["messageID"])
-                break
-
-        mail_context = self.client.post(
-            "https://www.emailnator.com/message-list",
-            json={
-                "email": self.email,
-                "messageID": mail_token[1]["messageID"],
-            },
-        )
-
-        return mail_context.text
-
-    def get_verification_code(self):
-        message = self.get_message()
-        code = findall(r';">(\d{6,7})</div>', message)[0]
-        print(f"Verification code: {code}")
-        return code
-
-    def clear_inbox(self):
-        print("Clearing inbox...")
-        self.client.post(
-            "https://www.emailnator.com/delete-all",
-            json={"email": self.email},
-        )
-        print("Inbox cleared!")
-
-    def __del__(self):
-        if self.email:
-            self.clear_inbox()
-
-    @staticmethod
-    @retry(
-        wait_fixed=5000,
-        stop_max_attempt_number=5,
-        retry_on_exception=lambda e: isinstance(e, RequestException),
-    )
-    def __make_request(client: Session) -> Response:
-        client.get(f'https://www.emailnator.com/', timeout=6)
-        if client.cookies.get("XSRF-TOKEN") is None:
-            print('retry')
-            raise RequestException('Unable to get the response from server')
-        return client.cookies.get("XSRF-TOKEN")
+def getTimeList(text):
+    """
+    获取时间列表
+    :param text:
+    :return:
+    """
+    timelist = list()
+    pattern = "<span>[0-9]*-[0-9]*-[0-9]*</span>"
+    result = re.findall(pattern, text)
+    for temp in result:
+        timelist.append(temp.replace("<span>", "").replace("</span>", "").strip())
+    return timelist
 
 def main():
-    mail_client = Emailnator()
-    mail_address = mail_client.get_mail()
-    print(mail_address)
-    # 逻辑
-    mail_content = mail_client.get_message()
-    print(mail_content)
-    # mail_token = findall(r';">(\d{6,7})</div>', mail_content)[0]
+    search_key="aaa"
+    options = webdriver.ChromeOptions()
+    options.add_experimental_option('detach', True)
+    options.add_argument('--start-maximized')
+    driver = webdriver.Chrome(options=options)
+    driver.get('https://fofa.info/')
+    WebDriverWait(driver, timeout=5).until(lambda d: d.find_element(By.CLASS_NAME, 'el-input__inner'))
 
-import math
+    driver.find_element(by=By.CLASS_NAME, value='el-input__inner').send_keys(search_key)
+    driver.find_element(by=By.CLASS_NAME, value='icon-search').click()
 
-def haversine(lat1, lon1, lat2, lon2):  # 纬度1，经度1，纬度2,经度2 （十进制度数）
-    """
-    Calculate the great circle distance between two points
-    on the earth (specified in decimal degrees)
-    """
-    dLat = (lat2 - lat1) * math.pi / 180.0
-    dLon = (lon2 - lon1) * math.pi / 180.0
+    time.sleep(5)
+    timelist = getTimeList(driver.page_source)
 
-    # convert to radians
-    lat1 = (lat1) * math.pi / 180.0
-    lat2 = (lat2) * math.pi / 180.0
+    time.sleep(5)
 
-    # apply formulae
-    a = (pow(math.sin(dLat / 2), 2) +
-         pow(math.sin(dLon / 2), 2) *
-         math.cos(lat1) * math.cos(lat2))
-    rad = 6371
-    c = 2 * math.asin(math.sqrt(a))
-    return rad * c
+    search_key = modifySearchTimeUrl(search_key,timelist)
+    input_button=driver.find_element(by=By.CLASS_NAME, value='el-input__inner')
+    input_button.clear()
+    input_button.send_keys(search_key)
+    driver.find_element(by=By.CLASS_NAME, value='icon-search').click()
+    timelist.clear()
 
+    time.sleep(5)
+    timelist = getTimeList(driver.page_source)
+    search_key = modifySearchTimeUrl(search_key, timelist)
+    input_button = driver.find_element(by=By.CLASS_NAME, value='el-input__inner')
+    input_button.clear()
+    input_button.send_keys(search_key)
+    driver.find_element(by=By.CLASS_NAME, value='icon-search').click()
+    timelist.clear()
 
 if __name__ == '__main__':
-    print(haversine(30.3121081,104.0448277,30.3036757,104.0450954),"K.M.")
+    main()

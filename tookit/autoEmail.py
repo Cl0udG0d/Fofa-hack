@@ -11,7 +11,7 @@ from tookit.fofaUseragent import getFakeUserAgent
 class Emailnator:
     def __init__(self) -> None:
         self.client = Session()
-        self.client.get("https://www.emailnator.com/", timeout=6)
+        self.client.get("https://www.emailnator.com/", timeout=8)
         self.cookies = self.client.cookies.get_dict()
 
         self.client.headers = {

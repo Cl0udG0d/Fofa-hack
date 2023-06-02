@@ -8,6 +8,7 @@ import argparse
 import time
 
 from core.fofaC import FofaC
+from core.fofaS import FofaS
 from tookit import unit, config
 from tookit.levelData import LevelData
 from tookit.outputData import OutputData
@@ -28,6 +29,8 @@ def main():
     parser.add_argument('--output', '-o', help='输出格式:txt、json,默认为txt')
     parser.add_argument('--fuzz', '-f', help='关键字fuzz参数,增加内容获取粒度', action='store_true')
     parser.add_argument('--proxy', help="指定代理，代理格式 --proxy '127.0.0.1:7890'")
+    parser.add_argument('--type', type=str, choices=["common", "selenium"], default="common",
+                        help="运行类型,默认为普通方式")
     args = parser.parse_args()
 
     time_sleep = int(args.timesleep)
@@ -43,10 +46,17 @@ def main():
         output_data = OutputData(filename, level, pattern=output)
     else:
         filename = "暂无"
-        output_data=None
+        output_data = None
     is_proxy, proxy = setProxy(args.proxy)
+    type = args.type
     inputfile = args.inputfile if args.inputfile else None
-    fofa=FofaC(search_key,inputfile,filename,time_sleep,endcount,level,level_data,output,output_data,fuzz,timeout,is_proxy, proxy)
+    if type == "selenium":
+        fofa = FofaS(search_key, inputfile, filename, time_sleep, endcount, level, level_data, output, output_data,
+                     fuzz,
+                     timeout, is_proxy, proxy)
+    else:
+        fofa = FofaC(search_key, inputfile, filename, time_sleep, endcount, level, level_data, output, output_data,
+                     fuzz, timeout, is_proxy, proxy)
     fofa.start()
 
 

@@ -1,4 +1,7 @@
 import hashlib
+import random
+import string
+import time
 
 from tookit import config
 
@@ -8,6 +11,14 @@ def md5(str):
     m.update(str.encode("utf8"))
     # print(m.hexdigest())
     return m.hexdigest()
+
+def get_username():
+    return generate_username(5)
+
+def generate_username(length):
+    letters = string.ascii_lowercase
+    random_str=''.join(random.choice(letters) for i in range(length))
+    return random_str+"_"+str(int(time.time()))
 
 def outputLogo():
     print('''

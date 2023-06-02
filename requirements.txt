@@ -2,3 +2,4 @@ lxml==4.9.2
 requests==2.27.1
 urllib3==1.26.13
 ddddocr==1.4.7
+selenium==4.9.1

@@ -4,6 +4,8 @@
 
 ### 简介
 
+PS: 有钱还是支持正版,感谢FOFA提供这么好的测绘工具,我为fofa打call,不用Zoomeye,Hunter和Quake :)
+
 非付费会员,fofa数据无限抓取版,一整个返璞归真
 
 `-f` 参数开启关键字fuzz
@@ -42,16 +44,16 @@ Fofa-hack>python fofa.py -h
         |__|  \____/|__| /__/\__\               
              _   _   ____   ____  __  __        
             | |_| | / () \ / (__`|  |/  /       
-            |_| |_|/__/\__\\____)|__|\__\ V2.3.0
+            |_| |_|/__/\__\\____)|__|\__\ v2.3.1
                                                 
             公众号: 黑糖安全                    
                                                 
-usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE)       
-               [--timesleep TIMESLEEP] [--timeout TIMEOUT]            
-               [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT]
-               [--fuzz] [--proxy PROXY]                               
+usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE) [--timesleep TIMESLEEP] 
+      [--timeout TIMEOUT] [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz] 
+      [--proxy PROXY] [--type {common,selenium}]
+                             
                                                                       
-Fofa-hack v2.2.5 使用说明                                             
+Fofa-hack v2.3.1 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -71,6 +73,8 @@ optional arguments:
                         输出格式:txt、json,默认为txt
   --fuzz, -f            关键字fuzz参数,增加内容获取粒度
   --proxy PROXY         指定代理，代理格式 --proxy '127.0.0.1:7890'
+  --type {common,selenium}
+                        运行类型,默认为普通方式
 ```
 
 爬取的去重结果会存储到`final_md5(搜索关键字)_运行时间戳.txt`文件中

@@ -13,13 +13,7 @@ import string
 from tookit.autoEmail import Emailnator
 
 
-def get_username():
-    return generate_username(5)
 
-def generate_username(length):
-    letters = string.ascii_lowercase
-    random_str=''.join(random.choice(letters) for i in range(length))
-    return random_str+"_"+str(int(time.time()))
 
 def registerFofa():
     options = webdriver.ChromeOptions()

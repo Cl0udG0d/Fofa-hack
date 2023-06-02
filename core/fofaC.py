@@ -10,7 +10,6 @@ import base64
 import time
 from urllib.parse import quote_plus
 from tookit import unit, fofaUseragent
-import argparse
 from tookit.levelData import LevelData
 from tookit.outputData import OutputData
 import re, requests
