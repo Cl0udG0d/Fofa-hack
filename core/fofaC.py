@@ -426,6 +426,9 @@ class FofaC:
         # regard the_earliest_time.tomorrow as optimized time_before
         timestamp_list = list(self.timestamp_list[index])
         timestamp_list.sort()
+        if len(timestamp_list) == 0:
+            print("似乎时间戳到了尽头.")
+            exit(0)
         # print(timestamp_list)
 
         time_first = timestamp_list[0].split(' ')[0].strip('\n').strip()
