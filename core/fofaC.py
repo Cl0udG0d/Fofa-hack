@@ -103,7 +103,7 @@ class FofaC:
             pass
         print("[*] 存在数量:" + countnum)
         # print("[*] 独立IP数量:" + standaloneIpNum)
-        return searchbs64
+        return searchbs64, countnum
 
     def getTimeList(self, text):
         """
@@ -503,12 +503,20 @@ class FofaC:
                     self.search_key = clipKeyWord(line.strip())
                     self.filename = "{}_{}.{}".format(unit.md5(self.search_key), int(time.time()), self.output)
                     self.output_data = OutputData(self.filename, self.level, pattern=self.output)
-                    searchbs64 = self.getFofaKeywordsCount(self.search_key)
-                    self.fofaSpider(self.search_key, searchbs64, 0)
-                    print(f'[*] 抓取结束，{self.search_key}关键字共抓取数据 ' + str(len(self.host_set)) + ' 条\n')
+                    searchbs64, countnum = self.getFofaKeywordsCount(self.search_key)
+                    if str(countnum) == "0" and len(str(countnum)) == 1:
+                        print('无搜索结果，执行下一条')
+                        continue
+                    else:
+                        self.fofaSpider(self.search_key, searchbs64, 0)
+                        print(f'[*] 抓取结束，{self.search_key}关键字共抓取数据 ' + str(len(self.host_set)) + ' 条\n')
+
         else:
-            searchbs64 = self.getFofaKeywordsCount(self.search_key)
-            self.fofaSpider(self.search_key, searchbs64, 0)
+            searchbs64, countnum = self.getFofaKeywordsCount(self.search_key)
+            if str(countnum) == "0" and len(str(countnum)) == 1:
+                print('无搜索结果')
+            else:
+                self.fofaSpider(self.search_key, searchbs64, 0)
             print('[*] 抓取结束，共抓取数据 ' + str(len(self.host_set)) + ' 条\n')
 
 
