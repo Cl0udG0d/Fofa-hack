@@ -1,35 +1,35 @@
 # Fofa-hack
 
-![Fofa-hack](./images/logo.png)
+![Fofa-hack](../images/logo.png)
 
-简体中文 | [English](./docs/EN_README.md)
-### 简介
+[简体中文](../README.md) | English
+### summary
 
-PS: 感谢[FOFA](https://fofa.info/)提供这么好的测绘工具
+PS: Thanks to [FOFA](https://fofa.info/) for such a great cyberspace mapping tool!
 
-非付费会员,fofa数据采集工具
+Non-paying members,fofa data collection tool
 
-`-f` 参数开启关键字fuzz
+`-f` this parameter turns on the keyword fuzz
 
-使用示例
+getting Started
 > python fofa.py --keyword thinkphp --endcount 100
-### 安装
+### mounting
 
 ```shell
 git clone https://github.com/Cl0udG0d/Fofa-hack
 ```
 
-安装运行所需的库文件，国内请加源 https://pypi.tuna.tsinghua.edu.cn/simple
+Installation of library files required to run, please add the source in China: https://pypi.tuna.tsinghua.edu.cn/simple
 
 ```shell
 pip install -r requirements.txt
 ```
 
-### 运行
+### movement
 
-运行`fofa.py` , `-k`或`--keyword` 参数传入搜索关键字
+run `fofa.py` , `-k` or `--keyword` parameter pass in search keywords
 
-更多参数查看 `--help`
+more parameters to view `--help`
 
 > python3 fofa.py --help
 
@@ -74,37 +74,36 @@ optional arguments:
                         运行类型,默认为普通方式
 ```
 
-爬取的去重结果会存储到`final_md5(搜索关键字)_运行时间戳.txt`文件中
+crawled de-duplication results are stored in the `final_md5(search_keyword)_runtimestamp.txt` file
+### test
 
-### 测试
-
-使用命令 
+using commands
 
 > python fofa.py --keyword thinkphp --endcount 100
 
-爬取一百条数据轻轻松松
+it's easy to crawl a hundred pieces of data
 
-### 赞赏列表
+### appreciation List
 
-详情请见[SPONSOR](docs/SPONSOR.md)
+for more information, please see [SPONSOR](docs/SPONSOR.md)
 
-### 使用问题集合
+### using the problem set
 
-详情请见[QUESTIONS](docs/QUESTIONS.md)
+for more information, please see [QUESTIONS](docs/QUESTIONS.md)
 
 + [ERROR: Could not build wheels for opencv-python-headless, which is required to install pyproject.toml-based projects](docs/QUESTIONS.md#opencv-python错误)
 + [ddddocr错误解决](docs/QUESTIONS.md#ddddocr错误解决)
 + [FOFA综合语法使用](docs/QUESTIONS.md#FOFA综合语法使用)
 
-### 更新日志
+### update Log
 
-详情请见[CHANGELOG](docs/CHANGELOG.md)
+for more information, please see [CHANGELOG](docs/CHANGELOG.md)
 
 ### TODO List
 
-详情请见[CHANGELOG](docs/TODO.md)
+for more information, please see [CHANGELOG](docs/TODO.md)
 
-### 贡献者
+### benefactor
 
 <table>
 <tr>
@@ -141,7 +140,7 @@ optional arguments:
 
 ### END 
 
-添加我微信备注`进群`
+add me on Wechat and say `Join the group`.
 
 |               加我拉你入群               |                                                            黑糖安全公众号                                                             |
 |:----------------------------------------------------------: |:------------------------------------------------------------------------------------------------------------------------------:|

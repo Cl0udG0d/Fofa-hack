@@ -5,4 +5,4 @@
 # @File    : config.py
 # @Github: https://github.com/Cl0udG0d
 
-VERSION_NUM = "2.3.3"
+VERSION_NUM = "2.3.4"
