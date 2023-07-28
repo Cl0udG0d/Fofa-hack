@@ -69,7 +69,7 @@ class FofaC:
         """
         输出初始化信息
         """
-        print(f'''[*] LEVEL = {self.level} , 初始化成功
+        print(f'''\033[1;32m[*] LEVEL = {self.level} , 初始化成功
 [*] 爬取延时: {self.time_sleep}s
 [*] 爬取关键字: {self.search_key}
 [*] 爬取结束数量: {self.endcount}
@@ -78,7 +78,7 @@ class FofaC:
 [*] 是否开启关键字fuzz: {self.fuzz}
 [*] 是否开启代理: {self.is_proxy}
 [*] {"从"+self.inputfile if self.inputfile else "不从"}文件中读取
-''')
+\033[0m''')
 
 
 
@@ -89,7 +89,7 @@ class FofaC:
         :return:
         """
         searchbs64 = base64.b64encode(f'{search_key}'.encode()).decode()
-        print("[*] 爬取页面为:https://fofa.info/result?qbase64=" + searchbs64)
+        print("\033[1;32m[*] 爬取页面为:https://fofa.info/result?qbase64={}\033[0m" .format(searchbs64) )
         html = requests.get(url="https://fofa.info/result?qbase64=" + searchbs64,
                             headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,proxies=self.proxy)\
                             .text
@@ -98,10 +98,10 @@ class FofaC:
             countnum = tree.xpath('//span[@class="hsxa-highlight-color"]/text()')[0]
             # standaloneIpNum = tree.xpath('//span[@class="hsxa-highlight-color"]/text()')[1]
         except Exception as e:
-            print("[-] error:{}".format(e))
+            print("\033[1;31m[-] error:{}\033[0m".format(e))
             countnum = '0'
             pass
-        print("[*] 存在数量:" + countnum)
+        print("\033[1;32m[*] 存在数量:{}\033[0m" .format(countnum) )
         # print("[*] 独立IP数量:" + standaloneIpNum)
         return searchbs64, countnum
 
@@ -245,25 +245,28 @@ class FofaC:
         searchbs64 = searchbs64.replace("%3D", "=")
         # init_search_key = base64.b64decode(searchbs64).decode()
         init_search_key = search_key
-        print("now search key: " + init_search_key)
+        print("\033[1;34mnow search key: {}\033[0m" .format(init_search_key) )
         TEMP_RETRY_NUM = 0
 
         while TEMP_RETRY_NUM < self.MAX_MATCH_RETRY_NUM:
             try:
                 rep = self.setIndexTimestamp(searchbs64, timestamp_index)
                 self.saveDataToFile(rep)
-                for url in self.level_data.format_data:
-                    self.host_set.add(url)
+                for data in self.level_data.format_data:
+                    if self.level == "1":
+                        self.host_set.add(data)
+                    else:
+                        self.host_set.add(data["url"])
 
                 time.sleep(self.time_sleep)
 
                 return rep.text
 
             except Exception as e:
-                print("[-] error:{}".format(e))
+                print("\033[1;31m[-] error:{}\033[0m".format(e))
                 TEMP_RETRY_NUM += 1
-                print('[-] 第{}次尝试获取页面URL'.format(TEMP_RETRY_NUM))
-                pass
+                print('\033[1;31m[-] 第{}次尝试获取页面URL\033[0m'.format(TEMP_RETRY_NUM))
+                # pass
 
         print('[-] FOFA资源获取重试超过最大次数,程序退出')
         exit(0)
@@ -276,7 +279,7 @@ class FofaC:
         self.level_data.startSpider(rep)
         # tree = etree.HTML(rep.text)
         # urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
-        print("[*] 已爬取条数 [{}]: ".format(len(self.host_set)) + str(self.level_data.format_data))
+        print("\033[1;32m[*] 已爬取条数 [\033[1;33m{}\033[1;32m]: {}\033[0m".format(len(self.host_set),str(self.level_data.format_data)))
 
         self.output_data.output(self.level_data.format_data)
         # for i in self.level_data.formatData:
@@ -310,15 +313,15 @@ class FofaC:
             return
 
         if len(self.host_set) >= self.endcount:
-            print("[*] 在{}节点,数据爬取结束".format(index))
+            print("\033[1;32m[*] 在{}节点,数据爬取结束\033[0m".format(index))
             finalint = self.removeDuplicate()
-            print('[*] 去重结束，最终数据 ' + str(finalint) + ' 条')
+            print('\033[1;32m[*] 去重结束，最终数据 ' + str(finalint) + ' 条\033[0m')
             self.EXIT_FLAG = True
             return
         if self.old_length == len(self.host_set):
             self.no_new_data_count += 1
             if self.no_new_data_count == 2:
-                print("[-] {}节点数据无新增,该节点枯萎".format(index))
+                print("\033[1;31m[-] {}节点数据无新增,该节点枯萎\033[0m".format(index))
                 return
         else:
             self.no_new_data_count = 0
@@ -498,7 +501,7 @@ class FofaC:
 
     def start(self):
         self.outInitMsg()
-        print('[*] 开始运行')
+        print('\033[1;32m[*] 开始运行\033[0m')
         if self.inputfile:
             with open(self.inputfile, 'r') as f:
                 for line in f.readlines():
@@ -512,7 +515,7 @@ class FofaC:
                         continue
                     else:
                         self.fofaSpider(self.search_key, searchbs64, 0)
-                        print(f'[*] 抓取结束，{self.search_key}关键字共抓取数据 ' + str(len(self.host_set)) + ' 条\n')
+                        print(f'\033[1;32m[*] 抓取结束，{self.search_key}关键字共抓取数据 \033[1;33m' + str(len(self.host_set)) + '\033[1;32m 条\033[0m\n')
 
         else:
             searchbs64, countnum = self.getFofaKeywordsCount(self.search_key)
@@ -520,7 +523,7 @@ class FofaC:
                 print('无搜索结果')
             else:
                 self.fofaSpider(self.search_key, searchbs64, 0)
-            print('[*] 抓取结束，共抓取数据 ' + str(len(self.host_set)) + ' 条\n')
+            print('\033[1;32m[*] 抓取结束，共抓取数据 \033[1;33m' + str(len(self.host_set)) + ' \033[1;32m条\033[0m\n')
 
 
     def mainCall(self,keyword="test",timeSleep=3,timeout=3,endcount=100,level="1",fuzz=False,

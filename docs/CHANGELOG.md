@@ -1,4 +1,9 @@
 # CHANGELOG 代码变更记录
+### 2.3.5
+
++ 修复[ISSUE](https://github.com/Cl0udG0d/Fofa-hack/issues/22)
++ 高亮界面输出
+
 ### 2.3.4
 
 + 新增英文readme

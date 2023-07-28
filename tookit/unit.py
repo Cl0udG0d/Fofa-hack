@@ -21,15 +21,15 @@ def generate_username(length):
     return random_str+"_"+str(int(time.time()))
 
 def outputLogo():
-    print('''
+    print('''\033[1;32m
              ____  ____  ____  ____      
             | ===|/ () \| ===|/ () \     
             |__|  \____/|__| /__/\__\    
                  _   _   ____   ____  __  __ 
                 | |_| | / () \ / (__`|  |/  /
-                |_| |_|/__/\__\\\\____)|__|\__\\ V{}
+                |_| |_|/__/\__\\\\____)|__|\__\\ \033[0m\033[1;34mV{}\033[0m
 
-                公众号: 黑糖安全
+                \033[1;32m公众号: 黑糖安全\033[0m
             '''.format(config.VERSION_NUM))
 
 def clipKeyWord(keyword):
