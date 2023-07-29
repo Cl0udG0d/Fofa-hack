@@ -12,7 +12,7 @@ PS: 感谢[FOFA](https://fofa.info/)提供这么好的测绘工具
 `-f` 参数开启关键字fuzz
 
 使用示例
-> python fofa.py --keyword thinkphp --endcount 100
+> fofa-hack.exe --keyword thinkphp --endcount 100
 ### 安装
 
 下载 fofa-hack [releases](https://github.com/Cl0udG0d/Fofa-hack/releases) 最新版本
