@@ -12,45 +12,35 @@ Non-paying members,fofa data collection tool
 `-f` this parameter turns on the keyword fuzz
 
 getting Started
-> python fofa.py --keyword thinkphp --endcount 100
+> fofa-hack.exe --keyword thinkphp --endcount 100
 ### mounting
 
-```shell
-git clone https://github.com/Cl0udG0d/Fofa-hack
-```
-
-Installation of library files required to run, please add the source in China: https://pypi.tuna.tsinghua.edu.cn/simple
-
-```shell
-pip install -r requirements.txt
-```
+download the latest version of fofa-hack [releases](https://github.com/Cl0udG0d/Fofa-hack/releases)
 
 ### movement
 
-run `fofa.py` , `-k` or `--keyword` parameter pass in search keywords
+run `fofa-hack.exe` , `-k` or `--keyword` parameter pass in search keywords
 
 more parameters to view `--help`
 
-> python3 fofa.py --help
+> fofa-hack.exe --help
 
 ```shell
-Fofa-hack>python fofa.py -h
+Fofa-hack>fofa-hack.exe --help
 
-         ____  ____  ____  ____                 
-        | ===|/ () \| ===|/ () \                
-        |__|  \____/|__| /__/\__\               
-             _   _   ____   ____  __  __        
-            | |_| | / () \ / (__`|  |/  /       
-            |_| |_|/__/\__\\____)|__|\__\ v2.3.1
-                                                
-            公众号: 黑糖安全                    
-                                                
-usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE) [--timesleep TIMESLEEP] 
-      [--timeout TIMEOUT] [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz] 
-      [--proxy PROXY] [--type {common,selenium}]
-                             
-                                                                      
-Fofa-hack v2.3.1 使用说明
+             ____  ____  ____  ____
+            | ===|/ () \| ===|/ () \
+            |__|  \____/|__| /__/\__\
+                 _   _   ____   ____  __  __
+                | |_| | / () \ / (__`|  |/  /
+                |_| |_|/__/\__\\____)|__|\__\ V2.3.5
+
+                公众号: 黑糖安全
+
+usage: fofa-hack.exe [-h] (--keyword KEYWORD | --inputfile INPUTFILE) [--timesleep TIMESLEEP] [--timeout TIMEOUT]
+                     [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz] [--proxy PROXY] [--type {common,selenium}]
+
+Fofa-hack v2.3.5 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -79,7 +69,7 @@ crawled de-duplication results are stored in the `final_md5(search_keyword)_runt
 
 using commands
 
-> python fofa.py --keyword thinkphp --endcount 100
+> fofa-hack.exe --keyword thinkphp --endcount 100
 
 it's easy to crawl a hundred pieces of data
 

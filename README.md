@@ -15,42 +15,32 @@ PS: 感谢[FOFA](https://fofa.info/)提供这么好的测绘工具
 > python fofa.py --keyword thinkphp --endcount 100
 ### 安装
 
-```shell
-git clone https://github.com/Cl0udG0d/Fofa-hack
-```
-
-安装运行所需的库文件，国内请加源 https://pypi.tuna.tsinghua.edu.cn/simple
-
-```shell
-pip install -r requirements.txt
-```
+下载 fofa-hack [releases](https://github.com/Cl0udG0d/Fofa-hack/releases) 最新版本
 
 ### 运行
 
-运行`fofa.py` , `-k`或`--keyword` 参数传入搜索关键字
+运行`fofa-hack.exe` , `-k`或`--keyword` 参数传入搜索关键字
 
 更多参数查看 `--help`
 
-> python3 fofa.py --help
+> fofa-hack.exe --help
 
 ```shell
-Fofa-hack>python fofa.py -h
+Fofa-hack>fofa-hack.exe --help
 
-         ____  ____  ____  ____                 
-        | ===|/ () \| ===|/ () \                
-        |__|  \____/|__| /__/\__\               
-             _   _   ____   ____  __  __        
-            | |_| | / () \ / (__`|  |/  /       
-            |_| |_|/__/\__\\____)|__|\__\ v2.3.1
-                                                
-            公众号: 黑糖安全                    
-                                                
-usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE) [--timesleep TIMESLEEP] 
-      [--timeout TIMEOUT] [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz] 
-      [--proxy PROXY] [--type {common,selenium}]
-                             
-                                                                      
-Fofa-hack v2.3.1 使用说明
+             ____  ____  ____  ____
+            | ===|/ () \| ===|/ () \
+            |__|  \____/|__| /__/\__\
+                 _   _   ____   ____  __  __
+                | |_| | / () \ / (__`|  |/  /
+                |_| |_|/__/\__\\____)|__|\__\ V2.3.5
+
+                公众号: 黑糖安全
+
+usage: fofa-hack.exe [-h] (--keyword KEYWORD | --inputfile INPUTFILE) [--timesleep TIMESLEEP] [--timeout TIMEOUT]
+                     [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz] [--proxy PROXY] [--type {common,selenium}]
+
+Fofa-hack v2.3.5 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -80,7 +70,7 @@ optional arguments:
 
 使用命令 
 
-> python fofa.py --keyword thinkphp --endcount 100
+> fofa-hack.exe --keyword thinkphp --endcount 100
 
 爬取一百条数据轻轻松松
 

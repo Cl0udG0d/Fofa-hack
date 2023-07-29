@@ -3,6 +3,7 @@
 
 + 修复[ISSUE](https://github.com/Cl0udG0d/Fofa-hack/issues/22)
 + 高亮界面输出
++ 新增exe输出
 
 ### 2.3.4
 
