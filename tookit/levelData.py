@@ -104,7 +104,7 @@ class LevelData:
             temp_dic["port"] = portlist[i].strip()
             ip = leftList[i].xpath(self.IP_RULE)
             temp_dic["title"] = titleList[i].strip()
-            temp_dic["ip"] = ip[0].strip() if len(ip) > 1 else ""
+            temp_dic["ip"] = ip[0].strip() if len(ip) > 0 else ""
             self.format_data.append(temp_dic)
 
     def stripList(self, data):
@@ -147,12 +147,12 @@ class LevelData:
             temp_dic["url"] = urllist[i].strip()
             temp_dic["port"] = port_list[i].strip()
             temp_dic["title"] = title_list[i].strip()
-            temp_dic["ip"] = ip[0].strip() if len(ip) > 1 else ""
-            temp_dic["city"] = city[0].strip() if len(city) > 1 else ""
-            temp_dic["asn"] = asn[0].strip() if len(asn) > 1 else ""
-            temp_dic["organization"] = organization[0].strip() if len(organization) > 1 else ""
+            temp_dic["ip"] = ip[0].strip() if len(ip) > 0 else ""
+            temp_dic["city"] = city[0].strip() if len(city) > 0 else ""
+            temp_dic["asn"] = asn[0].strip() if len(asn) > 0 else ""
+            temp_dic["organization"] = organization[0].strip() if len(organization) > 0 else ""
             temp_dic["server"] = self.stripList(server)
-            temp_dic["rep"] = rep[0].strip() if len(rep) > 1 else ""
+            temp_dic["rep"] = rep[0].strip() if len(rep) > 0 else ""
             self.format_data.append(temp_dic)
 
     def cleanUrlListSpeace(self, data_list):
