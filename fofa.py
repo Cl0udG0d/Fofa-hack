@@ -8,7 +8,9 @@ import argparse
 import time
 
 from core.fofaC import FofaC
-from core.fofaS import FofaS
+import platform
+if platform.system() == 'Windows':
+    from core.fofaS import FofaS
 from tookit import unit, config
 from tookit.levelData import LevelData
 from tookit.outputData import OutputData
@@ -50,7 +52,7 @@ def main():
     is_proxy, proxy = setProxy(args.proxy)
     type = args.type
     inputfile = args.inputfile if args.inputfile else None
-    if type == "selenium":
+    if type == "selenium" and platform.system() == 'Windows':
         fofa = FofaS(search_key, inputfile, filename, time_sleep, endcount, level, level_data, output, output_data,
                      fuzz,
                      timeout, is_proxy, proxy)

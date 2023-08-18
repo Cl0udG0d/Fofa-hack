@@ -100,7 +100,8 @@ class FofaC:
         except Exception as e:
             print("\033[1;31m[-] error:{}\033[0m".format(e))
             countnum = '0'
-            pass
+            print("Perhaps there is a problem with your network or your area has been officially banned by Fofa, so the program exits")
+            exit(0)
         print("\033[1;32m[*] 存在数量:{}\033[0m" .format(countnum) )
         # print("[*] 独立IP数量:" + standaloneIpNum)
         return searchbs64, countnum

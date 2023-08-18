@@ -1,4 +1,9 @@
 # CHANGELOG 代码变更记录
+### 2.3.7
+
++ 添加地区访问fofa判断
++ linux环境下不支持运行selenium模式
+
 ### 2.3.6
 
 + 修复[ISSUE](https://github.com/Cl0udG0d/Fofa-hack/issues/34)

@@ -1,6 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
-
-
+import platform
 block_cipher = None
 
 
@@ -8,7 +7,6 @@ a = Analysis(
     ['fofa.py'],
     pathex=['core/*', 'tookit/*'],
     binaries=[],
-    datas=[('D:\\sec\\Fofa-hack\\venv\\Lib\\site-packages\\onnxruntime\\capi\\onnxruntime_providers_shared.dll','onnxruntime\\capi'),('D:\\sec\\Fofa-hack\\venv\\Lib\\site-packages\\ddddocr\\common.onnx','ddddocr')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -19,6 +17,11 @@ a = Analysis(
     cipher=block_cipher,
     noarchive=False,
 )
+
+if platform.system() == 'Windows':
+    a.datas.append(('D:\\sec\\Fofa-hack\\venv\\Lib\\site-packages\\onnxruntime\\capi\\onnxruntime_providers_shared.dll','onnxruntime\\capi'))
+    a.datas.append(('D:\\sec\\Fofa-hack\\venv\\Lib\\site-packages\\ddddocr\\common.onnx','ddddocr'))
+
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(
