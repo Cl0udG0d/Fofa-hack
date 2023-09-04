@@ -76,23 +76,25 @@ class OutputData:
                 if self.level=="1":
                     data[i] = i
                 elif self.level=="2":
-                    data[i] = {}
-                    data[i]["url"] = i["url"]
-                    data[i]["port"] = i["port"]
-                    data[i]["title"] = i["title"]
-                    data[i]["ip"] = i["ip"]
-                else :
-                    data[i] = {}
-                    data[i]["url"] = i["url"]
-                    data[i]["port"] = i["port"]
-                    data[i]["title"] = i["title"]
-                    data[i]["ip"] = i["ip"]
-                    data[i]["city"] = i["city"]
-                    data[i]["asn"] = i["asn"]
-                    data[i]["organization"] = i["organization"]
-                    data[i]["server"] = i["server"]
-                    data[i]["rep"] = i["rep"]
-            print(data)
+                    keyword =i["url"]
+                    data[keyword] = {}
+                    data[keyword]["url"] = i["url"]
+                    data[keyword]["port"] = i["port"]
+                    data[keyword]["title"] = i["title"]
+                    data[keyword]["ip"] = i["ip"]
+                else:
+                    keyword = i["url"]
+                    data[keyword] = {}
+                    data[keyword]["url"] = i["url"]
+                    data[keyword]["port"] = i["port"]
+                    data[keyword]["title"] = i["title"]
+                    data[keyword]["ip"] = i["ip"]
+                    data[keyword]["city"] = i["city"]
+                    data[keyword]["asn"] = i["asn"]
+                    data[keyword]["organization"] = i["organization"]
+                    data[keyword]["server"] = i["server"]
+                    data[keyword]["rep"] = i["rep"]
+            # print(data)
 
             json.dump(data, load_f, indent=4, ensure_ascii=False)
             load_f.close()

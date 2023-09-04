@@ -1,13 +1,14 @@
 # -*- mode: python ; coding: utf-8 -*-
-import platform
+
+
 block_cipher = None
 
 
 a = Analysis(
     ['fofa.py'],
-    pathex=['core/*', 'tookit/*'],
-    datas=[('D:\\sec\\Fofa-hack\\venv\\Lib\\site-packages\\onnxruntime\\capi\\onnxruntime_providers_shared.dll','onnxruntime\\capi'),('D:\\sec\\Fofa-hack\\venv\\Lib\\site-packages\\ddddocr\\common.onnx','ddddocr')],
+    pathex=['D:\\sec\\Fofa-hack\\venv\\Lib\\site-packages'],
     binaries=[],
+    datas=[],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -18,8 +19,6 @@ a = Analysis(
     cipher=block_cipher,
     noarchive=False,
 )
-
-
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(
@@ -29,7 +28,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='fofa-hack',
+    name='fofa',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -42,5 +41,4 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='icon.ico',
 )
