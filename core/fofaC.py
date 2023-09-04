@@ -315,8 +315,11 @@ class FofaC:
 
         if len(self.host_set) >= self.endcount:
             print("\033[1;32m[*] 在{}节点,数据爬取结束\033[0m".format(index))
-            finalint = self.removeDuplicate()
-            print('\033[1;32m[*] 去重结束，最终数据 ' + str(finalint) + ' 条\033[0m')
+            if self.output == 'txt':
+                finalint = self.removeDuplicate()
+                print('\033[1;32m[*] 去重结束，最终数据 ' + str(finalint) + ' 条\033[0m')
+            else:
+                print('\033[1;32m[*] 输出类型为其他,不进行去重操作 \033[0m')
             self.EXIT_FLAG = True
             return
         if self.old_length == len(self.host_set):

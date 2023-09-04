@@ -6,9 +6,9 @@ block_cipher = None
 
 a = Analysis(
     ['fofa.py'],
-    pathex=['D:\\sec\\Fofa-hack\\venv\\Lib\\site-packages'],
+    pathex=['core/*', 'tookit/*'],
+    datas=[('D:\\sec\\Fofa-hack\\venv\\Lib\\site-packages\\onnxruntime\\capi\\onnxruntime_providers_shared.dll','onnxruntime\\capi'),('D:\\sec\\Fofa-hack\\venv\\Lib\\site-packages\\ddddocr\\common.onnx','ddddocr')],
     binaries=[],
-    datas=[],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -28,7 +28,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='fofa',
+    name='fofa-hack',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -41,4 +41,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon='icon.ico',
 )

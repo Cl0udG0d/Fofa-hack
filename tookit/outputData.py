@@ -95,6 +95,7 @@ class OutputData:
                     data[keyword]["server"] = i["server"]
                     data[keyword]["rep"] = i["rep"]
             # print(data)
+            # print(json.dumps(data, ensure_ascii=False))
 
             json.dump(data, load_f, indent=4, ensure_ascii=False)
             load_f.close()
