@@ -6,7 +6,7 @@ block_cipher = None
 
 a = Analysis(
     ['fofa.py'],
-    pathex=['D:\\sec\\Fofa-hack\\venv\\Lib\\site-packages'],
+    pathex=['/usr/local/lib/python3.8/dist-packages'],
     binaries=[],
     datas=[],
     hiddenimports=[],
