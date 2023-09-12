@@ -4,6 +4,7 @@
 # @Author  : Cl0udG0d
 # @File    : fofaC.py
 # @Github: https://github.com/Cl0udG0d
+import sys
 from datetime import datetime
 from datetime import timedelta
 import base64
@@ -101,7 +102,7 @@ class FofaC:
             print("\033[1;31m[-] error:{}\033[0m".format(e))
             countnum = '0'
             print("Perhaps there is a problem with your network or your area has been officially banned by Fofa, so the program exits")
-            exit(0)
+            self._destroy()
         print("\033[1;32m[*] 存在数量:{}\033[0m" .format(countnum) )
         # print("[*] 独立IP数量:" + standaloneIpNum)
         return searchbs64, countnum
@@ -270,7 +271,7 @@ class FofaC:
                 # pass
 
         print('[-] FOFA资源获取重试超过最大次数,程序退出')
-        exit(0)
+        self._destroy()
 
     def saveDataToFile(self, rep):
         """
@@ -435,7 +436,7 @@ class FofaC:
         timestamp_list.sort()
         if len(timestamp_list) == 0:
             print("似乎时间戳到了尽头.")
-            exit(0)
+            self._destroy()
         # print(timestamp_list)
 
         time_first = timestamp_list[0].split(' ')[0].strip('\n').strip()
@@ -563,6 +564,10 @@ class FofaC:
         print(self.host_set)
 
         return self.host_set
+
+    def _destroy(self):
+        self.removeDuplicate()
+        sys.exit(0)
 
 
 if __name__ == '__main__':
