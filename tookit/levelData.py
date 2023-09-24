@@ -1,6 +1,8 @@
 '''
     levelData 根据不同level爬取对应的结果
 '''
+import json
+
 from lxml import etree
 
 
@@ -34,9 +36,10 @@ class LevelData:
     内部变量
     '''
     level = "1"
-    tree = None
+    # tree = None
     rep = None
     format_data = []
+    assets=[]
 
     def __init__(self, level="1"):
         self.level = level if self.checkLevelStandard(level) else "1"
@@ -60,7 +63,9 @@ class LevelData:
         """
         self.format_data = []
         self.rep = rep
-        self.tree = etree.HTML(rep.text)
+        # self.tree = etree.HTML(rep.text)
+        data = json.loads(self.rep.text)
+        self.assets=data["data"]["assets"]
         self.selectSpiderRule()
 
     def selectSpiderRule(self):
@@ -77,10 +82,10 @@ class LevelData:
             url
         :return:
         """
-        urllist1 = self.tree.xpath(self.URLLIST_RULE)
-        urllist2 = self.cleanUrlListSpeace(self.tree.xpath(self.URLLIST_RULE_TWO))
+        # urllist1 = self.tree.xpath(self.URLLIST_RULE)
+        # urllist2 = self.cleanUrlListSpeace(self.tree.xpath(self.URLLIST_RULE_TWO))
 
-        self.format_data = urllist1 + urllist2
+        self.format_data = [d['link'] for d in self.assets]
 
     def spiderMiddleData(self):
         """
@@ -91,20 +96,16 @@ class LevelData:
             ip
         :return:
         """
-        urllist1 = self.tree.xpath(self.URLLIST_RULE)
-        urllist2 = self.cleanUrlListSpeace(self.tree.xpath(self.URLLIST_RULE_TWO))
-        urllist = urllist1 + urllist2
-        # urllist = self.tree.xpath(self.URLLIST_RULE)
-        portlist = self.tree.xpath(self.PORTLIST_RULE)
-        leftList = self.tree.xpath(self.LEFT_LIST_RULE)
-        titleList = self.tree.xpath(self.TITLE_RULE)
+        urllist = [d['link'] for d in self.assets]
+        portlist = [d['port'] for d in self.assets]
+        titleList = [d['title'] for d in self.assets]
+        iplist = [d['ip'] for d in self.assets]
         for i in range(len(urllist)):
             temp_dic = {}
             temp_dic["url"] = urllist[i].strip()
             temp_dic["port"] = portlist[i].strip()
-            ip = leftList[i].xpath(self.IP_RULE)
             temp_dic["title"] = titleList[i].strip()
-            temp_dic["ip"] = ip[0].strip() if len(ip) > 0 else ""
+            temp_dic["ip"] = iplist[i].strip()
             self.format_data.append(temp_dic)
 
     def stripList(self, data):
@@ -127,33 +128,34 @@ class LevelData:
             rep
         :return:
         """
-        urllist1 = self.tree.xpath(self.URLLIST_RULE)
-        urllist2 = self.cleanUrlListSpeace(self.tree.xpath(self.URLLIST_RULE_TWO))
-        urllist = urllist1 + urllist2
-        port_list = self.tree.xpath(self.PORTLIST_RULE)
-        left_list = self.tree.xpath(self.LEFT_LIST_RULE)
-        right_list = self.tree.xpath(self.RIGHT_LIST_RULE)
-        title_list = self.tree.xpath(self.TITLE_RULE)
-
-        for i in range(len(urllist)):
-            temp_dic = {}
-            ip = left_list[i].xpath(self.IP_RULE)
-            city = left_list[i].xpath(self.CITY_RULE)
-            asn = left_list[i].xpath(self.ASN_RULE)
-            organization = left_list[i].xpath(self.ORGANIZATION_RULE)
-            server = left_list[i].xpath(self.SERVER_RULE)
-            rep = right_list[i].xpath(self.REP_RULE) if len(right_list) > i else ["None"]
-
-            temp_dic["url"] = urllist[i].strip()
-            temp_dic["port"] = port_list[i].strip()
-            temp_dic["title"] = title_list[i].strip()
-            temp_dic["ip"] = ip[0].strip() if len(ip) > 0 else ""
-            temp_dic["city"] = city[0].strip() if len(city) > 0 else ""
-            temp_dic["asn"] = asn[0].strip() if len(asn) > 0 else ""
-            temp_dic["organization"] = organization[0].strip() if len(organization) > 0 else ""
-            temp_dic["server"] = self.stripList(server)
-            temp_dic["rep"] = rep[0].strip() if len(rep) > 0 else ""
-            self.format_data.append(temp_dic)
+        self.format_data=self.assets
+        # urllist1 = self.tree.xpath(self.URLLIST_RULE)
+        # urllist2 = self.cleanUrlListSpeace(self.tree.xpath(self.URLLIST_RULE_TWO))
+        # urllist = urllist1 + urllist2
+        # port_list = self.tree.xpath(self.PORTLIST_RULE)
+        # left_list = self.tree.xpath(self.LEFT_LIST_RULE)
+        # right_list = self.tree.xpath(self.RIGHT_LIST_RULE)
+        # title_list = self.tree.xpath(self.TITLE_RULE)
+        #
+        # for i in range(len(urllist)):
+        #     temp_dic = {}
+        #     ip = left_list[i].xpath(self.IP_RULE)
+        #     city = left_list[i].xpath(self.CITY_RULE)
+        #     asn = left_list[i].xpath(self.ASN_RULE)
+        #     organization = left_list[i].xpath(self.ORGANIZATION_RULE)
+        #     server = left_list[i].xpath(self.SERVER_RULE)
+        #     rep = right_list[i].xpath(self.REP_RULE) if len(right_list) > i else ["None"]
+        #
+        #     temp_dic["url"] = urllist[i].strip()
+        #     temp_dic["port"] = port_list[i].strip()
+        #     temp_dic["title"] = title_list[i].strip()
+        #     temp_dic["ip"] = ip[0].strip() if len(ip) > 0 else ""
+        #     temp_dic["city"] = city[0].strip() if len(city) > 0 else ""
+        #     temp_dic["asn"] = asn[0].strip() if len(asn) > 0 else ""
+        #     temp_dic["organization"] = organization[0].strip() if len(organization) > 0 else ""
+        #     temp_dic["server"] = self.stripList(server)
+        #     temp_dic["rep"] = rep[0].strip() if len(rep) > 0 else ""
+        #     self.format_data.append(temp_dic)
 
     def cleanUrlListSpeace(self, data_list):
         new_list = list()

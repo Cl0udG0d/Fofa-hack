@@ -12,7 +12,8 @@ PS: 感谢[FOFA](https://fofa.info/)提供这么好的测绘工具
 `-f` 参数开启关键字fuzz
 
 使用示例
-> fofa-hack.exe --keyword thinkphp --endcount 100
+> fofa-hack.exe --keyword thinkphp --endcount 500
+
 ### 安装
 
 下载 fofa-hack [releases](https://github.com/Cl0udG0d/Fofa-hack/releases) 最新版本
@@ -33,14 +34,14 @@ Fofa-hack>fofa-hack.exe --help
             |__|  \____/|__| /__/\__\
                  _   _   ____   ____  __  __
                 | |_| | / () \ / (__`|  |/  /
-                |_| |_|/__/\__\\____)|__|\__\ V2.3.5
+                |_| |_|/__/\__\\____)|__|\__\ V2.4.0
 
                 公众号: 黑糖安全
 
 usage: fofa-hack.exe [-h] (--keyword KEYWORD | --inputfile INPUTFILE) [--timesleep TIMESLEEP] [--timeout TIMEOUT]
                      [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz] [--proxy PROXY] [--type {common,selenium}]
 
-Fofa-hack v2.3.5 使用说明
+Fofa-hack V2.4.0 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -60,19 +61,31 @@ optional arguments:
                         输出格式:txt、json,默认为txt
   --fuzz, -f            关键字fuzz参数,增加内容获取粒度
   --proxy PROXY         指定代理，代理格式 --proxy '127.0.0.1:7890'
-  --type {common,selenium}
-                        运行类型,默认为普通方式
 ```
 
 爬取的去重结果会存储到`final_md5(搜索关键字)_运行时间戳.txt`文件中
+
+### 搜索语法
+一些搜索的示例
+
++ 搜索 thinkphp 1000条数据
+> fofa.exe -k thinkphp -e 1000
+
++ 搜索有连接符的关键字(注意单双引号)
+> fofa.exe -k "index && country='CN'"
+
++ 高级语法搜索(本来我以为高级语法用不了,但是最近好像又解禁了)
+> fofa.exe -k icon_hash="1165838194"
+
++ 欢迎补充....
 
 ### 测试
 
 使用命令 
 
-> fofa-hack.exe --keyword thinkphp --endcount 100
+> fofa-hack.exe --keyword thinkphp --endcount 500
 
-爬取一百条数据轻轻松松
+爬取五百条数据轻轻松松
 
 ### 赞赏列表
 

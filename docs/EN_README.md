@@ -12,7 +12,7 @@ Non-paying members,fofa data collection tool
 `-f` this parameter turns on the keyword fuzz
 
 getting Started
-> fofa-hack.exe --keyword thinkphp --endcount 100
+> fofa-hack.exe --keyword thinkphp --endcount 500
 ### mounting
 
 download the latest version of fofa-hack [releases](https://github.com/Cl0udG0d/Fofa-hack/releases)
@@ -33,7 +33,7 @@ Fofa-hack>fofa-hack.exe --help
             |__|  \____/|__| /__/\__\
                  _   _   ____   ____  __  __
                 | |_| | / () \ / (__`|  |/  /
-                |_| |_|/__/\__\\____)|__|\__\ V2.3.5
+                |_| |_|/__/\__\\____)|__|\__\ V2.4.0
 
                 公众号: 黑糖安全
 
@@ -60,18 +60,27 @@ optional arguments:
                         输出格式:txt、json,默认为txt
   --fuzz, -f            关键字fuzz参数,增加内容获取粒度
   --proxy PROXY         指定代理，代理格式 --proxy '127.0.0.1:7890'
-  --type {common,selenium}
-                        运行类型,默认为普通方式
 ```
 
 crawled de-duplication results are stored in the `final_md5(search_keyword)_runtimestamp.txt` file
+
+### Search syntax
+Some search examples
++ Search for Thinkphp 1000 pieces of data
+> fofa.exe -k thinkphp -e 1000
++ Search for keywords with connectors (note single and double quotes)
+> fofa.exe -k "index && country='CN'"
++ Advanced grammar search (I thought advanced grammar wouldn't work, but it seems to have been lifted recently)
+> fofa.exe -k icon_hash="1165838194"
++ Welcome to add
+
 ### test
 
 using commands
 
-> fofa-hack.exe --keyword thinkphp --endcount 100
+> fofa-hack.exe --keyword thinkphp --endcount 500
 
-it's easy to crawl a hundred pieces of data
+capturing 500 pieces of data is easy
 
 ### appreciation List
 

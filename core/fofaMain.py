@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 2023/5/30 20:59
+# @Time    : 2023/9/24 22:13
 # @Author  : Cl0udG0d
-# @File    : fofaC.py
+# @File    : fofaMain.py
 # @Github: https://github.com/Cl0udG0d
+import json
 import sys
 from datetime import datetime
 from datetime import timedelta
@@ -16,10 +17,11 @@ from tookit.outputData import OutputData
 import re, requests
 from lxml import etree
 
+from tookit.sign import getUrl
 from tookit.unit import clipKeyWord, setProxy
 
 
-class FofaC:
+class FofaMain:
     '''
     FUZZ规则
     '''
@@ -114,10 +116,12 @@ class FofaC:
         :return:
         """
         timelist = list()
-        pattern = "<span>[0-9]*-[0-9]*-[0-9]*</span>"
-        result = re.findall(pattern, text)
-        for temp in result:
-            timelist.append(temp.replace("<span>", "").replace("</span>", "").strip())
+        data = json.loads(text)
+        assets=data["data"]["assets"]
+        for asset in assets:
+            mtime=asset["mtime"].split()[0]
+            timelist.append(mtime)
+        # print(timelist)
         return timelist
 
     def bypassAsn(self, context, index):
@@ -224,7 +228,7 @@ class FofaC:
         @return:
         """
         try:
-            request_url = 'https://fofa.info/result?qbase64=' + searchbs64 + "&full=false&page_size=10"
+            request_url = getUrl(searchbs64)
             # print(f'request_url:{request_url}')
             rep = requests.get(request_url, headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,
                                proxies=self.proxy)
@@ -531,45 +535,11 @@ class FofaC:
             print('\033[1;32m[*] 抓取结束，共抓取数据 \033[1;33m' + str(len(self.host_set)) + ' \033[1;32m条\033[0m\n')
 
 
-    def mainCall(self,keyword="test",timeSleep=3,timeout=3,endcount=100,level="1",fuzz=False,
-                  output="txt",proxy=None):
-        """
-        外部调用fofa-hack 使用此方法
-        返回self.host_set
-        :param keyword:
-        :param timeSleep:
-        :param timeout:
-        :param endcount:
-        :param level:
-        :param fuzz:
-        :param output:
-        :param proxy:
-        :return:
-        """
-        self.timeSleep = int(timeSleep)
-        self.timeout = int(timeout)
-        self.searchKey = clipKeyWord(keyword)
-        self.endcount = int(endcount)
-        self.level = level
-        self.levelData = LevelData(self.level)
-        self.fuzz = fuzz
-        self.output = output
-        self.filename = "{}_{}.{}".format(unit.md5(self.searchKey), int(time.time()), self.output)
-        self.outputData = OutputData(self.filename, self.level, pattern=self.output)
-        _,self.proxy = setProxy(proxy)
-        self.outInitMsg()
-        searchbs64 = base64.b64encode(f'{self.searchKey}'.encode()).decode()
-        self.fofaSpider(self.searchKey, searchbs64, 0)
-        print('[*] 抓取结束，共抓取数据 ' + str(len(self.host_set)) + ' 条\n')
-        print(self.host_set)
-
-        return self.host_set
-
     def _destroy(self):
         self.removeDuplicate()
         sys.exit(0)
 
 
 if __name__ == '__main__':
-    fofa = FofaC()
-    fofa.main()
+    fofa = FofaMain("","","",3,"","","","","","",10,"","")
+    fofa.setIndexTimestamp("InRoaW5rcGhwIg==",0)

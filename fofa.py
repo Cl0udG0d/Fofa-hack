@@ -6,11 +6,7 @@
 # @Github: https://github.com/Cl0udG0d
 import argparse
 import time
-
-from core.fofaC import FofaC
-import platform
-if platform.system() == 'Windows':
-    from core.fofaS import FofaS
+from core.fofaMain import FofaMain
 from tookit import unit, config
 from tookit.levelData import LevelData
 from tookit.outputData import OutputData
@@ -25,14 +21,14 @@ def main():
     group.add_argument('--inputfile', '-i', help="指定文件,从文件中批量读取fofa语法")
 
     parser.add_argument('--timesleep', '-t', help='爬取每一页等待秒数,防止IP被Ban,默认为3', default=3)
-    parser.add_argument('--timeout', '-to', help='爬取每一页的超时时间', default=10)
+    parser.add_argument('--timeout', '-to', help='爬取每一页的超时时间,默认为180秒', default=180)
     parser.add_argument('--endcount', '-e', help='爬取结束数量')
     parser.add_argument('--level', '-l', help='爬取等级: 1-3 ,数字越大内容越详细,默认为 1')
     parser.add_argument('--output', '-o', help='输出格式:txt、json,默认为txt')
     parser.add_argument('--fuzz', '-f', help='关键字fuzz参数,增加内容获取粒度', action='store_true')
     parser.add_argument('--proxy', help="指定代理，代理格式 --proxy '127.0.0.1:7890'")
-    parser.add_argument('--type', type=str, choices=["common", "selenium"], default="common",
-                        help="运行类型,默认为普通方式")
+    # parser.add_argument('--type', type=str, choices=["common", "selenium"], default="common",
+    #                     help="运行类型,默认为普通方式")
     args = parser.parse_args()
 
     time_sleep = int(args.timesleep)
@@ -50,14 +46,9 @@ def main():
         filename = "暂无"
         output_data = None
     is_proxy, proxy = setProxy(args.proxy)
-    type = args.type
+    # type = args.type
     inputfile = args.inputfile if args.inputfile else None
-    if type == "selenium" and platform.system() == 'Windows':
-        fofa = FofaS(search_key, inputfile, filename, time_sleep, endcount, level, level_data, output, output_data,
-                     fuzz,
-                     timeout, is_proxy, proxy)
-    else:
-        fofa = FofaC(search_key, inputfile, filename, time_sleep, endcount, level, level_data, output, output_data,
+    fofa = FofaMain(search_key, inputfile, filename, time_sleep, endcount, level, level_data, output, output_data,
                      fuzz, timeout, is_proxy, proxy)
     fofa.start()
 

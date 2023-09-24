@@ -7,7 +7,7 @@ block_cipher = None
 a = Analysis(
     ['fofa.py'],
     pathex=['core/*', 'tookit/*'],
-    datas=[('D:\\sec\\Fofa-hack\\venv\\Lib\\site-packages\\onnxruntime\\capi\\onnxruntime_providers_shared.dll','onnxruntime\\capi'),('D:\\sec\\Fofa-hack\\venv\\Lib\\site-packages\\ddddocr\\common.onnx','ddddocr')],
+    datas=[],
     binaries=[],
     hiddenimports=[],
     hookspath=[],

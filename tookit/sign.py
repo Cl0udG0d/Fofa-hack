@@ -1,11 +1,19 @@
-# python -m pip install pycryptodome
-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Time    : 2023/9/24 22:28
+# @Author  : Cl0udG0d
+# @File    : sign.py
+# @Github: https://github.com/Cl0udG0d
 from Cryptodome.Signature import PKCS1_v1_5
 from Cryptodome.Hash import SHA256
 from Cryptodome.PublicKey import RSA
 import urllib.parse
 import time
 import base64
+
+'''
+加密算法部分感谢 tastypear
+'''
 
 private_key_str = '''-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEAv0xjefuBTF6Ox940ZqLLUFFBDtTcB9dAfDjWgyZ2A55K+VdG
@@ -35,26 +43,22 @@ wbG6+eWekyLZ1RVEw3eRF+aMOEFNaK6xKjXGMhuWj3A9xVw9Fauv8a2KBU42Vmcd
 t4HRyaBPCQQsIoErdChZj8g7DdxWheuiKoN4gbfK4W1APCcuhUA=
 -----END RSA PRIVATE KEY-----'''
 
-ts = int(time.time()*1000)
-print(ts)
-print()
 
-# sample
-
-message = f'fullfalsepage1q"thinkphp"qbase64InRoaW5rcGhwIg==size10ts{ts}'.format(ts)
-
-print(message)
-print()
-
-def sign(message):
+def getSign(message):
     priv_key = RSA.importKey(private_key_str)
     h = SHA256.new(message.encode('utf-8'))
     signature = PKCS1_v1_5.new(priv_key).sign(h)
     result = base64.b64encode(signature).decode()
     return result
-    
-sign = urllib.parse.quote(sign(message))
-print()
 
-url = f'https://api.fofa.info/v1/search?q=%22thinkphp%22&qbase64=InRoaW5rcGhwIg%3D%3D&full=false&page=1&size=10&ts={ts}&sign={sign}&app_id=9e9fb94330d97833acfbc041ee1a76793f1bc691'.format(ts,sign)
-print(url)
+
+def getUrl(qbase64):
+    ts = int(time.time() * 1000)
+    message = f'fullfalsepage1qbase64{qbase64}size50ts{ts}'
+    sign = urllib.parse.quote(getSign(message))
+    url = f'https://api.fofa.info/v1/search?qbase64={urllib.parse.quote(qbase64)}&full=false&page=1&size=50&ts={ts}&sign={sign}&app_id=9e9fb94330d97833acfbc041ee1a76793f1bc691'
+    return url
+
+
+if __name__ == '__main__':
+    print(getUrl("InRoaW5rcGhwIg=="))

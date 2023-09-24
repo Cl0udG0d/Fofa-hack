@@ -83,17 +83,17 @@ class OutputData:
                     data[keyword]["title"] = i["title"]
                     data[keyword]["ip"] = i["ip"]
                 else:
-                    keyword = i["url"]
-                    data[keyword] = {}
-                    data[keyword]["url"] = i["url"]
-                    data[keyword]["port"] = i["port"]
-                    data[keyword]["title"] = i["title"]
-                    data[keyword]["ip"] = i["ip"]
-                    data[keyword]["city"] = i["city"]
-                    data[keyword]["asn"] = i["asn"]
-                    data[keyword]["organization"] = i["organization"]
-                    data[keyword]["server"] = i["server"]
-                    data[keyword]["rep"] = i["rep"]
+                    keyword = i["link"]
+                    data[keyword] = i
+                    # data[keyword]["url"] = i["url"]
+                    # data[keyword]["port"] = i["port"]
+                    # data[keyword]["title"] = i["title"]
+                    # data[keyword]["ip"] = i["ip"]
+                    # data[keyword]["city"] = i["city"]
+                    # data[keyword]["asn"] = i["asn"]
+                    # data[keyword]["organization"] = i["organization"]
+                    # data[keyword]["server"] = i["server"]
+                    # data[keyword]["rep"] = i["rep"]
             # print(data)
             # print(json.dumps(data, ensure_ascii=False))
 
