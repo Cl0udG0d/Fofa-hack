@@ -64,3 +64,22 @@ def setProxy(proxy):
     else:
         is_proxy = False
         return is_proxy,proxies
+
+
+def colorize(string, color):
+    colors = {
+        'red': '\033[1;31m',
+        'green': '\033[1;32m',
+        'yellow': '\033[1;33m',
+        'blue': '\033[1;34m',
+        'purple': '\033[1;35m',
+        'cyan': '\033[1;36m',
+    }
+    end_color = '\033[0m'
+
+    if color not in colors:
+        return string
+
+    color_code = colors[color]
+    return f"{color_code}{string}{end_color}"
+

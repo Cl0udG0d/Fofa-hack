@@ -6,7 +6,7 @@ block_cipher = None
 
 a = Analysis(
     ['fofa.py'],
-    pathex=['core/*', 'tookit/*'],
+    pathex=['core/*', 'tookit/*' ,"locale/*"],
     datas=[],
     binaries=[],
     hiddenimports=[],

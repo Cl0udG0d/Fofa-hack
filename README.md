@@ -93,11 +93,7 @@ optional arguments:
 
 ### 使用问题集合
 
-详情请见[QUESTIONS](docs/QUESTIONS.md)
-
-+ [ERROR: Could not build wheels for opencv-python-headless, which is required to install pyproject.toml-based projects](docs/QUESTIONS.md#opencv-python错误)
-+ [ddddocr错误解决](docs/QUESTIONS.md#ddddocr错误解决)
-+ [FOFA综合语法使用](docs/QUESTIONS.md#FOFA综合语法使用)
+详情请见[ISSUES](https://github.com/Cl0udG0d/Fofa-hack/issues)
 
 ### 更新日志
 
@@ -105,7 +101,7 @@ optional arguments:
 
 ### TODO List
 
-详情请见[CHANGELOG](docs/TODO.md)
+详情请见[TODO](docs/TODO.md)
 
 ### 贡献者
 

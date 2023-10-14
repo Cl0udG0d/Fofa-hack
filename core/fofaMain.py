@@ -18,8 +18,20 @@ import re, requests
 from lxml import etree
 
 from tookit.sign import getUrl
-from tookit.unit import clipKeyWord, setProxy
+from tookit.unit import clipKeyWord, setProxy, colorize
+import gettext
+import locale
 
+# 获取当前的语言设置
+lang, _ = locale.getdefaultlocale()
+if lang.startswith('zh'):
+    # 如果是中文环境，不需要翻译，直接用原始字符串
+    _ = lambda x: x
+else:
+    # 如果是其他语言环境，则加载对应的翻译文件
+    language = gettext.translation('fofa_hack', localedir='./locale', languages=[lang])
+    language.install()
+    _ = language.gettext
 
 class FofaMain:
     '''
@@ -72,16 +84,17 @@ class FofaMain:
         """
         输出初始化信息
         """
-        print(f'''\033[1;32m[*] LEVEL = {self.level} , 初始化成功
-[*] 爬取延时: {self.time_sleep}s
-[*] 爬取关键字: {self.search_key}
-[*] 爬取结束数量: {self.endcount}
-[*] 输出格式为: {self.output}
-[*] 存储文件名: {self.filename}
-[*] 是否开启关键字fuzz: {self.fuzz}
-[*] 是否开启代理: {self.is_proxy}
-[*] {"从"+self.inputfile if self.inputfile else "不从"}文件中读取
-\033[0m''')
+        print(colorize(_('''[*] LEVEL = {} , 初始化成功
+[*] 爬取延时: {}s
+[*] 爬取关键字: {}
+[*] 爬取结束数量: {}
+[*] 输出格式为: {}
+[*] 存储文件名: {}
+[*] 是否开启关键字fuzz: {}
+[*] 是否开启代理: {}
+[*] 读取文件: {}
+''').format(self.level,self.time_sleep,self.search_key,self.endcount,self.output,self.filename,
+                  self.fuzz,self.is_proxy,self.inputfile),"green"))
 
 
 
@@ -92,7 +105,7 @@ class FofaMain:
         :return:
         """
         searchbs64 = base64.b64encode(f'{search_key}'.encode()).decode()
-        print("\033[1;32m[*] 爬取页面为:https://fofa.info/result?qbase64={}\033[0m" .format(searchbs64) )
+        print(colorize(_("[*] 爬取页面为:https://fofa.info/result?qbase64={}") .format(searchbs64) ,"green"))
         html = requests.get(url="https://fofa.info/result?qbase64=" + searchbs64,
                             headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,proxies=self.proxy)\
                             .text
@@ -105,7 +118,7 @@ class FofaMain:
             countnum = '0'
             print("Perhaps there is a problem with your network or your area has been officially banned by Fofa, so the program exits")
             self._destroy()
-        print("\033[1;32m[*] 存在数量:{}\033[0m" .format(countnum) )
+        print(colorize(_("[*] 存在数量:{}") .format(countnum),"green"))
         # print("[*] 独立IP数量:" + standaloneIpNum)
         return searchbs64, countnum
 
@@ -271,10 +284,10 @@ class FofaMain:
             except Exception as e:
                 print("\033[1;31m[-] error:{}\033[0m".format(e))
                 TEMP_RETRY_NUM += 1
-                print('\033[1;31m[-] 第{}次尝试获取页面URL\033[0m'.format(TEMP_RETRY_NUM))
+                print(colorize(_('[-] 第{}次尝试获取页面URL').format(TEMP_RETRY_NUM),"red"))
                 # pass
 
-        print('[-] FOFA资源获取重试超过最大次数,程序退出')
+        print(colorize(_('[-] FOFA资源获取重试超过最大次数,程序退出'),"red"))
         self._destroy()
 
     def saveDataToFile(self, rep):
@@ -285,7 +298,7 @@ class FofaMain:
         self.level_data.startSpider(rep)
         # tree = etree.HTML(rep.text)
         # urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
-        print("\033[1;32m[*] 已爬取条数 [\033[1;33m{}\033[1;32m]: {}\033[0m".format(len(self.host_set),str(self.level_data.format_data)))
+        print(colorize(_("[*] 已爬取条数 {} : {}").format(len(self.host_set),str(self.level_data.format_data)),"green"))
 
         self.output_data.output(self.level_data.format_data)
         # for i in self.level_data.formatData:
@@ -319,18 +332,18 @@ class FofaMain:
             return
 
         if len(self.host_set) >= self.endcount:
-            print("\033[1;32m[*] 在{}节点,数据爬取结束\033[0m".format(index))
+            print(colorize(_("[*] 在{}节点,数据爬取结束").format(index),"green"))
             if self.output == 'txt':
                 finalint = self.removeDuplicate()
-                print('\033[1;32m[*] 去重结束，最终数据 ' + str(finalint) + ' 条\033[0m')
+                print(colorize(_('[*] 去重结束，最终数据 {} 条').format(str(finalint)),"green"))
             else:
-                print('\033[1;32m[*] 输出类型为其他,不进行去重操作 \033[0m')
+                print(colorize(_('[*] 输出类型为其他,不进行去重操作 '),"green"))
             self.EXIT_FLAG = True
             return
         if self.old_length == len(self.host_set):
             self.no_new_data_count += 1
             if self.no_new_data_count == 2:
-                print("\033[1;31m[-] {}节点数据无新增,该节点枯萎\033[0m".format(index))
+                print(colorize(_("[-] {}节点数据无新增,该节点枯萎").format(index),"red"))
                 return
         else:
             self.no_new_data_count = 0
@@ -439,7 +452,7 @@ class FofaMain:
         timestamp_list = list(self.timestamp_list[index])
         timestamp_list.sort()
         if len(timestamp_list) == 0:
-            print("似乎时间戳到了尽头.")
+            print(colorize(_("似乎时间戳到了尽头."),"red"))
             self._destroy()
         # print(timestamp_list)
 
@@ -510,7 +523,7 @@ class FofaMain:
 
     def start(self):
         self.outInitMsg()
-        print('\033[1;32m[*] 开始运行\033[0m')
+        print(colorize(_('[*] 开始运行'),"green"))
         if self.inputfile:
             with open(self.inputfile, 'r') as f:
                 for line in f.readlines():
@@ -520,19 +533,19 @@ class FofaMain:
                     self.output_data = OutputData(self.filename, self.level, pattern=self.output)
                     searchbs64, countnum = self.getFofaKeywordsCount(self.search_key)
                     if str(countnum) == "0" and len(str(countnum)) == 1:
-                        print('无搜索结果，执行下一条')
+                        print(colorize(_('无搜索结果，执行下一条'),"red"))
                         continue
                     else:
                         self.fofaSpider(self.search_key, searchbs64, 0)
-                        print(f'\033[1;32m[*] 抓取结束，{self.search_key}关键字共抓取数据 \033[1;33m' + str(len(self.host_set)) + '\033[1;32m 条\033[0m\n')
+                        print(colorize(_('[+] 抓取结束,{}关键字共抓取数据 {} 条\n').format(self.search_key,str(len(self.host_set))),"green"))
 
         else:
             searchbs64, countnum = self.getFofaKeywordsCount(self.search_key)
             if str(countnum) == "0" and len(str(countnum)) == 1:
-                print('无搜索结果')
+                print(colorize(_('无搜索结果'),"red"))
             else:
                 self.fofaSpider(self.search_key, searchbs64, 0)
-            print('\033[1;32m[*] 抓取结束，共抓取数据 \033[1;33m' + str(len(self.host_set)) + ' \033[1;32m条\033[0m\n')
+            print(colorize(_('[*] 抓取结束，共抓取数据 {} 条').format(str(len(self.host_set))),"green"))
 
 
     def _destroy(self):
