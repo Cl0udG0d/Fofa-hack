@@ -7,9 +7,9 @@ block_cipher = None
 a = Analysis(
     ['fofa.py'],
     pathex=['core/*', 'tookit/*' ,"locale/*"],
-    datas=[],
+    datas=[("locale","./locale")],
     binaries=[],
-    hiddenimports=['gettext'],
+    hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

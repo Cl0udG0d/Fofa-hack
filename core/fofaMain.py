@@ -23,6 +23,10 @@ from tookit.unit import clipKeyWord, setProxy, colorize
 import gettext
 import locale
 
+if getattr(sys, 'frozen', None):
+    dir = sys._MEIPASS
+else:
+    dir = config.ROOT_PATH
 # 获取当前的语言设置
 lang, _ = locale.getdefaultlocale()
 if lang.startswith('zh'):
@@ -30,9 +34,10 @@ if lang.startswith('zh'):
     _ = lambda x: x
 else:
     # 如果是其他语言环境，则加载对应的翻译文件
-    language = gettext.translation('fofa_hack', localedir=os.path.join(config.ROOT_PATH,"locale"), languages=['en'])
+    language = gettext.translation('fofa_hack', localedir=os.path.join(dir,"locale"), languages=['en'])
     language.install()
     _ = language.gettext
+
 
 class FofaMain:
     '''
