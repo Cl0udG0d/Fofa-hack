@@ -5,13 +5,14 @@
 # @File    : fofaMain.py
 # @Github: https://github.com/Cl0udG0d
 import json
+import os
 import sys
 from datetime import datetime
 from datetime import timedelta
 import base64
 import time
 from urllib.parse import quote_plus
-from tookit import unit, fofaUseragent
+from tookit import unit, fofaUseragent, config
 from tookit.levelData import LevelData
 from tookit.outputData import OutputData
 import re, requests
@@ -29,7 +30,7 @@ if lang.startswith('zh'):
     _ = lambda x: x
 else:
     # 如果是其他语言环境，则加载对应的翻译文件
-    language = gettext.translation('fofa_hack', localedir='./locale', languages=[lang])
+    language = gettext.translation('fofa_hack', localedir=os.path.join(config.ROOT_PATH,"locale"), languages=['en'])
     language.install()
     _ = language.gettext
 

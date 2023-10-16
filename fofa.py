@@ -5,6 +5,7 @@
 # @File    : fofa.py
 # @Github: https://github.com/Cl0udG0d
 import argparse
+import os
 import time
 from core.fofaMain import FofaMain
 from tookit import unit, config
@@ -21,14 +22,17 @@ if lang.startswith('zh'):
     _ = lambda x: x
 else:
     # 如果是其他语言环境，则加载对应的翻译文件
-    language = gettext.translation('fofa_hack', localedir='./locale', languages=[lang])
+    language = gettext.translation('fofa_hack', localedir=os.path.join(config.ROOT_PATH,"locale"), languages=['en'])
     language.install()
     _ = language.gettext
 
 
+def init():
+    outputLogo()
+    config.ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 def main():
-    outputLogo()
+    init()
     parser = argparse.ArgumentParser(description=_("Fofa-hack v{} 使用说明").format(config.VERSION_NUM))
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--keyword', '-k', help=_('fofa搜索关键字'))
@@ -63,7 +67,7 @@ def main():
     # type = args.type
     inputfile = args.inputfile if args.inputfile else None
     fofa = FofaMain(search_key, inputfile, filename, time_sleep, endcount, level, level_data, output, output_data,
-                     fuzz, timeout, is_proxy, proxy)
+                    fuzz, timeout, is_proxy, proxy)
     fofa.start()
 
 
