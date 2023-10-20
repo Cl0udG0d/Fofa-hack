@@ -15,6 +15,7 @@ from tookit.outputData import OutputData
 from tookit.unit import clipKeyWord, setProxy, outputLogo
 import gettext
 import locale
+import base64
 
 config.ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 if getattr(sys, 'frozen', None):
@@ -40,6 +41,7 @@ def main():
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--keyword', '-k', help=_('fofa搜索关键字'))
     group.add_argument('--inputfile', '-i', help=_("指定文件,从文件中批量读取fofa语法"))
+    group.add_argument('--base','-b', help=_("以base64的形式输入关键字 -b InRoaW5rcGhwIg=="))
 
     parser.add_argument('--timesleep', '-t', help=_('爬取每一页等待秒数,防止IP被Ban,默认为3'), default=3)
     parser.add_argument('--timeout', '-to', help=_('爬取每一页的超时时间,默认为180秒'), default=180)
@@ -54,7 +56,20 @@ def main():
 
     time_sleep = int(args.timesleep)
     timeout = int(args.timeout)
-    search_key = clipKeyWord(args.keyword) if args.keyword else None
+    if args.keyword:
+        search_key = clipKeyWord(args.keyword)
+    else:
+        base = args.base if args.base else None
+        if base:
+            try:
+                search_key = base64.b64decode(base).decode('utf-8')
+            except Exception as e:
+                print(e)
+                search_key = ""
+                pass
+        else:
+            search_key=""
+
     endcount = int(args.endcount) if args.endcount else 100
     level = args.level if args.level else "1"
     level_data = LevelData(level)
@@ -69,6 +84,10 @@ def main():
     is_proxy, proxy = setProxy(args.proxy)
     # type = args.type
     inputfile = args.inputfile if args.inputfile else None
+    if not inputfile and not search_key:
+        print(_("未输入搜索内容"))
+        exit(0)
+
     fofa = FofaMain(search_key, inputfile, filename, time_sleep, endcount, level, level_data, output, output_data,
                     fuzz, timeout, is_proxy, proxy)
     fofa.start()

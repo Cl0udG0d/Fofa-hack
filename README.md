@@ -27,21 +27,21 @@ PS: 感谢[FOFA](https://fofa.info/)提供这么好的测绘工具
 > fofa-hack.exe --help
 
 ```shell
-Fofa-hack>fofa-hack.exe --help
+Fofa-hack>python fofa.py -h
 
-             ____  ____  ____  ____
-            | ===|/ () \| ===|/ () \
-            |__|  \____/|__| /__/\__\
-                 _   _   ____   ____  __  __
+             ____  ____  ____  ____      
+            | ===|/ () \| ===|/ () \     
+            |__|  \____/|__| /__/\__\    
+                 _   _   ____   ____  __  __ 
                 | |_| | / () \ / (__`|  |/  /
-                |_| |_|/__/\__\\____)|__|\__\ V2.4.0
+                |_| |_|/__/\__\\____)|__|\__\ V2.4.3
 
                 公众号: 黑糖安全
+            
+usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE | --base BASE) [--timesleep TIMESLEEP] [--timeout TIMEOUT] [--endcount ENDCOUNT]
+               [--level LEVEL] [--output OUTPUT] [--fuzz] [--proxy PROXY]
 
-usage: fofa-hack.exe [-h] (--keyword KEYWORD | --inputfile INPUTFILE) [--timesleep TIMESLEEP] [--timeout TIMEOUT]
-                     [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz] [--proxy PROXY] [--type {common,selenium}]
-
-Fofa-hack V2.4.0 使用说明
+Fofa-hack v2.4.3 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -49,10 +49,11 @@ optional arguments:
                         fofa搜索关键字
   --inputfile INPUTFILE, -i INPUTFILE
                         指定文件,从文件中批量读取fofa语法
+  --base BASE, -b BASE  以base64的形式输入关键字 -b InRoaW5rcGhwIg==
   --timesleep TIMESLEEP, -t TIMESLEEP
                         爬取每一页等待秒数,防止IP被Ban,默认为3
   --timeout TIMEOUT, -to TIMEOUT
-                        爬取每一页的超时时间
+                        爬取每一页的超时时间,默认为180秒
   --endcount ENDCOUNT, -e ENDCOUNT
                         爬取结束数量
   --level LEVEL, -l LEVEL

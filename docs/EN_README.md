@@ -33,14 +33,14 @@ Fofa-hack>fofa-hack.exe --help
             |__|  \____/|__| /__/\__\
                  _   _   ____   ____  __  __
                 | |_| | / () \ / (__`|  |/  /
-                |_| |_|/__/\__\\____)|__|\__\ V2.4.0
+                |_| |_|/__/\__\\____)|__|\__\ V2.4.3
 
-                公众号: 黑糖安全
+                公众号: 2.4.3
 
 usage: fofa-hack.exe [-h] (--keyword KEYWORD | --inputfile INPUTFILE) [--timesleep TIMESLEEP] [--timeout TIMEOUT]
                      [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz] [--proxy PROXY] [--type {common,selenium}]
 
-Fofa-hack v2.3.5 使用说明
+Fofa-hack v2.4.3 Usage Notes
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -48,6 +48,7 @@ optional arguments:
                         fofa搜索关键字
   --inputfile INPUTFILE, -i INPUTFILE
                         指定文件,从文件中批量读取fofa语法
+  --base BASE, -b BASE Input keyword as base64 -b InRoaW5rcGhwIg==
   --timesleep TIMESLEEP, -t TIMESLEEP
                         爬取每一页等待秒数,防止IP被Ban,默认为3
   --timeout TIMEOUT, -to TIMEOUT
