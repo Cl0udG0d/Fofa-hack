@@ -135,6 +135,13 @@ for more information, please see [CHANGELOG](docs/TODO.md)
             <sub><b>KawaiiSh1zuku</b></sub>
         </a>
     </td>
+    <td align="center">
+        <a href="https://github.com/Valdo-Caeserius">
+            <img src="https://avatars.githubusercontent.com/u/148833225?v=4" width="100;" alt="wanswu"/>
+            <br />
+            <sub><b>Valdo-Caeserius</b></sub>
+        </a>
+    </td>
 </tr>
 </table>
 
