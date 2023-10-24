@@ -42,7 +42,11 @@ def clipKeyWord(keyword):
     # print(tempkey)
 
     if '"' not in tempkey and ' ' not in tempkey:
-        if "=" in tempkey:
+        if "==" in tempkey:
+            tempkey = tempkey.split("==")[0] + '=="' + "==".join(tempkey.split("==")[1:]) + '"'
+        elif "!=" in tempkey:
+            tempkey = tempkey.split("!=")[0] + '!="' + "!=".join(tempkey.split("!=")[1:]) + '"'
+        elif "=" in tempkey:
             # print("=".join(tempkey.split("=")[1:]))
             tempkey = tempkey.split("=")[0] + '="' + "=".join(tempkey.split("=")[1:]) + '"'
         else:
