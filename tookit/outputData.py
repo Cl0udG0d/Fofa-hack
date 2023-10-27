@@ -62,15 +62,6 @@ class OutputData:
         data=self.readAllJsonData()
 
         with open(self.filename, 'w+', encoding=self.ENCODING_TYPE) as load_f:
-            # load_f.seek(0)
-            # print(os.path.getsize(self.filename))
-            # print("lines : " + str(load_f.readlines()))
-            # if os.path.getsize(self.filename)==0:
-            #     load_dict={}
-            # else:
-            #     print("lines : "+str(load_f.readlines()))
-            #     load_dict = json.load(load_f)
-            # print(load_dict)
 
             for i in newdata:
                 if self.level=="1":
@@ -85,17 +76,6 @@ class OutputData:
                 else:
                     keyword = i["link"]
                     data[keyword] = i
-                    # data[keyword]["url"] = i["url"]
-                    # data[keyword]["port"] = i["port"]
-                    # data[keyword]["title"] = i["title"]
-                    # data[keyword]["ip"] = i["ip"]
-                    # data[keyword]["city"] = i["city"]
-                    # data[keyword]["asn"] = i["asn"]
-                    # data[keyword]["organization"] = i["organization"]
-                    # data[keyword]["server"] = i["server"]
-                    # data[keyword]["rep"] = i["rep"]
-            # print(data)
-            # print(json.dumps(data, ensure_ascii=False))
 
             json.dump(data, load_f, indent=4, ensure_ascii=False)
             load_f.close()

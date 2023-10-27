@@ -40,6 +40,9 @@ def clipKeyWord(keyword):
     """
     tempkey = keyword.replace("'", '"')
     # print(tempkey)
+    # 单关键字情况 并且 关键字内部有空格
+    if ("&&" or "||") not in tempkey and " " in tempkey:
+        tempkey = '"{}"'.format(tempkey)
 
     if '"' not in tempkey and ' ' not in tempkey:
         if "==" in tempkey:

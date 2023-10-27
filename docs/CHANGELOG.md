@@ -1,4 +1,8 @@
 # CHANGELOG 代码变更记录
+### 2.4.5
++ 修复 [issues 51](https://github.com/Cl0udG0d/Fofa-hack/issues/51)
++ 修复 [issues 53](https://github.com/Cl0udG0d/Fofa-hack/issues/53)
+
 ### 2.4.4
 + unit.py 修剪关键字功能扩展
 

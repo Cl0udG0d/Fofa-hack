@@ -280,8 +280,10 @@ class FofaMain:
                 for data in self.level_data.format_data:
                     if self.level == "1":
                         self.host_set.add(data)
-                    else:
+                    elif self.level == "2":
                         self.host_set.add(data["url"])
+                    else :
+                        self.host_set.add(data["id"])
 
                 time.sleep(self.time_sleep)
 
