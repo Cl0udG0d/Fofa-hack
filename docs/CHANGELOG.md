@@ -1,4 +1,9 @@
 # CHANGELOG 代码变更记录
+
+### 2.4.6
++ 修复 [issues 54](https://github.com/Cl0udG0d/Fofa-hack/issues/54)
++ 终端颜色输出问题解决
+
 ### 2.4.5
 + 修复 [issues 51](https://github.com/Cl0udG0d/Fofa-hack/issues/51)
 + 修复 [issues 53](https://github.com/Cl0udG0d/Fofa-hack/issues/53)

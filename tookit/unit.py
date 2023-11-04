@@ -4,7 +4,10 @@ import string
 import time
 
 from tookit import config
+from colorama import init, Fore
 
+# 初始化 colorama 库
+init()
 
 def md5(str):
     m = hashlib.md5()
@@ -75,18 +78,18 @@ def setProxy(proxy):
 
 def colorize(string, color):
     colors = {
-        'red': '\033[1;31m',
-        'green': '\033[1;32m',
-        'yellow': '\033[1;33m',
-        'blue': '\033[1;34m',
-        'purple': '\033[1;35m',
-        'cyan': '\033[1;36m',
+        'red': Fore.RED,
+        'green': Fore.GREEN,
+        'yellow': Fore.YELLOW,
+        'blue': Fore.BLUE,
+        'purple': Fore.MAGENTA,
+        'cyan': Fore.CYAN,
     }
-    end_color = '\033[0m'
+    # end_color = '\033[0m'
 
     if color not in colors:
         return string
 
     color_code = colors[color]
-    return f"{color_code}{string}{end_color}"
+    return f"{color_code}{string}{Fore.RESET}"
 

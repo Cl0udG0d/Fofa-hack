@@ -85,7 +85,7 @@ class LevelData:
         # urllist1 = self.tree.xpath(self.URLLIST_RULE)
         # urllist2 = self.cleanUrlListSpeace(self.tree.xpath(self.URLLIST_RULE_TWO))
 
-        self.format_data = [d['link'] for d in self.assets]
+        self.format_data = [d['link'] if d['link'] != '' else d['host'] for d in self.assets]
 
     def spiderMiddleData(self):
         """
@@ -96,7 +96,7 @@ class LevelData:
             ip
         :return:
         """
-        urllist = [d['link'] for d in self.assets]
+        urllist = [d['link'] if d['link'] != '' else d['host'] for d in self.assets]
         portlist = [d['port'] for d in self.assets]
         titleList = [d['title'] for d in self.assets]
         iplist = [d['ip'] for d in self.assets]

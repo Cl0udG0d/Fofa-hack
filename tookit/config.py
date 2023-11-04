@@ -5,5 +5,5 @@
 # @File    : config.py
 # @Github: https://github.com/Cl0udG0d
 
-VERSION_NUM = "2.4.5"
+VERSION_NUM = "2.4.6"
 ROOT_PATH=""

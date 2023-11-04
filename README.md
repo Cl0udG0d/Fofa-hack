@@ -87,6 +87,9 @@ optional arguments:
 > fofa-hack.exe --keyword thinkphp --endcount 500
 
 爬取五百条数据轻轻松松
+### 代码安全
+
+[![Security Status](https://www.murphysec.com/platform3/v31/badge/1720281845524238336.svg)](https://www.murphysec.com/console/report/1720281838695911424/1720281845524238336)
 
 ### 赞赏列表
 
