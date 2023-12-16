@@ -74,7 +74,7 @@ def getCheckHeaders():
     :return:
     """
     check_headers = {
-        'Host': 'fofa.info',
+        'Host': 'fofa_hack.info',
         'User-Agent': getFakeUserAgent(),
         'sec-ch-ua': '"Chromium";v="106", "Microsoft Edge";v="106", "Not;A=Brand";v="99"',
         'sec-ch-ua-platform': '"Windows"',

@@ -26,7 +26,7 @@ more parameters to view `--help`
 > fofa-hack.exe --help
 
 ```shell
-Fofa-hack>fofa-hack.exe --help
+Fofa-hack>fofa_hack-hack.exe --help
 
              ____  ____  ____  ____
             | ===|/ () \| ===|/ () \
@@ -37,7 +37,7 @@ Fofa-hack>fofa-hack.exe --help
 
                 公众号: 2.4.3
 
-usage: fofa-hack.exe [-h] (--keyword KEYWORD | --inputfile INPUTFILE) [--timesleep TIMESLEEP] [--timeout TIMEOUT]
+usage: fofa_hack-hack.exe [-h] (--keyword KEYWORD | --inputfile INPUTFILE) [--timesleep TIMESLEEP] [--timeout TIMEOUT]
                      [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz] [--proxy PROXY] [--type {common,selenium}]
 
 Fofa-hack v2.4.3 Usage Notes

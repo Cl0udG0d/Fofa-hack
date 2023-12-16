@@ -24,15 +24,14 @@ else:
     dir = config.ROOT_PATH
 # 获取当前的语言设置
 lang, _ = locale.getdefaultlocale()
-if lang.startswith('zh'):
+if lang and lang.startswith('zh'):
     # 如果是中文环境，不需要翻译，直接用原始字符串
     _ = lambda x: x
 else:
     # 如果是其他语言环境，则加载对应的翻译文件
-    language = gettext.translation('fofa_hack', localedir=os.path.join(dir,"locale"), languages=['en'])
+    language = gettext.translation('fofa_hack', localedir=os.path.join(dir, "locale"), languages=['en'])
     language.install()
     _ = language.gettext
-
 
 
 def main():
@@ -41,7 +40,7 @@ def main():
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--keyword', '-k', help=_('fofa搜索关键字'))
     group.add_argument('--inputfile', '-i', help=_("指定文件,从文件中批量读取fofa语法"))
-    group.add_argument('--base','-b', help=_("以base64的形式输入关键字 -b InRoaW5rcGhwIg=="))
+    group.add_argument('--base', '-b', help=_("以base64的形式输入关键字 -b InRoaW5rcGhwIg=="))
 
     parser.add_argument('--timesleep', '-t', help=_('爬取每一页等待秒数,防止IP被Ban,默认为3'), default=3)
     parser.add_argument('--timeout', '-to', help=_('爬取每一页的超时时间,默认为180秒'), default=180)
@@ -68,7 +67,7 @@ def main():
                 search_key = ""
                 pass
         else:
-            search_key=""
+            search_key = ""
 
     endcount = int(args.endcount) if args.endcount else 100
     level = args.level if args.level else "1"
