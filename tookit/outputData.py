@@ -14,8 +14,9 @@ class OutputData:
 
     ENCODING_TYPE="utf-8"
 
-    def __init__(self,filename,level="1",pattern="txt"):
+    def __init__(self,filename, outputname, level="1",pattern="txt"):
         self.filename=filename
+        self.outputname=outputname
         self.pattern = pattern if self.checkPatternStandard(pattern) else "txt"
         self.level=level
         # self.path=os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))),self.filename)

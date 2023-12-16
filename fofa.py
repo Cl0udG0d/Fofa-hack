@@ -48,7 +48,7 @@ def main():
     parser.add_argument('--endcount', '-e', help=_('爬取结束数量'))
     parser.add_argument('--level', '-l', help=_('爬取等级: 1-3 ,数字越大内容越详细,默认为 1'))
     parser.add_argument('--output', '-o', help=_('输出格式:txt、json,默认为txt'))
-    parser.add_argument('--outputname','-on', help=_("指定输出文件名，默认文件名为 fofaHack.json"))
+    parser.add_argument('--outputname','-on', help=_("指定输出文件名，默认文件名为 fofaHack"))
     parser.add_argument('--fuzz', '-f', help=_('关键字fuzz参数,增加内容获取粒度'), action='store_true')
     parser.add_argument('--proxy', help=_("指定代理，代理格式 --proxy '127.0.0.1:7890'"))
 
@@ -77,8 +77,18 @@ def main():
     level_data = LevelData(level)
     fuzz = args.fuzz
     output = args.output if args.output else "txt"
+    outputname = args.outputname if args.outputname else "fofaHack"
+
     if search_key:
-        filename = "{}_{}.{}".format(unit.md5(search_key), int(time.time()), output)
+        if outputname:
+            filename="{}.{}".format(outputname,output)
+            # 检查文件是否存在
+            if os.path.exists(filename):
+                # 如果存在，删除文件
+                os.remove(filename)
+                os.remove("final_"+filename)
+        else:
+            filename = "{}_{}.{}".format(unit.md5(search_key), int(time.time()), output)
         output_data = OutputData(filename, level, pattern=output)
     else:
         filename = _("暂无")
