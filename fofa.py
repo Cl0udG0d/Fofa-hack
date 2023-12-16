@@ -48,8 +48,10 @@ def main():
     parser.add_argument('--endcount', '-e', help=_('爬取结束数量'))
     parser.add_argument('--level', '-l', help=_('爬取等级: 1-3 ,数字越大内容越详细,默认为 1'))
     parser.add_argument('--output', '-o', help=_('输出格式:txt、json,默认为txt'))
+    parser.add_argument('--outputname','-on', help=_("指定输出文件名，默认文件名为 fofaHack.json"))
     parser.add_argument('--fuzz', '-f', help=_('关键字fuzz参数,增加内容获取粒度'), action='store_true')
     parser.add_argument('--proxy', help=_("指定代理，代理格式 --proxy '127.0.0.1:7890'"))
+
     # parser.add_argument('--type', type=str, choices=["common", "selenium"], default="common",
     #                     help="运行类型,默认为普通方式")
     args = parser.parse_args()
