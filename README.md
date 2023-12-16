@@ -66,6 +66,23 @@ optional arguments:
 
 爬取的去重结果会存储到`final_md5(搜索关键字)_运行时间戳.txt`文件中
 
+### API
+
+也可以使用api调用
+
+`pip install fofa-hack`
+
+```python
+from fofa_hack import fofa
+def main():
+    result_generator = fofa.api("thinkphp", endcount=100)
+    for data in result_generator:
+        print(data)
+
+if __name__ == '__main__':
+    main()
+```
+
 ### 搜索语法
 一些搜索的示例
 
