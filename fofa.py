@@ -79,15 +79,15 @@ def main():
     outputname = args.outputname if args.outputname else "fofaHack"
 
     if search_key:
-        if outputname:
-            filename="{}.{}".format(outputname,output)
-            # 检查文件是否存在
-            if os.path.exists(filename):
-                # 如果存在，删除文件
-                os.remove(filename)
-                os.remove("final_"+filename)
-        else:
-            filename = "{}_{}.{}".format(unit.md5(search_key), int(time.time()), output)
+        # if outputname:
+        filename="{}.{}".format(outputname,output)
+        # 检查文件是否存在
+        if os.path.exists(filename):
+            # 如果存在，删除文件
+            os.remove(filename)
+            os.remove("final_"+filename)
+        # else:
+        #     filename = "{}_{}.{}".format(unit.md5(search_key), int(time.time()), output)
         output_data = OutputData(filename, level, pattern=output)
     else:
         filename = _("暂无")

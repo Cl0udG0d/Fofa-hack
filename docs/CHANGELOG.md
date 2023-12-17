@@ -1,5 +1,9 @@
 # CHANGELOG 代码变更记录
 
+### 2.4.9
++ 修复语言问题
++ 修改代码冗余部分
+
 ### 2.4.8
 + 修复setup.py问题
 + 合并[新增可设置保存文件名代码](https://github.com/Cl0udG0d/Fofa-hack/pull/58)

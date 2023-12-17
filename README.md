@@ -66,7 +66,7 @@ optional arguments:
   --proxy PROXY         指定代理，代理格式 --proxy '127.0.0.1:7890'
 ```
 
-爬取的去重结果会存储到`final_md5(搜索关键字)_运行时间戳.txt`文件中
+爬取的去重结果会存储到`final_fofaHack.txt`文件中
 
 ### API
 

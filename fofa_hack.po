@@ -145,8 +145,11 @@ msgid ""
 msgstr ""
 "[*] Grabbing is over, total data {} items grabbed"
 
-msgid "以base64的形式输入关键字 , -b InRoaW5rcGhwIg=="
-msgstr "Type the keyword as base64 , -b InRoaW5rcGhwIg=="
+msgid "以base64的形式输入关键字 -b InRoaW5rcGhwIg=="
+msgstr "Enter the keyword in base64 form -b InRoaW5rcGhwIg=="
 
 msgid "未输入搜索内容"
 msgstr "No search entered"
+
+msgid "指定输出文件名，默认文件名为 fofaHack"
+msgstr "Specify the output file name, the default file name is fofaHack."
