@@ -59,6 +59,8 @@ optional arguments:
                         爬取等级: 1-3 ,数字越大内容越详细,默认为 1
   --output OUTPUT, -o OUTPUT
                         输出格式:txt、json,默认为txt
+  --outputname OUTPUT, -on OUTPUTNAME
+                        指定输出文件名，默认为fofaHack
   --fuzz, -f            关键字fuzz参数,增加内容获取粒度
   --proxy PROXY         指定代理，代理格式 --proxy '127.0.0.1:7890'
 ```
@@ -140,6 +142,13 @@ for more information, please see [CHANGELOG](docs/TODO.md)
             <img src="https://avatars.githubusercontent.com/u/148833225?v=4" width="100;" alt="wanswu"/>
             <br />
             <sub><b>Valdo-Caeserius</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/10cks">
+            <img src="https://avatars.githubusercontent.com/u/47177550?v=4" width="100;" alt="wanswu"/>
+            <br />
+            <sub><b>10cks</b></sub>
         </a>
     </td>
 </tr>

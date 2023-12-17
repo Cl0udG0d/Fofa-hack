@@ -1,5 +1,10 @@
 # CHANGELOG 代码变更记录
 
+### 2.4.8
++ 修复setup.py问题
++ 合并[新增可设置保存文件名代码](https://github.com/Cl0udG0d/Fofa-hack/pull/58)
++ 新增贡献者[10cks](https://github.com/10cks)
+
 ### 2.4.7
 + 去除没有获取到语言情况下为空的问题
 + 生成fofa-hack pip包
