@@ -82,7 +82,7 @@ def main():
         # if outputname:
         filename="{}.{}".format(outputname,output)
         # 检查文件是否存在
-        if os.path.exists(filename):
+        if os.path.exists(filename) and os.path.exists("final_"+filename):
             # 如果存在，删除文件
             os.remove(filename)
             os.remove("final_"+filename)

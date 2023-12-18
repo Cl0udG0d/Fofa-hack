@@ -7,6 +7,7 @@
 import json
 import os
 import sys
+import urllib
 from datetime import datetime
 from datetime import timedelta
 import base64
@@ -267,7 +268,7 @@ class FofaMain:
         获取fofa一页的数据
         :rtype: object
         """
-        searchbs64 = searchbs64.replace("%3D", "=")
+        # searchbs64 = searchbs64.replace("%3D", "=")
         # init_search_key = base64.b64decode(searchbs64).decode()
         init_search_key = search_key
         print("\033[1;34mnow search key: {}\033[0m" .format(init_search_key) )
@@ -287,7 +288,7 @@ class FofaMain:
 
                 time.sleep(self.time_sleep)
 
-                return rep.text
+                return rep.text if rep else None
 
             except Exception as e:
                 print("\033[1;31m[-] error:{}\033[0m".format(e))
@@ -361,7 +362,7 @@ class FofaMain:
 
         search_key_modify = self.modifySearchTimeUrl(search_key, index)
         # print(search_key_modify)
-        searchbs64_modify = quote_plus(base64.b64encode(search_key_modify.encode()))
+        searchbs64_modify = urllib.parse.quote(base64.b64encode(search_key_modify.encode("utf-8")))
         # search_key = search_key_modify
         # searchbs64 = searchbs64_modify
         self.fofaSpider(search_key_modify, searchbs64_modify, index)
@@ -421,7 +422,7 @@ class FofaMain:
                 for data in dataList:
                     new_key = search_key + ' && {}="{}"'.format(fuzzKey, data)
                     # print("new_key: "+new_key)
-                    searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
+                    searchbs64_modify = urllib.parse.quote(base64.b64encode(new_key.encode("utf-8")))
                     self.fuzzListAdd()
                     self.setIndexTimestamp(searchbs64_modify, self.timestamp_index)
                     # self.fofaSpiderOnePageData(search_key,searchbs64_modify,self.timestamp_index)
@@ -430,7 +431,7 @@ class FofaMain:
                 for data in dataList:
                     new_key = search_key + ' && {}!="{}"'.format(fuzzKey, data)
                     # print("new_key: "+new_key)
-                    searchbs64_modify = quote_plus(base64.b64encode(new_key.encode("utf-8")))
+                    searchbs64_modify = urllib.parse.quote(base64.b64encode(new_key.encode("utf-8")))
                     self.fuzzListAdd()
                     self.setIndexTimestamp(searchbs64_modify, self.timestamp_index)
                     # self.fofaSpiderOnePageData(search_key,searchbs64_modify,self.timestamp_index)
