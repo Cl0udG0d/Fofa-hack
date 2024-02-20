@@ -6,6 +6,7 @@
 """
 import random
 
+from tookit import config
 
 user_agent = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0',
@@ -92,5 +93,13 @@ def getFofaPageNumHeaders():
     headers_use = {
         'User-Agent': getFakeUserAgent(),
         'Accept': 'application/json, text/plain, */*',
+    }
+    return headers_use
+
+def getFofaCookieHeaders():
+    headers_use = {
+        'User-Agent': getFakeUserAgent(),
+        'Accept': 'application/json, text/plain, */*',
+        'Authorization':config.AUTHORIZATION,
     }
     return headers_use

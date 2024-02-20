@@ -59,6 +59,12 @@ def getUrl(qbase64):
     url = f'https://api.fofa.info/v1/search?qbase64={urllib.parse.quote(qbase64)}&full=false&page=1&size=50&ts={ts}&sign={sign}&app_id=9e9fb94330d97833acfbc041ee1a76793f1bc691'
     return url
 
+def getPage2Url(qbase64,page):
+    ts = int(time.time() * 1000)
+    message = f'fullfalsepage{page}qbase64{qbase64}size10ts{ts}'
+    sign = urllib.parse.quote(getSign(message))
+    url = f'https://api.fofa.info/v1/search?qbase64={urllib.parse.quote(qbase64)}&full=false&page={page}&size=10&ts={ts}&sign={sign}&app_id=9e9fb94330d97833acfbc041ee1a76793f1bc691'
+    return url
 
 if __name__ == '__main__':
     print(getUrl("InRoaW5rcGhwIg=="))

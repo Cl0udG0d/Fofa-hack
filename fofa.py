@@ -50,6 +50,7 @@ def main():
     parser.add_argument('--outputname','-on', help=_("指定输出文件名，默认文件名为 fofaHack"))
     parser.add_argument('--fuzz', '-f', help=_('关键字fuzz参数,增加内容获取粒度'), action='store_true')
     parser.add_argument('--proxy', help=_("指定代理，代理格式 --proxy '127.0.0.1:7890'"))
+    parser.add_argument('--authorization', type=str, help="指定Authorization值")
 
     # parser.add_argument('--type', type=str, choices=["common", "selenium"], default="common",
     #                     help="运行类型,默认为普通方式")
@@ -98,6 +99,10 @@ def main():
     if not inputfile and not search_key:
         print(_("未输入搜索内容"))
         exit(0)
+    if args.authorization:
+        # 用户输入了Authorization值
+        # print("用户输入的Authorization值为:", args.authorization)
+        config.AUTHORIZATION = args.authorization
 
     fofa = FofaMain(search_key, inputfile, filename, time_sleep, endcount, level, level_data, output, output_data,
                     fuzz, timeout, is_proxy, proxy)

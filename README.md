@@ -11,6 +11,8 @@ PS: 感谢[FOFA](https://fofa.info/)提供这么好的测绘工具
 
 `-f` 参数开启关键字fuzz
 
+`--authorization` 指定登录用户的 authorization,authorization需要F12获取
+
 使用示例
 > fofa-hack.exe --keyword thinkphp --endcount 500
 
@@ -64,6 +66,8 @@ optional arguments:
                         指定输出文件名，默认为fofaHack
   --fuzz, -f            关键字fuzz参数,增加内容获取粒度
   --proxy PROXY         指定代理，代理格式 --proxy '127.0.0.1:7890'
+  --authorization AUTHORIZATION
+                        指定Authorization值
 ```
 
 爬取的去重结果会存储到`final_fofaHack.txt`文件中
@@ -106,9 +110,6 @@ if __name__ == '__main__':
 > fofa-hack.exe --keyword thinkphp --endcount 500
 
 爬取五百条数据轻轻松松
-### 代码安全
-
-[![Security Status](https://www.murphysec.com/platform3/v31/badge/1720281845524238336.svg)](https://www.murphysec.com/console/report/1720281838695911424/1720281845524238336)
 
 ### 赞赏列表
 
@@ -174,11 +175,3 @@ if __name__ == '__main__':
     </td>
 </tr>
 </table>
-
-### END 
-
-添加我微信备注`进群`
-
-|               加我拉你入群               |                                                            黑糖安全公众号                                                             |
-|:----------------------------------------------------------: |:------------------------------------------------------------------------------------------------------------------------------:|
-| <img src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/1a1f7894a170bec207e61bf86a01592.jpg" width="300"/> | <img src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/qrcode_for_gh_cead8e1080d6_430.jpg" width="300"/> |
