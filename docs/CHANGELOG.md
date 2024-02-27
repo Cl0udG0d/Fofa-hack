@@ -1,5 +1,9 @@
 # CHANGELOG 代码变更记录
 
+### 2.4.12
++ 修复[issue 63](https://github.com/Cl0udG0d/Fofa-hack/issues/63)
++ 
+
 ### 2.4.11
 + 新增SECURITY文件
 + 新增用户Authorization查询
