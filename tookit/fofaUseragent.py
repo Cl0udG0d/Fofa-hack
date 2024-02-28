@@ -94,12 +94,14 @@ def getFofaPageNumHeaders():
         'User-Agent': getFakeUserAgent(),
         'Accept': 'application/json, text/plain, */*',
     }
+    if config.AUTHORIZATION:
+        headers_use['Authorization'] = config.AUTHORIZATION
     return headers_use
 
-def getFofaCookieHeaders():
-    headers_use = {
-        'User-Agent': getFakeUserAgent(),
-        'Accept': 'application/json, text/plain, */*',
-        'Authorization':config.AUTHORIZATION,
-    }
-    return headers_use
+# def getFofaCookieHeaders():
+#     headers_use = {
+#         'User-Agent': getFakeUserAgent(),
+#         'Accept': 'application/json, text/plain, */*',
+#         'Authorization':config.AUTHORIZATION,
+#     }
+#     return headers_use

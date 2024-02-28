@@ -2,7 +2,7 @@
 
 ### 2.4.12
 + 修复[issue 63](https://github.com/Cl0udG0d/Fofa-hack/issues/63)
-+ 
++ 完善Authorization逻辑
 
 ### 2.4.11
 + 新增SECURITY文件

@@ -19,7 +19,7 @@ from tookit.outputData import OutputData
 import re, requests
 from lxml import etree
 
-from tookit.sign import getUrl, getPage2Url
+from tookit.sign import getUrl
 from tookit.unit import clipKeyWord, setProxy, colorize
 import gettext
 import locale
@@ -116,6 +116,8 @@ class FofaMain:
         """
         searchbs64 = base64.b64encode(f'{search_key}'.encode()).decode()
         print(colorize(_("[*] 爬取页面为:https://fofa.info/result?qbase64={}") .format(searchbs64) ,"green"))
+        if config.AUTHORIZATION:
+            return searchbs64,""
         html = requests.get(url="https://fofa.info/result?qbase64=" + searchbs64,
                             headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,proxies=self.proxy)\
                             .text
@@ -251,17 +253,10 @@ class FofaMain:
         @return:
         """
         try:
-            if config.AUTHORIZATION:
-                request_url = getPage2Url(searchbs64,self.current_page_num)
-                # print(request_url)
-                self.current_page_num +=1
-                rep = requests.get(request_url, headers=fofaUseragent.getFofaCookieHeaders(), timeout=self.timeout,
-                                   proxies=self.proxy)
-            else:
-                request_url = getUrl(searchbs64)
-            # print(f'request_url:{request_url}')
-                rep = requests.get(request_url, headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,
-                                   proxies=self.proxy)
+            request_url = getUrl(searchbs64)
+            # print(request_url)
+            rep = requests.get(request_url, headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,
+                               proxies=self.proxy)
             # print(rep.text)
             timelist = self.getTimeList(rep.text)
             # print(timelist)
@@ -281,8 +276,8 @@ class FofaMain:
         # searchbs64 = searchbs64.replace("%3D", "=")
         # init_search_key = base64.b64decode(searchbs64).decode()
         init_search_key = search_key
-        if not config.AUTHORIZATION:
-            print("\033[1;34mnow search key: {}\033[0m" .format(init_search_key) )
+        # if not config.AUTHORIZATION:
+        print("\033[1;34mnow search key: {}\033[0m" .format(init_search_key) )
         TEMP_RETRY_NUM = 0
 
         while TEMP_RETRY_NUM < self.MAX_MATCH_RETRY_NUM:
@@ -371,15 +366,12 @@ class FofaMain:
         if self.fuzz and not self.EXIT_FLAG:
             self.fofaFuzzSpider(search_key, context, index)
 
-        if config.AUTHORIZATION:
-            self.fofaSpider(search_key, searchbs64, index)
-        else:
-            search_key_modify = self.modifySearchTimeUrl(search_key, index)
-            # print(search_key_modify)
-            searchbs64_modify = urllib.parse.quote(base64.b64encode(search_key_modify.encode("utf-8")))
-            # search_key = search_key_modify
-            # searchbs64 = searchbs64_modify
-            self.fofaSpider(search_key_modify, searchbs64_modify, index)
+        search_key_modify = self.modifySearchTimeUrl(search_key, index)
+        # print(search_key_modify)
+        searchbs64_modify = urllib.parse.quote(base64.b64encode(search_key_modify.encode("utf-8")))
+        # search_key = search_key_modify
+        # searchbs64 = searchbs64_modify
+        self.fofaSpider(search_key_modify, searchbs64_modify, index)
 
     def isPortInKeyword(self):
         """

@@ -11,10 +11,12 @@ PS: 感谢[FOFA](https://fofa.info/)提供这么好的测绘工具
 
 `-f` 参数开启关键字fuzz
 
-`--authorization` 指定登录用户的 authorization,authorization需要F12获取
+`--authorization` 指定登录用户的 authorization , authorization需要F12获取
 
 使用示例
 > fofa-hack.exe --keyword thinkphp --endcount 500
+> 
+> fofa-hack.exe --keyword thinkphp --endcount 500 --authorization your_authorization
 
 ### 安装
 
@@ -43,7 +45,7 @@ Fofa-hack>python fofa.py -h
 usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE | --base BASE) [--timesleep TIMESLEEP] [--timeout TIMEOUT] [--endcount ENDCOUNT]
                [--level LEVEL] [--output OUTPUT] [--fuzz] [--proxy PROXY]
 
-Fofa-hack v2.4.3 使用说明
+Fofa-hack v2.4.12 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
