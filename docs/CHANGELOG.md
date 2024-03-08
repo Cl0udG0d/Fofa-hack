@@ -1,5 +1,9 @@
 # CHANGELOG 代码变更记录
 
+### 2.4.13
++ 新增icon文件和网址功能 [issue 64](https://github.com/Cl0udG0d/Fofa-hack/issues/64)
++ 修复BUG [issue 65](https://github.com/Cl0udG0d/Fofa-hack/issues/65)
+
 ### 2.4.12
 + 修复[issue 63](https://github.com/Cl0udG0d/Fofa-hack/issues/63)
 + 完善Authorization逻辑

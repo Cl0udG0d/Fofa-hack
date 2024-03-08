@@ -8,7 +8,7 @@ __pycache__/
 *.so
 /venv
 *.json
-
+favicon32.ico
 debug.log
 # Distribution / packaging
 .Python

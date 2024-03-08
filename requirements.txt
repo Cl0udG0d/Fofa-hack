@@ -5,6 +5,7 @@ colorama==0.4.6
 idna==3.4
 importlib-metadata==7.0.1
 lxml==4.9.2
+mmh3==4.1.0
 packaging==23.2
 pefile==2023.2.7
 pycryptodomex==3.19.0
