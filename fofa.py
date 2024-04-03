@@ -53,7 +53,8 @@ def main():
     parser.add_argument('--output', '-o', help=_('输出格式:txt、json,默认为txt'))
     parser.add_argument('--outputname','-on', help=_("指定输出文件名，默认文件名为 fofaHack"))
     parser.add_argument('--fuzz', '-f', help=_('关键字fuzz参数,增加内容获取粒度'), action='store_true')
-    parser.add_argument('--proxy', help=_("指定代理，代理格式 --proxy '127.0.0.1:7890'"))
+    parser.add_argument('--proxy', help=_("指定代理,代理格式 --proxy '127.0.0.1:7890'"))
+    parser.add_argument('--proxy-type',choices=['socks4','socks5', 'http'], help=_("代理类型,默认为http"),default='http')
     parser.add_argument('--authorization', type=str, help="指定Authorization值")
 
 
@@ -114,7 +115,7 @@ def main():
     else:
         filename = _("暂无")
         output_data = None
-    is_proxy, proxy = setProxy(args.proxy)
+    is_proxy, proxy = setProxy(args.proxy,args.proxy_type)
     # type = args.type
     inputfile = args.inputfile if args.inputfile else None
     if not inputfile and not search_key:

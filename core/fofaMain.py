@@ -257,6 +257,7 @@ class FofaMain:
             # print(request_url)
             rep = requests.get(request_url, headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,
                                proxies=self.proxy)
+            print(rep.json())
             # print(rep.text)
             timelist = self.getTimeList(rep.text)
             # print(timelist)

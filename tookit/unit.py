@@ -59,17 +59,18 @@ def clipKeyWord(keyword):
             tempkey = '"{}"'.format(tempkey)
     return tempkey
 
-def setProxy(proxy):
+def setProxy(proxy,proxy_type):
     """
     设置代理
     """
     proxies = {}
     if proxy:
         proxies = {
-            'http': 'http://' + proxy,
-            'https': 'http://' + proxy
+            'http': proxy_type+'://' + proxy,
+            'https': proxy_type+'://' + proxy
         }
         is_proxy = True
+        # print(proxies)
         return is_proxy, proxies
     else:
         is_proxy = False

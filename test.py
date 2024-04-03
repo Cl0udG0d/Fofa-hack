@@ -1,29 +1,19 @@
 import requests
+def get_ip():
+    proxies =  {'http': 'socks5://18.178.209.57:5555', 'https': 'socks5://18.178.209.57:5555'}
+    response = requests.get('https://api64.ipify.org?format=json',proxies=proxies).json()
+    return response["ip"]
 
-from fofa_hack import fofa
-from tookit import fofaUseragent
+def get_location():
+    ip_address = get_ip()
+    response = requests.get(f'https://ipapi.co/{ip_address}/json/').json()
+    location_data = {
+        "ip": ip_address,
+        "city": response.get("city"),
+        "region": response.get("region"),
+        "country": response.get("country_name")
+    }
+    return location_data
 
-import requests,sys,mmh3,codecs
-
-def main():
-    # result_generator = fofa.api('body="亿邮邮件" && country="CN" && region!="HK" && region!="MO"', endcount=100)
-    # for data in result_generator:
-    #     print(data)
-    import mmh3
-    import requests
-    import base64
-    # f = open("favicon32.ico","rb")
-    filename = "favicon32.ico"
-    # print(f.read())
-    with open(filename, 'rb') as f:
-        _icon = mmh3.hash(codecs.lookup('base64').encode(f.read())[0])
-        print('http.favicon.hash:' + str(_icon))
-
-
-    # response = requests.get('https://g.csdnimg.cn/static/logo/favicon32.ico')
-    # favicon = base64.b64encode(response.content)
-    # hash = mmh3.hash(favicon)
-
-
-if __name__ == '__main__':
-    main()
+print(get_ip())
+# print(get_location())

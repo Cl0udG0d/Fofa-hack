@@ -11,6 +11,7 @@ pefile==2023.2.7
 pycryptodomex==3.19.0
 pyinstaller==6.4.0
 pyinstaller-hooks-contrib==2024.1
+PySocks==1.7.1
 pywin32-ctypes==0.2.2
 requests==2.27.1
 urllib3==1.25.11

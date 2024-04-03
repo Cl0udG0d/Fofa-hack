@@ -38,14 +38,14 @@ Fofa-hack>python fofa.py -h
             |__|  \____/|__| /__/\__\    
                  _   _   ____   ____  __  __ 
                 | |_| | / () \ / (__`|  |/  /
-                |_| |_|/__/\__\\____)|__|\__\ V2.4.3
+                |_| |_|/__/\__\\____)|__|\__\ V2.4.14
 
                 公众号: 黑糖安全
             
 usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE | --base BASE) [--timesleep TIMESLEEP] [--timeout TIMEOUT] [--endcount ENDCOUNT]
                [--level LEVEL] [--output OUTPUT] [--fuzz] [--proxy PROXY]
 
-Fofa-hack v2.4.12 使用说明
+Fofa-hack v2.4.14 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -68,6 +68,8 @@ optional arguments:
                         指定输出文件名，默认为fofaHack
   --fuzz, -f            关键字fuzz参数,增加内容获取粒度
   --proxy PROXY         指定代理，代理格式 --proxy '127.0.0.1:7890'
+  --proxy-type {socks4,socks5,http}
+                        代理类型,默认为http
   --authorization AUTHORIZATION
                         指定Authorization值
 ```

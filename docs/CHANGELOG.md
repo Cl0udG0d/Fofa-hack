@@ -1,5 +1,8 @@
 # CHANGELOG 代码变更记录
 
+### 2.4.14
++ 修改并测试了代理的问题
+
 ### 2.4.13
 + 新增icon文件和网址功能 [issue 64](https://github.com/Cl0udG0d/Fofa-hack/issues/64)
 + 修复BUG [issue 65](https://github.com/Cl0udG0d/Fofa-hack/issues/65)
