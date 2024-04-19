@@ -5,6 +5,22 @@
 # @File    : config.py
 # @Github: https://github.com/Cl0udG0d
 
-VERSION_NUM = "2.4.14"
+VERSION_NUM = "2.4.15"
 ROOT_PATH=""
 AUTHORIZATION = ""
+
+### ============================================================================
+### 代理相关的配置参数
+
+# 代理的参数
+PROXY_ARGS = None
+
+PROXY_FROM_URL = False
+PROXY_SINGLE = False
+PROXY_FROM_TXT = False
+
+# 是否使用代理 默认不适用代理
+IS_PROXY = False
+
+# 代理类型 默认为 http
+PROXY_TYPE = "http"

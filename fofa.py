@@ -12,7 +12,7 @@ from core.fofaMain import FofaMain
 from tookit import unit, config
 from tookit.levelData import LevelData
 from tookit.outputData import OutputData
-from tookit.unit import clipKeyWord, setProxy, outputLogo
+from tookit.unit import clipKeyWord, outputLogo
 import gettext
 import locale
 import mmh3
@@ -53,11 +53,14 @@ def main():
     parser.add_argument('--output', '-o', help=_('输出格式:txt、json,默认为txt'))
     parser.add_argument('--outputname','-on', help=_("指定输出文件名，默认文件名为 fofaHack"))
     parser.add_argument('--fuzz', '-f', help=_('关键字fuzz参数,增加内容获取粒度'), action='store_true')
-    parser.add_argument('--proxy', help=_("指定代理,代理格式 --proxy '127.0.0.1:7890'"))
+
     parser.add_argument('--proxy-type',choices=['socks4','socks5', 'http'], help=_("代理类型,默认为http"),default='http')
     parser.add_argument('--authorization', type=str, help="指定Authorization值")
 
-
+    proxy_group = parser.add_mutually_exclusive_group()
+    proxy_group.add_argument('--proxy', help=_("指定代理,代理格式 --proxy '127.0.0.1:7890'"))
+    proxy_group.add_argument('--proxy-url', help=_("指定代理url，即访问URL响应为proxy,代理格式 --proxy-url http://127.0.0.1/proxy_pool/get"))
+    proxy_group.add_argument('--proxy-file', help=_("指定txt格式的代理文件,按行分割,代理格式 --proxy-file proxy.txt"))
     # parser.add_argument('--type', type=str, choices=["common", "selenium"], default="common",
     #                     help="运行类型,默认为普通方式")
     args = parser.parse_args()
@@ -115,7 +118,22 @@ def main():
     else:
         filename = _("暂无")
         output_data = None
-    is_proxy, proxy = setProxy(args.proxy,args.proxy_type)
+
+    if args.proxy or args.proxy_url or args.proxy_file :
+        config.IS_PROXY = True
+        if args.proxy:
+            config.PROXY_SINGLE = True
+            config.PROXY_ARGS = args.proxy
+        elif args.proxy_url :
+            config.PROXY_FROM_URL = True
+            config.PROXY_ARGS = args.proxy_url
+        else:
+            config.PROXY_FROM_TXT = True
+            config.PROXY_ARGS = args.proxy_file
+    if args.proxy_type:
+        config.PROXY_TYPE = args.proxy_type
+
+    # is_proxy, proxy = setProxy(args.proxy,args.proxy_type)
     # type = args.type
     inputfile = args.inputfile if args.inputfile else None
     if not inputfile and not search_key:
@@ -127,7 +145,7 @@ def main():
         config.AUTHORIZATION = args.authorization
 
     fofa = FofaMain(search_key, inputfile, filename, time_sleep, endcount, level, level_data, output, output_data,
-                    fuzz, timeout, is_proxy, proxy)
+                    fuzz, timeout, config.IS_PROXY)
     fofa.start()
 
 

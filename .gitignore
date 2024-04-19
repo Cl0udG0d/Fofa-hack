@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+./proxy.txt
 *.txt
 .idea
 # C extensions

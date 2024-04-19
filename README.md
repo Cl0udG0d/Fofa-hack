@@ -33,19 +33,21 @@ PS: 感谢[FOFA](https://fofa.info/)提供这么好的测绘工具
 ```shell
 Fofa-hack>python fofa.py -h
 
-             ____  ____  ____  ____      
-            | ===|/ () \| ===|/ () \     
-            |__|  \____/|__| /__/\__\    
-                 _   _   ____   ____  __  __ 
+             ____  ____  ____  ____
+            | ===|/ () \| ===|/ () \
+            |__|  \____/|__| /__/\__\
+                 _   _   ____   ____  __  __
                 | |_| | / () \ / (__`|  |/  /
-                |_| |_|/__/\__\\____)|__|\__\ V2.4.14
+                |_| |_|/__/\__\\____)|__|\__\ V2.4.15
 
                 公众号: 黑糖安全
-            
-usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE | --base BASE) [--timesleep TIMESLEEP] [--timeout TIMEOUT] [--endcount ENDCOUNT]
-               [--level LEVEL] [--output OUTPUT] [--fuzz] [--proxy PROXY]
 
-Fofa-hack v2.4.14 使用说明
+usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE | --base BASE | --iconurl ICONURL | --iconfile ICONFILE)
+               [--timesleep TIMESLEEP] [--timeout TIMEOUT] [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT]
+               [--outputname OUTPUTNAME] [--fuzz] [--proxy-type {socks4,socks5,http}] [--authorization AUTHORIZATION]
+               [--proxy PROXY | --proxy-url PROXY_URL | --proxy-file PROXY_FILE]
+
+Fofa-hack v2.4.15 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -54,6 +56,8 @@ optional arguments:
   --inputfile INPUTFILE, -i INPUTFILE
                         指定文件,从文件中批量读取fofa语法
   --base BASE, -b BASE  以base64的形式输入关键字 -b InRoaW5rcGhwIg==
+  --iconurl ICONURL     指定url的icon作为icon_hash关键字
+  --iconfile ICONFILE   指定icon_file作为icon_hash关键字
   --timesleep TIMESLEEP, -t TIMESLEEP
                         爬取每一页等待秒数,防止IP被Ban,默认为3
   --timeout TIMEOUT, -to TIMEOUT
@@ -64,14 +68,18 @@ optional arguments:
                         爬取等级: 1-3 ,数字越大内容越详细,默认为 1
   --output OUTPUT, -o OUTPUT
                         输出格式:txt、json,默认为txt
-  --outputname OUTPUT, -on OUTPUTNAME
-                        指定输出文件名，默认为fofaHack
+  --outputname OUTPUTNAME, -on OUTPUTNAME
+                        指定输出文件名，默认文件名为 fofaHack
   --fuzz, -f            关键字fuzz参数,增加内容获取粒度
-  --proxy PROXY         指定代理，代理格式 --proxy '127.0.0.1:7890'
   --proxy-type {socks4,socks5,http}
                         代理类型,默认为http
   --authorization AUTHORIZATION
                         指定Authorization值
+  --proxy PROXY         指定代理,代理格式 --proxy '127.0.0.1:7890'
+  --proxy-url PROXY_URL
+                        指定代理url，即访问URL响应为proxy,代理格式 --proxy-url http://127.0.0.1/proxy_pool/get
+  --proxy-file PROXY_FILE
+                        指定txt格式的代理文件,按行分割,代理格式 --proxy-file proxy.txt
 ```
 
 爬取的去重结果会存储到`final_fofaHack.txt`文件中

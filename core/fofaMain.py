@@ -6,6 +6,7 @@
 # @Github: https://github.com/Cl0udG0d
 import json
 import os
+import random
 import sys
 import urllib
 from datetime import datetime
@@ -20,7 +21,7 @@ import re, requests
 from lxml import etree
 
 from tookit.sign import getUrl
-from tookit.unit import clipKeyWord, setProxy, colorize
+from tookit.unit import clipKeyWord, colorize
 import gettext
 import locale
 
@@ -35,7 +36,7 @@ if lang.startswith('zh'):
     _ = lambda x: x
 else:
     # 如果是其他语言环境，则加载对应的翻译文件
-    language = gettext.translation('fofa_hack', localedir=os.path.join(dir,"locale"), languages=['en'])
+    language = gettext.translation('fofa_hack', localedir=os.path.join(dir, "locale"), languages=['en'])
     language.install()
     _ = language.gettext
 
@@ -50,23 +51,24 @@ class FofaMain:
     ORG_RULE = 'p[5]/a/text()'
     PORT_RULE = '//a[@class="hsxa-port"]/text()'
 
-    def __init__(self,search_key,inputfile,filename,time_sleep,endcount,level,level_data,output,output_data,fuzz,timeout,is_proxy, proxy):
+    def __init__(self, search_key, inputfile, filename, time_sleep, endcount, level, level_data, output, output_data,
+                 fuzz, timeout, is_proxy, proxy=None):
         """
         初始化方法
         """
-        self.search_key=search_key
-        self.inputfile=inputfile
+        self.search_key = search_key
+        self.inputfile = inputfile
         self.filename = filename
-        self.time_sleep=time_sleep
+        self.time_sleep = time_sleep
         self.endcount = endcount
-        self.level=level
-        self.level_data=level_data
-        self.output=output
-        self.output_data=output_data
-        self.fuzz=fuzz
-        self.timeout=timeout
-        self.is_proxy=is_proxy
-        self.proxy=proxy
+        self.level = level
+        self.level_data = level_data
+        self.output = output
+        self.output_data = output_data
+        self.fuzz = fuzz
+        self.timeout = timeout
+        self.is_proxy = is_proxy
+        self.proxy = proxy
 
         self.bypass = None
         self.host_set = set()
@@ -89,7 +91,6 @@ class FofaMain:
         self.current_page_num = 1
         self.EXIT_FLAG = False
 
-
     def outInitMsg(self):
         """
         输出初始化信息
@@ -103,10 +104,49 @@ class FofaMain:
 [*] 是否开启关键字fuzz: {}
 [*] 是否开启代理: {}
 [*] 读取文件: {}
-''').format(self.level,self.time_sleep,self.search_key,self.endcount,self.output,self.filename,
-                  self.fuzz,self.is_proxy,self.inputfile),"green"))
+''').format(self.level, self.time_sleep, self.search_key, self.endcount, self.output, self.filename,
+            self.fuzz, self.is_proxy, self.inputfile), "green"))
 
+    def format_single_proxy(self, proxy):
+        """
+        格式化单个代理
+        """
+        proxies = {}
+        if proxy:
+            proxies = {
+                'http': config.PROXY_TYPE + '://' + proxy,
+                'https': config.PROXY_TYPE + '://' + proxy
+            }
+            return proxies
+        else:
+            return proxies
 
+    def get_proxy(self):
+        # 防止有通过API调用FOFA的情况
+        if self.proxy:
+            return self.proxy
+
+        if config.IS_PROXY:
+            if config.PROXY_SINGLE:
+                return self.format_single_proxy(config.PROXY_ARGS)
+            elif config.PROXY_FROM_TXT:
+                file_path = os.path.join(config.ROOT_PATH, config.PROXY_ARGS)
+
+                # 读取文件中的所有行
+                with open(file_path, 'r') as file:
+                    lines = file.readlines()
+
+                proxy = random.choice(lines).strip()
+                return self.format_single_proxy(proxy)
+            else:
+                rep = requests.get(config.PROXY_ARGS, headers=fofaUseragent.getNormalHeaders(), timeout=10)
+                if rep:
+                    proxy = rep.text.strip()
+                    return self.format_single_proxy(proxy)
+                else:
+                    return {}
+        else:
+            return {}
 
     def getFofaKeywordsCount(self, search_key):
         """
@@ -115,22 +155,25 @@ class FofaMain:
         :return:
         """
         searchbs64 = base64.b64encode(f'{search_key}'.encode()).decode()
-        print(colorize(_("[*] 爬取页面为:https://fofa.info/result?qbase64={}") .format(searchbs64) ,"green"))
+        print(colorize(_("[*] 爬取页面为:https://fofa.info/result?qbase64={}").format(searchbs64), "green"))
         if config.AUTHORIZATION:
-            return searchbs64,""
-        html = requests.get(url="https://fofa.info/result?qbase64=" + searchbs64,
-                            headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,proxies=self.proxy)\
-                            .text
-        tree = etree.HTML(html)
+            return searchbs64, ""
         try:
+
+            html = requests.get(url="https://fofa.info/result?qbase64=" + searchbs64,
+                                headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,
+                                proxies=self.get_proxy()) \
+                .text
+            tree = etree.HTML(html)
             countnum = tree.xpath('//span[@class="hsxa-highlight-color"]/text()')[0]
             # standaloneIpNum = tree.xpath('//span[@class="hsxa-highlight-color"]/text()')[1]
         except Exception as e:
             print("\033[1;31m[-] error:{}\033[0m".format(e))
             countnum = '0'
-            print("Perhaps there is a problem with your network or your area has been officially banned by Fofa, so the program exits")
+            print(
+                "\033[1;31m[-] perhaps there is a problem with your network or your area has been officially banned by Fofa, so the program exits\033[0m")
             self._destroy()
-        print(colorize(_("[*] 存在数量:{}") .format(countnum),"green"))
+        print(colorize(_("[*] 存在数量:{}").format(countnum), "green"))
         # print("[*] 独立IP数量:" + standaloneIpNum)
         return searchbs64, countnum
 
@@ -142,9 +185,9 @@ class FofaMain:
         """
         timelist = list()
         data = json.loads(text)
-        assets=data["data"]["assets"]
+        assets = data["data"]["assets"]
         for asset in assets:
-            mtime=asset["mtime"].split()[0]
+            mtime = asset["mtime"].split()[0]
             timelist.append(mtime)
         # print(timelist)
         return timelist
@@ -256,7 +299,7 @@ class FofaMain:
             request_url = getUrl(searchbs64)
             # print(request_url)
             rep = requests.get(request_url, headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,
-                               proxies=self.proxy)
+                               proxies=self.get_proxy())
             # print(rep.text)
             timelist = self.getTimeList(rep.text)
             # print(timelist)
@@ -277,7 +320,7 @@ class FofaMain:
         # init_search_key = base64.b64decode(searchbs64).decode()
         init_search_key = search_key
         # if not config.AUTHORIZATION:
-        print("\033[1;34mnow search key: {}\033[0m" .format(init_search_key) )
+        print("\033[1;34mnow search key: {}\033[0m".format(init_search_key))
         TEMP_RETRY_NUM = 0
 
         while TEMP_RETRY_NUM < self.MAX_MATCH_RETRY_NUM:
@@ -289,7 +332,7 @@ class FofaMain:
                         self.host_set.add(data)
                     elif self.level == "2":
                         self.host_set.add(data["url"])
-                    else :
+                    else:
                         self.host_set.add(data["id"])
 
                 time.sleep(self.time_sleep)
@@ -299,10 +342,10 @@ class FofaMain:
             except Exception as e:
                 print("\033[1;31m[-] error:{}\033[0m".format(e))
                 TEMP_RETRY_NUM += 1
-                print(colorize(_('[-] 第{}次尝试获取页面URL').format(TEMP_RETRY_NUM),"red"))
+                print(colorize(_('[-] 第{}次尝试获取页面URL').format(TEMP_RETRY_NUM), "red"))
                 # pass
 
-        print(colorize(_('[-] FOFA资源获取重试超过最大次数,程序退出'),"red"))
+        print(colorize(_('[-] FOFA资源获取重试超过最大次数,程序退出'), "red"))
         self._destroy()
 
     def saveDataToFile(self, rep):
@@ -313,7 +356,8 @@ class FofaMain:
         self.level_data.startSpider(rep)
         # tree = etree.HTML(rep.text)
         # urllist = tree.xpath('//span[@class="hsxa-host"]/a/@href')
-        print(colorize(_("[*] 已爬取条数 {} : {}").format(len(self.host_set),str(self.level_data.format_data)),"green"))
+        print(
+            colorize(_("[*] 已爬取条数 {} : {}").format(len(self.host_set), str(self.level_data.format_data)), "green"))
 
         self.output_data.output(self.level_data.format_data)
         # for i in self.level_data.formatData:
@@ -347,18 +391,18 @@ class FofaMain:
             return
 
         if len(self.host_set) >= self.endcount:
-            print(colorize(_("[*] 在{}节点,数据爬取结束").format(index),"green"))
+            print(colorize(_("[*] 在{}节点,数据爬取结束").format(index), "green"))
             if self.output == 'txt':
                 finalint = self.removeDuplicate()
-                print(colorize(_('[*] 去重结束，最终数据 {} 条').format(str(finalint)),"green"))
+                print(colorize(_('[*] 去重结束，最终数据 {} 条').format(str(finalint)), "green"))
             else:
-                print(colorize(_('[*] 输出类型为其他,不进行去重操作 '),"green"))
+                print(colorize(_('[*] 输出类型为其他,不进行去重操作 '), "green"))
             self.EXIT_FLAG = True
             return
         if self.old_length == len(self.host_set):
             self.no_new_data_count += 1
             if self.no_new_data_count == 2:
-                print(colorize(_("[-] {}节点数据无新增,该节点枯萎").format(index),"red"))
+                print(colorize(_("[-] {}节点数据无新增,该节点枯萎").format(index), "red"))
                 return
         else:
             self.no_new_data_count = 0
@@ -443,7 +487,6 @@ class FofaMain:
                     # self.fofaSpiderOnePageData(search_key,searchbs64_modify,self.timestamp_index)
                     self.fofaSpider(new_key, searchbs64_modify, self.timestamp_index)
 
-
     def modifySearchTimeUrl(self, search_key, index):
         """
         根据时间修订搜索值
@@ -467,7 +510,7 @@ class FofaMain:
         timestamp_list = list(self.timestamp_list[index])
         timestamp_list.sort()
         if len(timestamp_list) == 0:
-            print(colorize(_("似乎时间戳到了尽头."),"red"))
+            print(colorize(_("似乎时间戳到了尽头."), "red"))
             self._destroy()
         # print(timestamp_list)
 
@@ -499,26 +542,30 @@ class FofaMain:
         去除重复值
         @return:
         """
-        f = open(self.filename, "r", encoding='utf-8')
-        text_list = []
-        s = set()
-        document = f.readlines()
-        document_num = int(len(document))
-        content = [x.strip() for x in document]
-        for x in range(0, len(content)):
-            text = content[x]
-            if text not in s:
-                s.add(text)
-                text_list.append(text)
-        with open("final_" + str(self.filename), 'a+', encoding='utf-8') as final:
-            for i in range(len(text_list)):
-                # s = str(i).split()
-                s = str(text_list[i])
-                s = s + '\n'
-                final.write(s)
-        f.close()
-        final.close()
-        return int(len(text_list))
+        try:
+            f = open(self.filename, "r", encoding='utf-8')
+            text_list = []
+            s = set()
+            document = f.readlines()
+            document_num = int(len(document))
+            content = [x.strip() for x in document]
+            for x in range(0, len(content)):
+                text = content[x]
+                if text not in s:
+                    s.add(text)
+                    text_list.append(text)
+            with open("final_" + str(self.filename), 'a+', encoding='utf-8') as final:
+                for i in range(len(text_list)):
+                    # s = str(i).split()
+                    s = str(text_list[i])
+                    s = s + '\n'
+                    final.write(s)
+            f.close()
+            final.close()
+            return int(len(text_list))
+        except Exception as e:
+            print("\033[1;31m[-] error:{}\033[0m".format(e))
+            return 0
 
     def cleanInitParameters(self):
         """
@@ -538,7 +585,7 @@ class FofaMain:
 
     def start(self):
         self.outInitMsg()
-        print(colorize(_('[*] 开始运行'),"green"))
+        print(colorize(_('[*] 开始运行'), "green"))
         if self.inputfile:
             with open(self.inputfile, 'r') as f:
                 for line in f.readlines():
@@ -548,20 +595,21 @@ class FofaMain:
                     self.output_data = OutputData(self.filename, self.level, pattern=self.output)
                     searchbs64, countnum = self.getFofaKeywordsCount(self.search_key)
                     if str(countnum) == "0" and len(str(countnum)) == 1:
-                        print(colorize(_('无搜索结果，执行下一条'),"red"))
+                        print(colorize(_('无搜索结果，执行下一条'), "red"))
                         continue
                     else:
                         self.fofaSpider(self.search_key, searchbs64, 0)
-                        print(colorize(_('[+] 抓取结束,{}关键字共抓取数据 {} 条\n').format(self.search_key,str(len(self.host_set))),"green"))
+                        print(colorize(_('[+] 抓取结束,{}关键字共抓取数据 {} 条\n').format(self.search_key,
+                                                                                           str(len(self.host_set))),
+                                       "green"))
 
         else:
             searchbs64, countnum = self.getFofaKeywordsCount(self.search_key)
             if str(countnum) == "0" and len(str(countnum)) == 1:
-                print(colorize(_('无搜索结果'),"red"))
+                print(colorize(_('无搜索结果'), "red"))
             else:
                 self.fofaSpider(self.search_key, searchbs64, 0)
-            print(colorize(_('[*] 抓取结束，共抓取数据 {} 条').format(str(len(self.host_set))),"green"))
-
+            print(colorize(_('[*] 抓取结束，共抓取数据 {} 条').format(str(len(self.host_set))), "green"))
 
     def _destroy(self):
         self.removeDuplicate()
@@ -569,5 +617,5 @@ class FofaMain:
 
 
 if __name__ == '__main__':
-    fofa = FofaMain("","","",3,"","","","","","",10,"","")
-    fofa.setIndexTimestamp("InRoaW5rcGhwIg==",0)
+    fofa = FofaMain("", "", "", 3, "", "", "", "", "", "", 10, "", "")
+    fofa.setIndexTimestamp("InRoaW5rcGhwIg==", 0)
