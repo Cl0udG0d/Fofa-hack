@@ -3,6 +3,18 @@
 ![Fofa-hack](./images/logo.png)
 
 简体中文 | [English](./docs/EN_README.md)
+
+### 公告
+> 在[issue79](https://github.com/Cl0udG0d/Fofa-hack/issues/79) 和 [issue78](https://github.com/Cl0udG0d/Fofa-hack/issues/78) 基础上的调研发现
+> 
+> fofa对游客的请求进行了限制 , Fofa-hack 程序本身没有问题
+> 
+> 如果你使用的时候发现获取不到数据 , 请使用最新版本中的多authorization实现数据获取
+> 
+> python fofa.py -k index --authorization-file au.txt
+> 
+> 以及... 如果大家有注册的多余没用的账号,也可以把authorization提交到 [issue](https://github.com/Cl0udG0d/Fofa-hack/issues/80)里面来实现共享
+
 ### 简介
 
 PS: 感谢[FOFA](https://fofa.info/)提供这么好的测绘工具
@@ -33,21 +45,19 @@ PS: 感谢[FOFA](https://fofa.info/)提供这么好的测绘工具
 ```shell
 Fofa-hack>python fofa.py -h
 
-             ____  ____  ____  ____
-            | ===|/ () \| ===|/ () \
-            |__|  \____/|__| /__/\__\
-                 _   _   ____   ____  __  __
+             ____  ____  ____  ____      
+            | ===|/ () \| ===|/ () \     
+            |__|  \____/|__| /__/\__\    
+                 _   _   ____   ____  __  __ 
                 | |_| | / () \ / (__`|  |/  /
-                |_| |_|/__/\__\\____)|__|\__\ V2.4.15
+                |_| |_|/__/\__\\____)|__|\__\ V2.4.16
 
                 公众号: 黑糖安全
+            
+usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE | --base BASE | --iconurl ICONURL | --iconfile ICONFILE) [--timesleep TIMESLEEP] [--timeout TIMEOUT] [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT]
+               [--outputname OUTPUTNAME] [--fuzz] [--proxy-type {socks4,socks5,http}] [--authorization AUTHORIZATION] [--authorization-file AUTHORIZATION_FILE] [--proxy PROXY | --proxy-url PROXY_URL | --proxy-file PROXY_FILE]
 
-usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE | --base BASE | --iconurl ICONURL | --iconfile ICONFILE)
-               [--timesleep TIMESLEEP] [--timeout TIMEOUT] [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT]
-               [--outputname OUTPUTNAME] [--fuzz] [--proxy-type {socks4,socks5,http}] [--authorization AUTHORIZATION]
-               [--proxy PROXY | --proxy-url PROXY_URL | --proxy-file PROXY_FILE]
-
-Fofa-hack v2.4.15 使用说明
+Fofa-hack v2.4.16 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -75,11 +85,14 @@ optional arguments:
                         代理类型,默认为http
   --authorization AUTHORIZATION
                         指定Authorization值
+  --authorization-file AUTHORIZATION_FILE
+                        从文件中读取authorization列表 --authorization-file authorization.txt
   --proxy PROXY         指定代理,代理格式 --proxy '127.0.0.1:7890'
   --proxy-url PROXY_URL
                         指定代理url，即访问URL响应为proxy,代理格式 --proxy-url http://127.0.0.1/proxy_pool/get
   --proxy-file PROXY_FILE
                         指定txt格式的代理文件,按行分割,代理格式 --proxy-file proxy.txt
+
 ```
 
 爬取的去重结果会存储到`final_fofaHack.txt`文件中

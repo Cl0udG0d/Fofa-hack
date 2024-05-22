@@ -1,5 +1,8 @@
 # CHANGELOG 代码变更记录
 
+### 2.4.16
++ 新增 --authorization-file 参数
+
 ### 2.4.15
 + 添加批量从文件使用代理的功能 --proxy-file
 + 添加使用网址代理的功能 --proxy-url

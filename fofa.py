@@ -56,6 +56,7 @@ def main():
 
     parser.add_argument('--proxy-type',choices=['socks4','socks5', 'http'], help=_("代理类型,默认为http"),default='http')
     parser.add_argument('--authorization', type=str, help="指定Authorization值")
+    parser.add_argument('--authorization-file', type=str, help="从文件中读取authorization列表 --authorization-file authorization.txt")
 
     proxy_group = parser.add_mutually_exclusive_group()
     proxy_group.add_argument('--proxy', help=_("指定代理,代理格式 --proxy '127.0.0.1:7890'"))
@@ -64,6 +65,12 @@ def main():
     # parser.add_argument('--type', type=str, choices=["common", "selenium"], default="common",
     #                     help="运行类型,默认为普通方式")
     args = parser.parse_args()
+
+    if args.authorization_file:
+        config.AUTHORIZATION_FILE = args.authorization_file
+        with open(config.AUTHORIZATION_FILE, 'r') as f:
+            for line in f.readlines():
+                config.AUTHORIZATION_LIST.append(line)
 
     time_sleep = int(args.timesleep)
     timeout = int(args.timeout)

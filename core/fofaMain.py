@@ -288,6 +288,33 @@ class FofaMain:
                 return city
         return None
 
+    def check_authorization_is_available(self):
+
+        # au = config.AUTHORIZATION_LIST.pop()
+        # print(au)
+        # print(config.AUTHORIZATION_LIST)
+        while len(config.AUTHORIZATION_LIST)>0:
+            config.AUTHORIZATION = config.AUTHORIZATION_LIST.pop()
+
+            try:
+                request_profile_url = "https://api.fofa.info/v1/m/profile"
+                rep = requests.get(request_profile_url, headers=fofaUseragent.getFofaPageNumHeaders(), timeout=10)
+                limit_num = json.loads(rep.text)["data"]["info"]["data_limit"]["web_data"]
+
+                request_month_url = "https://api.fofa.info/v1/m/data_usage/month"
+                rep = requests.get(request_month_url, headers=fofaUseragent.getFofaPageNumHeaders(), timeout=10)
+                available_num = json.loads(rep.text)["data"]["web_data"]
+
+                if available_num + 50 < limit_num:
+                    config.AUTHORIZATION_LIST.append(config.AUTHORIZATION)
+                    return True
+
+            except Exception as e:
+                print(
+                    "\033[1;31m[-] error:AUTHORIZATION测试错误 {}\033[0m".format(e))
+                pass
+        return False
+
     def setIndexTimestamp(self, searchbs64, timestamp_index):
         """
         设置时间列表
@@ -296,8 +323,14 @@ class FofaMain:
         @return:
         """
         try:
+            if config.AUTHORIZATION_FILE:
+                if not self.check_authorization_is_available():
+                    print("\033[1;31m[-] error:{}\033[0m".format(
+                        "authorization获取数据均达本月上限或authorization存在错误"))
+                    exit(0)
+
             request_url = getUrl(searchbs64)
-            # print(request_url)
+
             rep = requests.get(request_url, headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,
                                proxies=self.get_proxy())
             # print(rep.text)
