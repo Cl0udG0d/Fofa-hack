@@ -11,7 +11,7 @@ with open("README.md", "r",encoding="utf-8") as fh:
 
 setuptools.setup(
     name="fofa_hack",
-    version="0.0.1",
+    version="0.0.2",
     author="Cl0udG0d",
     author_email="",
     description="fofa hack",  # 包简短的描述

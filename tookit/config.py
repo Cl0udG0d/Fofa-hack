@@ -5,7 +5,7 @@
 # @File    : config.py
 # @Github: https://github.com/Cl0udG0d
 
-VERSION_NUM = "2.4.16"
+VERSION_NUM = "2.4.17"
 ROOT_PATH=""
 AUTHORIZATION = ""
 AUTHORIZATION_LIST = [

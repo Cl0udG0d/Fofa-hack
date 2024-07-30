@@ -4,16 +4,6 @@
 
 简体中文 | [English](./docs/EN_README.md)
 
-### 公告
-> 在[issue79](https://github.com/Cl0udG0d/Fofa-hack/issues/79) 和 [issue78](https://github.com/Cl0udG0d/Fofa-hack/issues/78) 基础上的调研发现
-> 
-> fofa对游客的请求进行了限制 , Fofa-hack 程序本身没有问题
-> 
-> 如果你使用的时候发现获取不到数据 , 请使用最新版本中的多authorization实现数据获取
-> 
-> python fofa.py -k index --authorization-file au.txt
-> 
-> 以及... 如果大家有注册的多余没用的账号,也可以把authorization提交到 [issue](https://github.com/Cl0udG0d/Fofa-hack/issues/80)里面来实现共享
 
 ### 简介
 
