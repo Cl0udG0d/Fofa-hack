@@ -25,7 +25,8 @@ def get_timestamp_list(text):
         timelist.append(mtime)
     return timelist
 
-def get_searchkey(search_key,timelist):
+
+def get_searchkey(search_key, timelist):
     before_time_in_search_key = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
     if "before=" in search_key:
         pattern = r'before="([^"]+)"'
@@ -92,10 +93,16 @@ def api(search_key, endcount=100, timesleep=3, timeout=180, proxy=None):
         request_url = getUrl(searchbs64)
         rep = requests.get(request_url, headers=fofaUseragent.getFofaPageNumHeaders(), timeout=timeout,
                            proxies=proxy)
+        # request should be success
+        rep.raise_for_status()
+        # request should not be limited
+        # '{"code":820006,"message":"[820006] 资源访问每天限制","data":""}'
+        if len(rep.text) <= 55 and '820006' in rep.text:
+            raise RuntimeError("API call limit reached for today,call at next day or use proxy")
         timelist = get_timestamp_list(rep.text)
         data = json.loads(rep.text)
         format_data = [d['link'] if d['link'] != '' else d['host'] for d in data["data"]["assets"]]
-        fofa_key = get_searchkey(fofa_key,timelist)
+        fofa_key = get_searchkey(fofa_key, timelist)
         last_num += len(host_set)
         for url in format_data:
             host_set.add(url)
