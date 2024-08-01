@@ -1,5 +1,8 @@
 # CHANGELOG 代码变更记录
 
+### 2.4.18
++ 合入(pull request)(https://github.com/Cl0udG0d/Fofa-hack/pull/85)
+
 ### 2.4.17
 + 删除文档里面的存在问题的部分
 + 修改setup.py，更新fofa-hack包为0.02版本 [pip fofa-hack](https://pypi.org/manage/project/fofa-hack/release/0.0.2/)
