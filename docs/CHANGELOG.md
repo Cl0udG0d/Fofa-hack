@@ -1,5 +1,213 @@
 # CHANGELOG 代码变更记录
 
+### 2.4.17
++ 删除文档里面的存在问题的部分
++ 修改setup.py，更新fofa-hack包为0.02版本 [pip fofa-hack](https://pypi.org/manage/project/fofa-hack/release/0.0.2/)
+
+### 2.4.16
++ 新增 --authorization-file 参数
+
+### 2.4.15
++ 添加批量从文件使用代理的功能 --proxy-file
++ 添加使用网址代理的功能 --proxy-url
++ 在使用AUTHORIZATION的情况下,一次获取50条数据
+
+### 2.4.14
++ 修改并测试了代理的问题
+
+### 2.4.13
++ 新增icon文件和网址功能 [issue 64](https://github.com/Cl0udG0d/Fofa-hack/issues/64)
++ 修复BUG [issue 65](https://github.com/Cl0udG0d/Fofa-hack/issues/65)
+
+### 2.4.12
++ 修复[issue 63](https://github.com/Cl0udG0d/Fofa-hack/issues/63)
++ 完善Authorization逻辑
+
+### 2.4.11
++ 新增SECURITY文件
++ 新增用户Authorization查询
+
+### 2.4.10
++ 修复删除文件问题
++ 修复[issue 59](https://github.com/Cl0udG0d/Fofa-hack/issues/59)
+
+### 2.4.9
++ 修复语言问题
++ 修改代码冗余部分
+
+### 2.4.8
++ 修复setup.py问题
++ 合并[新增可设置保存文件名代码](https://github.com/Cl0udG0d/Fofa-hack/pull/58)
++ 新增贡献者[10cks](https://github.com/10cks)
+
+### 2.4.7
++ 去除没有获取到语言情况下为空的问题
++ 生成fofa-hack pip包
+
+### 2.4.6
++ 修复 [issues 54](https://github.com/Cl0udG0d/Fofa-hack/issues/54)
++ 终端颜色输出问题解决
+
+### 2.4.5
++ 修复 [issues 51](https://github.com/Cl0udG0d/Fofa-hack/issues/51)
++ 修复 [issues 53](https://github.com/Cl0udG0d/Fofa-hack/issues/53)
+
+### 2.4.4
++ unit.py 修剪关键字功能扩展
+
+### 2.4.3
+
++ 修复打包问题
+
+### 2.4.2
+
++ 修复打包问题
+### 2.4.1
+
++ 根据环境切换语言
+
+### 2.4.0
+
++ 删除多余逻辑文件
++ 更新获取数据逻辑,页面爬虫 -> api接口获取
++ 默认步长设置为 50,防止等待过久
+### 2.3.9
+
++ 修复exit(0)退出报错问题
++ 无时间戳的情况下退出并保存final文件
+
+### 2.3.8
+
++ 输出内容为json的情况下 ,level=2、3时报错问题修复
+
+### 2.3.7
+
++ 添加地区访问fofa判断
++ linux环境下不支持运行selenium模式
+
+### 2.3.6
+
++ 修复[ISSUE](https://github.com/Cl0udG0d/Fofa-hack/issues/34)
+
+### 2.3.5
+
++ 修复[ISSUE](https://github.com/Cl0udG0d/Fofa-hack/issues/22)
++ 高亮界面输出
++ 新增exe输出
+
+### 2.3.4
+
++ 新增英文readme
+### 2.3.3
+
++ 修复部分已知BUG 
+  + 修复搜索结果为0时出现的列表索引越界问题
+  + 修复搜索结果时间戳列表为空时的报错问题
+### 2.3.2
+
++ 修改运行方式readme
+
+### 2.3.1
+
++ 新增selenium部分
++ 新增type字段 虽然它不太稳定
+
+### 2.3.0
+
++ 分离参数输入和爬取部分
+
+### 2.2.6
+
++ 新增fofa公安版登录代码,该部分未完善
+
+### 2.2.5
+
++ 从文件批量读取语法 -i --inputfile
+
+### 2.2.4
+
++ 修复变量名BUG
+
+### 2.2.3
+
++ 除特殊变量外,变量统一命名规范为 小写字母+下划线
++ 除特殊方法外,方法一律使用小驼峰命名 camelCase
++ 方法名见名知意 复杂方法添加注释
++ 代码格式化
+
+### 2.2.2
+
++ 增加外部调用接口
++ 递归结束使用全局变量判定
+
+### 2.2.1
+
++ 合并tastypear程序兼容性功能
+
+### 2.2.0
+
++ 合并wanswu代理功能
+
+### 2.1.12
+
++ 支持JSON文件输出 -o json
+
+### 2.1.11
+
++ 修订 python maximum recursion depth exceeded错误
++ json文件输出BUG修改
+
+### 2.1.10
+
++ 修改logo
+
+### 2.1.9
+
++ 修改readme对于保存文件的描述
++ 实现fofa的两种URL获取逻辑，增加获取内容
+
+### 2.1.8
+
++ 增加了fuzz之后的去重 免得获取到一堆重复数据
+
+### 2.1.7
+
++ 新增fuzz参数 -f 开启
++ 修复header问题
+
+### 2.1.6
+
++ 删除测试 print
++ 新增 != fuzz 逻辑
+
+### 2.1.5
+
++ 删除config.py文件,合并内容到fofa.py
++ 每次递归的时候的关键字列表应当与下标对应，而不是统一SET
++ 运行测试 python fofa.py -k index --endcount 1000
++ 合并FUZZ关键字并进行递归
+
+### 2.1.4
+
++ 修复 https://github.com/Cl0udG0d/Fofa-hack/issues/13 ISSUE BUG
+
+### 2.1.3
+
++ 添加 port 自动化fuzz
++ 新增 搜索关键字 port判断
+
+### 2.1.2
+
++ 修复 host="edu.cn" 搜索错误
+
+### 2.1.1
+
++ 提升程序稳定性
++ 添加org 、asn 自动化fuzz
++ 修改递归逻辑
++ 新增项目头图
++ 新增TODO文件
+
 ### 2.1.0
 
 + 删除多余images

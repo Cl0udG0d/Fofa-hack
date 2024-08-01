@@ -1,0 +1,155 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2023-10-14 18:25+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp936\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: ./fofa.py:23
+msgid "Fofa-hack v{} 使用说明"
+msgstr "Fofa-hack v{} instructions for use"
+
+#: ./fofa.py:25
+msgid "fofa搜索关键字"
+msgstr "fofa search key"
+
+#: ./fofa.py:26
+msgid "指定文件,从文件中批量读取fofa语法"
+msgstr "Specify a file, batch read fofa syntax from file"
+
+#: ./fofa.py:28
+msgid "爬取每一页等待秒数,防止IP被Ban,默认为3"
+msgstr "The number of seconds to wait for each page to be crawled, to prevent the IP from being Ban, the default is 3."
+
+#: ./fofa.py:29
+msgid "爬取每一页的超时时间,默认为180秒"
+msgstr "Crawl timeout for each page, default is 180 seconds."
+
+#: ./fofa.py:30
+msgid "爬取结束数量"
+msgstr "Number of Crawl Ends"
+
+#: ./fofa.py:31
+msgid "爬取等级: 1-3 ,数字越大内容越详细,默认为 1"
+msgstr "Crawl level: 1-3, the larger the number the more detailed the content, the default is 1"
+
+#: ./fofa.py:32
+msgid "输出格式:txt、json,默认为txt"
+msgstr "Output format: txt, json, default is txt."
+
+#: ./fofa.py:33
+msgid "关键字fuzz参数,增加内容获取粒度"
+msgstr "Keyword fuzz parameter, increase content acquisition granularity"
+
+#: ./fofa.py:34
+msgid "指定代理，代理格式 --proxy '127.0.0.1:7890'"
+msgstr "Specify proxy, proxy format --proxy '127.0.0.1:7890'"
+
+#: ./fofa.py:51
+msgid "暂无"
+msgstr "currently unavailable"
+
+#: ./core/fofaMain.py:80
+msgid ""
+"[*] LEVEL = {} , 初始化成功\n"
+"[*] 爬取延时: {}s\n"
+"[*] 爬取关键字: {}\n"
+"[*] 爬取结束数量: {}\n"
+"[*] 输出格式为: {}\n"
+"[*] 存储文件名: {}\n"
+"[*] 是否开启关键字fuzz: {}\n"
+"[*] 是否开启代理: {}\n"
+"[*] 读取文件: {}\n"
+msgstr ""
+"[*] LEVEL = {} ，Initialized Successfully\n"
+"[*] Crawling Delay: {}s\n"
+"[*] Crawling Keyword: {}\n"
+"[*] Crawling Result Count: {}\n"
+"[*] Output Format: {}\n"
+"[*] Storage File Name: {}\n"
+"[*] Enable Keyword Fuzzing: {}\n"
+"[*] Enable Proxy: {}\n"
+"[*] Reading File: {}"
+
+#: ./core/fofaMain.py:101
+msgid "[*] 爬取页面为:https://fofa.info/result?qbase64={}"
+msgstr "[*] Crawl page for:https://fofa.info/result?qbase64={}"
+
+#: ./core/fofaMain.py:114
+msgid "[*] 存在数量:{}"
+msgstr "[*] Number of presences:{}"
+
+#: ./core/fofaMain.py:280
+msgid "[-] 第{}次尝试获取页面URL"
+msgstr "[-] {}th attempt to get the page URL"
+
+#: ./core/fofaMain.py:283
+msgid "[-] FOFA资源获取重试超过最大次数,程序退出"
+msgstr "[-] FOFA resource acquisition retries exceeded maximum number of times, programme exit"
+
+#: ./core/fofaMain.py:294
+msgid "[*] 已爬取条数 {} : {}"
+msgstr "[*] Number of articles crawled {} : {}"
+
+#: ./core/fofaMain.py:328
+msgid "[*] 在{}节点,数据爬取结束"
+msgstr "[*] At node {}, data crawling is over."
+
+#: ./core/fofaMain.py:331
+msgid "[*] 去重结束，最终数据 {} 条"
+msgstr "[*] End of de-duplication. Final data {}"
+
+#: ./core/fofaMain.py:333
+msgid "[*] 输出类型为其他,不进行去重操作 "
+msgstr "[*] Output type is other, no de-duplication is performed"
+
+#: ./core/fofaMain.py:339
+msgid "[-] {}节点数据无新增,该节点枯萎"
+msgstr "[-] {}Node data is not added, the node is dead."
+
+#: ./core/fofaMain.py:448
+msgid "似乎时间戳到了尽头."
+msgstr "It seems like the time stamp has come to an end."
+
+#: ./core/fofaMain.py:519
+msgid "[*] 开始运行"
+msgstr "[*] Commencement of operations"
+
+#: ./core/fofaMain.py:529
+msgid "无搜索结果，执行下一条"
+msgstr "No search results, execute next"
+
+#: ./core/fofaMain.py:533
+msgid ""
+"[+] 抓取结束,{}关键字共抓取数据 {} 条\n"
+msgstr ""
+"[+] End of Grabbing,{}Total Data Grabbed for {} Keyword(s) \n"
+
+#: ./core/fofaMain.py:538
+msgid "无搜索结果"
+msgstr "No search results"
+
+#: ./core/fofaMain.py:541
+msgid ""
+"[*] 抓取结束，共抓取数据 {} 条"
+msgstr ""
+"[*] Grabbing is over, total data {} items grabbed"
+
+msgid "以base64的形式输入关键字 -b InRoaW5rcGhwIg=="
+msgstr "Enter the keyword in base64 form -b InRoaW5rcGhwIg=="
+
+msgid "未输入搜索内容"
+msgstr "No search entered"
+
+msgid "指定输出文件名，默认文件名为 fofaHack"
+msgstr "Specify the output file name, the default file name is fofaHack."

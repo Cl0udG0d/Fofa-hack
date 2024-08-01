@@ -1,0 +1,1 @@
+msgfmt fofa_hack.po -o locale/en/LC_MESSAGES/fofa_hack.mo

@@ -2,12 +2,14 @@
 __pycache__/
 *.py[cod]
 *$py.class
+./proxy.txt
 *.txt
 .idea
 # C extensions
 *.so
 /venv
-
+*.json
+favicon32.ico
 debug.log
 # Distribution / packaging
 .Python
@@ -35,7 +37,7 @@ MANIFEST
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
-*.spec
+# *.spec
 
 # Installer logs
 pip-log.txt
@@ -56,7 +58,7 @@ coverage.xml
 .pytest_cache/
 
 # Translations
-*.mo
+#*.mo
 *.pot
 
 # Django stuff:

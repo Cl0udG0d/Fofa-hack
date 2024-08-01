@@ -1,74 +1,130 @@
 # Fofa-hack
 
+![Fofa-hack](./images/logo.png)
+
+简体中文 | [English](./docs/EN_README.md)
+
+
 ### 简介
 
-非付费会员,fofa数据无限抓取版,一整个返璞归真
+PS: 感谢[FOFA](https://fofa.info/)提供这么好的测绘工具
+
+非付费会员,fofa数据采集工具
+
+`-f` 参数开启关键字fuzz
+
+`--authorization` 指定登录用户的 authorization , authorization需要F12获取
 
 使用示例
-> python fofa.py --keyword thinkphp --endcount 100
+> fofa-hack.exe --keyword thinkphp --endcount 500
+> 
+> fofa-hack.exe --keyword thinkphp --endcount 500 --authorization your_authorization
+
 ### 安装
 
-```shell
-git clone https://github.com/Cl0udG0d/Fofa-hack
-```
-
-安装运行所需的库文件，国内请加源 https://pypi.tuna.tsinghua.edu.cn/simple
-
-```shell
-pip install -r requirements.txt
-```
-
-### 配置
-
-无需账号直接使用
+下载 fofa-hack [releases](https://github.com/Cl0udG0d/Fofa-hack/releases) 最新版本
 
 ### 运行
 
-运行`fofa.py` , `-k`或`--keyword` 参数传入搜索关键字
+运行`fofa-hack.exe` , `-k`或`--keyword` 参数传入搜索关键字
 
 更多参数查看 `--help`
 
-> python3 fofa.py --help
+> fofa-hack.exe --help
 
 ```shell
 Fofa-hack>python fofa.py -h
 
-         ____  ____  ____  ____      
-        | ===|/ () \| ===|/ () \     
-        |__|  \____/|__| /__/\__\    
-             _   _   ____   ____  __  __ 
-            | |_| | / () \ / (__`|  |/  /
-            |_| |_|/__/\__\\____)|__|\__\ V2.1.0
-        
-usage: fofa.py [-h] [--timesleep TIMESLEEP] [--timeout TIMEOUT] --keyword KEYWORD [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT] [--fuzz]
+             ____  ____  ____  ____      
+            | ===|/ () \| ===|/ () \     
+            |__|  \____/|__| /__/\__\    
+                 _   _   ____   ____  __  __ 
+                | |_| | / () \ / (__`|  |/  /
+                |_| |_|/__/\__\\____)|__|\__\ V2.4.16
 
-Fofa-hack v2.1.0 使用说明
+                公众号: 黑糖安全
+            
+usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE | --base BASE | --iconurl ICONURL | --iconfile ICONFILE) [--timesleep TIMESLEEP] [--timeout TIMEOUT] [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT]
+               [--outputname OUTPUTNAME] [--fuzz] [--proxy-type {socks4,socks5,http}] [--authorization AUTHORIZATION] [--authorization-file AUTHORIZATION_FILE] [--proxy PROXY | --proxy-url PROXY_URL | --proxy-file PROXY_FILE]
+
+Fofa-hack v2.4.16 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
+  --keyword KEYWORD, -k KEYWORD
+                        fofa搜索关键字
+  --inputfile INPUTFILE, -i INPUTFILE
+                        指定文件,从文件中批量读取fofa语法
+  --base BASE, -b BASE  以base64的形式输入关键字 -b InRoaW5rcGhwIg==
+  --iconurl ICONURL     指定url的icon作为icon_hash关键字
+  --iconfile ICONFILE   指定icon_file作为icon_hash关键字
   --timesleep TIMESLEEP, -t TIMESLEEP
                         爬取每一页等待秒数,防止IP被Ban,默认为3
   --timeout TIMEOUT, -to TIMEOUT
-                        爬取每一页的超时时间
-  --keyword KEYWORD, -k KEYWORD
-                        fofa搜索关键字,默认为test
+                        爬取每一页的超时时间,默认为180秒
   --endcount ENDCOUNT, -e ENDCOUNT
                         爬取结束数量
   --level LEVEL, -l LEVEL
                         爬取等级: 1-3 ,数字越大内容越详细,默认为 1
   --output OUTPUT, -o OUTPUT
                         输出格式:txt、json,默认为txt
+  --outputname OUTPUTNAME, -on OUTPUTNAME
+                        指定输出文件名，默认文件名为 fofaHack
+  --fuzz, -f            关键字fuzz参数,增加内容获取粒度
+  --proxy-type {socks4,socks5,http}
+                        代理类型,默认为http
+  --authorization AUTHORIZATION
+                        指定Authorization值
+  --authorization-file AUTHORIZATION_FILE
+                        从文件中读取authorization列表 --authorization-file authorization.txt
+  --proxy PROXY         指定代理,代理格式 --proxy '127.0.0.1:7890'
+  --proxy-url PROXY_URL
+                        指定代理url，即访问URL响应为proxy,代理格式 --proxy-url http://127.0.0.1/proxy_pool/get
+  --proxy-file PROXY_FILE
+                        指定txt格式的代理文件,按行分割,代理格式 --proxy-file proxy.txt
+
 ```
 
-爬取的结果会存储到`md5(搜索关键字)_运行时间戳.txt`文件中
+爬取的去重结果会存储到`final_fofaHack.txt`文件中
+
+### API
+
+也可以使用api调用
+
+`pip install fofa-hack`
+
+```python
+from fofa_hack import fofa
+def main():
+    result_generator = fofa.api("thinkphp", endcount=100)
+    for data in result_generator:
+        print(data)
+
+if __name__ == '__main__':
+    main()
+```
+
+### 搜索语法
+一些搜索的示例
+
++ 搜索 thinkphp 1000条数据
+> fofa.exe -k thinkphp -e 1000
+
++ 搜索有连接符的关键字(注意单双引号)
+> fofa.exe -k "index && country='CN'"
+
++ 高级语法搜索(本来我以为高级语法用不了,但是最近好像又解禁了)
+> fofa.exe -k icon_hash="1165838194"
+
++ 欢迎补充....
 
 ### 测试
 
 使用命令 
 
-> python fofa.py --keyword thinkphp --endcount 100
+> fofa-hack.exe --keyword thinkphp --endcount 500
 
-爬取一百条数据轻轻松松
+爬取五百条数据轻轻松松
 
 ### 赞赏列表
 
@@ -76,46 +132,15 @@ optional arguments:
 
 ### 使用问题集合
 
-详情请见[QUESTIONS](docs/QUESTIONS.md)
-
-+ [ERROR: Could not build wheels for opencv-python-headless, which is required to install pyproject.toml-based projects](docs/QUESTIONS.md#opencv-python错误)
-+ [ddddocr错误解决](docs/QUESTIONS.md#ddddocr错误解决)
-+ [FOFA综合语法使用](docs/QUESTIONS.md#FOFA综合语法使用)
+详情请见[ISSUES](https://github.com/Cl0udG0d/Fofa-hack/issues)
 
 ### 更新日志
 
 详情请见[CHANGELOG](docs/CHANGELOG.md)
 
 ### TODO List
-<details>
-<summary>TODO</summary>
-<table >
-  <tr>
-    <td>名称</td>
-    <td>简介</td>
-  </tr>
-<tr>
-    <td>支持代理池</td>
-    <td>使用代理池的方式防止FOFA断开连接</td>
-  </tr>
-<tr>
-    <td>编写图形化界面</td>
-    <td>生成可执行文件运行</td>
-  </tr>
-<tr>
-    <td>增加程序稳定性</td>
-    <td>防止程序因为各种情况运行失败或者被ban的情况</td>
-  </tr>
-<tr>
-    <td>持续突破</td>
-    <td>使用高级语法提高搜索准确率</td>
-  </tr>
-<tr>
-    <td>同步key</td>
-    <td>导出key跟FOFA同步</td>
-  </tr>
-</table>
-</details>
+
+详情请见[TODO](docs/TODO.md)
 
 ### 贡献者
 
@@ -142,19 +167,26 @@ optional arguments:
             <sub><b>tastypear</b></sub>
         </a>
     </td>
+    <td align="center">
+        <a href="https://github.com/KawaiiSh1zuku">
+            <img src="https://avatars.githubusercontent.com/u/51824296?v=4" width="100;" alt="wanswu"/>
+            <br />
+            <sub><b>KawaiiSh1zuku</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/Valdo-Caeserius">
+            <img src="https://avatars.githubusercontent.com/u/148833225?v=4" width="100;" alt="wanswu"/>
+            <br />
+            <sub><b>Valdo-Caeserius</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/10cks">
+            <img src="https://avatars.githubusercontent.com/u/47177550?v=4" width="100;" alt="wanswu"/>
+            <br />
+            <sub><b>10cks</b></sub>
+        </a>
+    </td>
 </tr>
 </table>
-
-### END 
-
-网络乞丐在线乞讨
-<div>
-    <img  alt="PNG" src="./images/sponsor.png"  width="280px" />
-</div>
-
-建了一个微信的安全交流群，欢迎添加我微信备注`进群`，一起来聊天吹水哇，以及一个会发布安全相关内容的公众号，欢迎关注 :)
-
-<div>
-    <img  alt="JPG" src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/1a1f7894a170bec207e61bf86a01592.jpg"  width="280px" />
-    <img  alt="JPG" src="https://springbird3.oss-cn-chengdu.aliyuncs.com/lianxiang/qrcode_for_gh_cead8e1080d6_430.jpg"  width="280px" />
-</div>

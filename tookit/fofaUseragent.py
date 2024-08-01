@@ -1,11 +1,12 @@
 """
-   File Name :    fofa_useragent.py
+   File Name :    fofaUseragent.py
    Description :
    Author :       Cl0udG0d
    date :         2023/2/12
 """
 import random
 
+from tookit import config
 
 user_agent = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0',
@@ -59,7 +60,7 @@ def getFofaLoginHeaders():
     """
     headers = {
         'User-Agent': getFakeUserAgent(),
-        'Referer': 'https://i.nosec.org/login?service=https://fofa.info/f_login',
+        'Referer': 'https://i.nosec.org/login?service=https://octra.fofa.vip/fofaLogin',
         'Host': 'i.nosec.org',
         'Origin': 'https://i.nosec.org',
         'sec-ch-ua': '"Chromium";v="106", "Microsoft Edge";v="106", "Not;A=Brand";v="99"',
@@ -74,7 +75,7 @@ def getCheckHeaders():
     :return:
     """
     check_headers = {
-        'Host': 'fofa.info',
+        'Host': 'fofa_hack.info',
         'User-Agent': getFakeUserAgent(),
         'sec-ch-ua': '"Chromium";v="106", "Microsoft Edge";v="106", "Not;A=Brand";v="99"',
         'sec-ch-ua-platform': '"Windows"',
@@ -93,4 +94,22 @@ def getFofaPageNumHeaders():
         'User-Agent': getFakeUserAgent(),
         'Accept': 'application/json, text/plain, */*',
     }
+    if config.AUTHORIZATION:
+        headers_use['Authorization'] = config.AUTHORIZATION
     return headers_use
+
+
+def getNormalHeaders():
+    headers_use = {
+        'User-Agent': getFakeUserAgent(),
+        'Accept': 'application/json, text/plain, */*',
+    }
+    return headers_use
+
+# def getFofaCookieHeaders():
+#     headers_use = {
+#         'User-Agent': getFakeUserAgent(),
+#         'Accept': 'application/json, text/plain, */*',
+#         'Authorization':config.AUTHORIZATION,
+#     }
+#     return headers_use
