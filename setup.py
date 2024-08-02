@@ -5,13 +5,14 @@
 # @File    : setup.py
 # @Github: https://github.com/Cl0udG0d
 import setuptools
+from tookit.config import VERSION_NUM
 
 with open("README.md", "r",encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="fofa_hack",
-    version="0.0.2",
+    version=VERSION_NUM,
     author="Cl0udG0d",
     author_email="",
     description="fofa hack",  # 包简短的描述
