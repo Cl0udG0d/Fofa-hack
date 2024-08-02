@@ -5,13 +5,13 @@
 # @File    : config.py
 # @Github: https://github.com/Cl0udG0d
 
-VERSION_NUM = "2.4.17"
-ROOT_PATH=""
+VERSION_NUM = "2.4.18"
+ROOT_PATH = ""
 AUTHORIZATION = ""
 AUTHORIZATION_LIST = [
 
 ]
-AUTHORIZATION_FILE =""
+AUTHORIZATION_FILE = ""
 
 ### ============================================================================
 ### 代理相关的配置参数

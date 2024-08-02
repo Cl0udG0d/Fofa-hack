@@ -333,6 +333,12 @@ class FofaMain:
 
             rep = requests.get(request_url, headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,
                                proxies=self.get_proxy())
+            # request should be success
+            rep.raise_for_status()
+            # request should not be limited
+            # '{"code":820006,"message":"[820006] 资源访问每天限制","data":""}'
+            if len(rep.text) <= 55 and '820006' in rep.text:
+                raise RuntimeError("API call limit reached for today,call at next day or use proxy")
             # print(rep.text)
             timelist = self.getTimeList(rep.text)
             # print(timelist)

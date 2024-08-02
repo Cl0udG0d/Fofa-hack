@@ -188,5 +188,12 @@ if __name__ == '__main__':
             <sub><b>10cks</b></sub>
         </a>
     </td>
+<td align="center">
+        <a href="https://github.com/fireinrain">
+            <img src="https://avatars.githubusercontent.com/u/14249262?v=4" width="100;" alt="fireinrain"/>
+            <br />
+            <sub><b>10cks</b></sub>
+        </a>
+    </td>
 </tr>
 </table>
