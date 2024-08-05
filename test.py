@@ -1,12 +1,26 @@
 # -*- coding: utf-8 -*-
+from tookit import config
 from tookit.fofa_client import Client
+from tookit.unit import colorize
 
-def get_base_results(key,search_key,size=10000,page=1):
-    client = Client(key)
+
+def get_base_results(search_key,size=10000,page=1):
+    client = Client(config.FOFA_KEY)
     data = client.search(search_key, size=size, page=page,fields="link,port,protocol,country,region,city,as_number,as_organization,host,domain,os,"
                                 "server,product")
     return data["results"]
 
+def get_link_results(search_key,size=10000,page=1):
+    client = Client(config.FOFA_KEY)
+    data = client.search(search_key, size=size, page=page,
+                         fields="link")
+    return data["results"]
+
+def get_search_data(search_key,size=10000,page=1):
+    client = Client(config.FOFA_KEY)
+    data = client.search(search_key, size=size, page=page,
+                         fields="")
+    return data
 
 def add_city_to_region(result_pool,current_country, current_region, current_city):
     """
@@ -47,56 +61,135 @@ def init_result_pool(results):
             result_pool["product"].add(product)
 
         # result_pool["country"][current_country][current_region].add(current_city)
-    print(result_pool)
+    # print(result_pool)
     return result_pool
 
-def get_new_search_key_list(source_key,result_pool):
-    search_key_result = []
 
-    # 真
+def check_search_key_exceed(search_key):
+    '''size'''
+    data = get_search_data(search_key)
+    if data.get("size") > 10000:
+        return True
+    return False
 
-    ## 城市
-    country_result = []
-    for country_code, country_data in result_pool['country'].items():
+def get_results(source_key,result_pool):
+    link_results = set()
 
-        for region_code, region_data in country_data.items():
-            for city in region_data:
-                country_result.append(f'({source_key}) && country="{country_code}" && region="{region_code}" && city="{city}"')
+    client = Client(config.FOFA_KEY)
+    data = client.search(source_key, size=10000, page=1,
+                         fields="link")
+    if data.get("size") > 10000:
+        ## 城市
+        country_result = []
+        for country_code, country_data in result_pool['country'].items():
 
-    ## 产品
-    product_result = []
-    for search_key in country_result:
-        for product in result_pool['product']:
-            product_result.append(f'{search_key} && product="{product}"')
+            for region_code, region_data in country_data.items():
+                for city in region_data:
+                    country_result.append(
+                        f'({source_key}) && country="{country_code}" && region="{region_code}" && city="{city}"')
+
+        ## 产品
+        product_result = []
+        for search_key in country_result:
+            for product in result_pool['product']:
+                product_result.append(f'{search_key} && product="{product}"')
+
+        ## 端口
+        port_result = []
+        for search_key in product_result:
+            for port in result_pool["port"]:
+                port_result.append(f'{search_key} && port="{port}"')
+
+        # false_port_key = ""
+        # for port in result_pool["port"]:
+        #     false_port_key += f" && port != {port}"
+        #
+        # for search_key in country_result:
+        #     port_result.append(f"{search_key} {false_port_key}")
+
+        return port_result
+    else:
+        print(
+            colorize("[*] 未超过FOFA会员单次限制", "green"))
+        link_results.update(data["results"])
+        return link_results
 
 
-    ## 端口
-    port_result = []
-    for search_key in product_result:
-        for port in result_pool["port"]:
-            port_result.append(f'{search_key} && port="{port}"')
+# def get_results(search_key_result):
+#     link_results = set()
+#     for search_key in search_key_result:
+#         links = get_link_results(search_key, 10000)
+#         print(
+#             colorize("[*] 当前搜索关键词: {}".format(search_key), "blue"))
+#         link_results.update(links)
+#     print(
+#         colorize("[*] 搜索结束 去重后数量为: {}".format(len(link_results)), "blue"))
+#     return link_results
+
+import socket
+from urllib.parse import urlparse
 
 
-    # false_port_key = ""
-    # for port in result_pool["port"]:
-    #     false_port_key += f" && port != {port}"
-    #
-    # for search_key in country_result:
-    #     port_result.append(f"{search_key} {false_port_key}")
+def is_ip(url):
+    url = urlparse(url).netloc
+    if ":" in url:
+        url = url.split(":")[0]
+    try:
+        ip = socket.gethostbyname(url)
+        if ip == url:
+            return True
+        else:
+            return False
+    except:
+        return False
 
-    for result in port_result:
-        print(result)
+from tldextract import tldextract
+
+def parse_url(url):
+    parsed_url = urlparse(url)
+    return parsed_url.scheme + "://" + parsed_url.netloc
+
+def get_ip(url):
+    parsed_url = urlparse(url)
+    if ":" in parsed_url.netloc:
+        return parsed_url.netloc.split(":")[0]
+    return parsed_url.netloc
+
+def save_scan_target(results):
+    print(
+        colorize("[*] 结果去重中...", "green"))
+    result_set = set()
+    with open('target.txt', 'w', encoding='utf-8') as file:
+        for target in results:
+            print(
+                colorize("[*] 当前去重检测项: {}".format(target), "green"))
+            if is_ip(target):
+                ip = get_ip(target)
+                if ip not in result_set:
+                    # print('ip '+ip)
+                    # print(parse_url(target))
+                    file.write(target+"\n")
+                    result_set.add(ip)
+            else:
+                url1 = tldextract.extract(target)
+                host = url1.domain + "." + url1.suffix
+                if host not in result_set:
+                    # print('host '+host)
+                    # print(parse_url(target))
+                    file.write(target+"\n")
+                    result_set.add(host)
 
 
-    return
 
 if __name__ == "__main__":
-    key = ''  # 输入key
-    source_key = 'header="thinkphp" || header="think_template"'
-    result = get_base_results(key,source_key,100)
-    print(result)
+    source_key_1='app="APACHE-Tomcat" && icon_hash="-656811182"'
+    # source_key = '"tomcat" && icon_hash="-656811182"'
+    result = get_base_results(source_key_1,100)
+    # print(result)
     result_pool = init_result_pool(result)
-    get_new_search_key_list(source_key,result_pool)
+    results = get_results(source_key_1,result_pool)
+    save_scan_target(results)
+    # print(results)
     # print(result)
     # print(len(result))
 
