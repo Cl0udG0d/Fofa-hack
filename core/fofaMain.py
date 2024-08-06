@@ -15,6 +15,7 @@ import base64
 import time
 from urllib.parse import quote_plus
 from tookit import unit, fofaUseragent, config
+from tookit.client_main import get_result_from_api
 from tookit.levelData import LevelData
 from tookit.outputData import OutputData
 import re, requests
@@ -637,18 +638,24 @@ class FofaMain:
                         print(colorize(_('无搜索结果，执行下一条'), "red"))
                         continue
                     else:
-                        self.fofaSpider(self.search_key, searchbs64, 0)
-                        print(colorize(_('[+] 抓取结束,{}关键字共抓取数据 {} 条\n').format(self.search_key,
-                                                                                           str(len(self.host_set))),
-                                       "green"))
+                        if config.FOFA_KEY:
+                            get_result_from_api(self.search_key)
+                        else:
+                            self.fofaSpider(self.search_key, searchbs64, 0)
+                            print(colorize(_('[+] 抓取结束,{}关键字共抓取数据 {} 条\n').format(self.search_key,
+                                                                                               str(len(self.host_set))),
+                                           "green"))
 
         else:
             searchbs64, countnum = self.getFofaKeywordsCount(self.search_key)
             if str(countnum) == "0" and len(str(countnum)) == 1:
                 print(colorize(_('无搜索结果'), "red"))
             else:
-                self.fofaSpider(self.search_key, searchbs64, 0)
-            print(colorize(_('[*] 抓取结束，共抓取数据 {} 条').format(str(len(self.host_set))), "green"))
+                if config.FOFA_KEY:
+                    get_result_from_api(self.search_key)
+                else:
+                    self.fofaSpider(self.search_key, searchbs64, 0)
+                    print(colorize(_('[*] 抓取结束，共抓取数据 {} 条').format(str(len(self.host_set))), "green"))
 
     def _destroy(self):
         self.removeDuplicate()

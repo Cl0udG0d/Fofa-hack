@@ -58,6 +58,9 @@ def main():
     parser.add_argument('--authorization', type=str, help="指定Authorization值")
     parser.add_argument('--authorization-file', type=str, help="从文件中读取authorization列表 --authorization-file authorization.txt")
 
+    parser.add_argument('--fofa-key', type=str,
+                        help="fofa api key值(配合fofa终身会员使用)")
+
     proxy_group = parser.add_mutually_exclusive_group()
     proxy_group.add_argument('--proxy', help=_("指定代理,代理格式 --proxy '127.0.0.1:7890'"))
     proxy_group.add_argument('--proxy-url', help=_("指定代理url，即访问URL响应为proxy,代理格式 --proxy-url http://127.0.0.1/proxy_pool/get"))
@@ -65,6 +68,9 @@ def main():
     # parser.add_argument('--type', type=str, choices=["common", "selenium"], default="common",
     #                     help="运行类型,默认为普通方式")
     args = parser.parse_args()
+
+    if args.fofa_key:
+        config.FOFA_KEY = args.fofa_key
 
     if args.authorization_file:
         config.AUTHORIZATION_FILE = args.authorization_file
