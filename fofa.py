@@ -114,6 +114,8 @@ def main():
     level = args.level if args.level else "1"
     level_data = LevelData(level)
     fuzz = args.fuzz
+
+
     output = args.output if args.output else "txt"
     outputname = args.outputname if args.outputname else "fofaHack"
 

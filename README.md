@@ -11,14 +11,9 @@ PS: 感谢[FOFA](https://fofa.info/)提供这么好的测绘工具
 
 非付费会员,fofa数据采集工具
 
-`-f` 参数开启关键字fuzz
-
-`--authorization` 指定登录用户的 authorization , authorization需要F12获取
-
 使用示例
 > fofa-hack.exe --keyword thinkphp --endcount 500
-> 
-> fofa-hack.exe --keyword thinkphp --endcount 500 --authorization your_authorization
+
 
 ### 安装
 
@@ -40,14 +35,15 @@ Fofa-hack>python fofa.py -h
             |__|  \____/|__| /__/\__\    
                  _   _   ____   ____  __  __ 
                 | |_| | / () \ / (__`|  |/  /
-                |_| |_|/__/\__\\____)|__|\__\ V2.4.16
+                |_| |_|/__/\__\\____)|__|\__\ V2.5.1
 
                 公众号: 黑糖安全
             
-usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE | --base BASE | --iconurl ICONURL | --iconfile ICONFILE) [--timesleep TIMESLEEP] [--timeout TIMEOUT] [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT]
-               [--outputname OUTPUTNAME] [--fuzz] [--proxy-type {socks4,socks5,http}] [--authorization AUTHORIZATION] [--authorization-file AUTHORIZATION_FILE] [--proxy PROXY | --proxy-url PROXY_URL | --proxy-file PROXY_FILE]
+usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE | --base BASE | --iconurl ICONURL | --iconfile ICONFILE) [--timesleep TIMESLEEP] [--timeout TIMEOUT] [--endcount ENDCOUNT] [--level LEVEL]
+               [--output OUTPUT] [--outputname OUTPUTNAME] [--fuzz] [--proxy-type {socks4,socks5,http}] [--authorization AUTHORIZATION] [--authorization-file AUTHORIZATION_FILE] [--fofa-key FOFA_KEY]
+               [--proxy PROXY | --proxy-url PROXY_URL | --proxy-file PROXY_FILE]
 
-Fofa-hack v2.4.16 使用说明
+Fofa-hack v2.5.1 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -77,6 +73,7 @@ optional arguments:
                         指定Authorization值
   --authorization-file AUTHORIZATION_FILE
                         从文件中读取authorization列表 --authorization-file authorization.txt
+  --fofa-key FOFA_KEY   fofa api key值(配合fofa终身会员使用)
   --proxy PROXY         指定代理,代理格式 --proxy '127.0.0.1:7890'
   --proxy-url PROXY_URL
                         指定代理url，即访问URL响应为proxy,代理格式 --proxy-url http://127.0.0.1/proxy_pool/get

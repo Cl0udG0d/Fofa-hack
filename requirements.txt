@@ -7,6 +7,7 @@ colorama==0.4.6
 cryptography==43.0.0
 decorator==5.1.1
 docutils==0.20.1
+filelock==3.15.4
 idna==3.4
 importlib-metadata==7.0.1
 importlib_resources==6.4.0
@@ -33,11 +34,13 @@ pyinstaller-hooks-contrib==2024.1
 pywin32-ctypes==0.2.2
 readme_renderer==43.0
 requests==2.27.1
+requests-file==2.1.0
 requests-toolbelt==1.0.0
 retry==0.9.2
 rfc3986==2.0.0
 rich==13.7.1
 SecretStorage==3.3.3
+tldextract==5.1.2
 twine==5.1.1
 typing_extensions==4.12.2
 urllib3==1.26.19

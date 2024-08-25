@@ -1,5 +1,9 @@
 # CHANGELOG 代码变更记录
 
+### 2.5.1
++ 添加 --fofa-key 参数 (优化中)
++ 修复BUG [issue 86](https://github.com/Cl0udG0d/Fofa-hack/issues/86)
+
 ### 2.4.18
 + 合入(pull request)(https://github.com/Cl0udG0d/Fofa-hack/pull/85)
 
