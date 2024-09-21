@@ -331,15 +331,20 @@ class FofaMain:
                     exit(0)
 
             request_url = getUrl(searchbs64)
+            if config.DEBUG:
+                print("[+] 当前请求网址: "+request_url)
 
             rep = requests.get(request_url, headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,
                                proxies=self.get_proxy())
             # request should be success
             rep.raise_for_status()
+            if config.DEBUG:
+                print("[+] 当前响应: " + rep.text)
             # request should not be limited
             # '{"code":820006,"message":"[820006] 资源访问每天限制","data":""}'
             if len(rep.text) <= 55 and '820006' in rep.text:
-                raise RuntimeError("API call limit reached for today,call at next day or use proxy")
+                raise RuntimeError("\033[1;31m[-] error:{}\033[0m".format(
+                        "API call limit reached for today,call at next day or use proxy"))
             # print(rep.text)
             timelist = self.getTimeList(rep.text)
             # print(timelist)
@@ -603,6 +608,8 @@ class FofaMain:
             f.close()
             final.close()
             return int(len(text_list))
+        except FileNotFoundError:
+            print("\033[1;31m[-] 未保存文件,去重失败\033[0m")
         except Exception as e:
             print("\033[1;31m[-] error:{}\033[0m".format(e))
             return 0

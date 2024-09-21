@@ -135,9 +135,6 @@ if __name__ == '__main__':
 
 详情请见[CHANGELOG](docs/CHANGELOG.md)
 
-### TODO List
-
-详情请见[TODO](docs/TODO.md)
 
 ### 贡献者
 

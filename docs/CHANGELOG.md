@@ -1,65 +1,86 @@
 # CHANGELOG 代码变更记录
 
+### 2.5.2
+
++ 添加csv后缀的输出
++ 添加debug模式
+
 ### 2.5.1
+
 + 添加 --fofa-key 参数 (优化中)
 + 修复BUG [issue 86](https://github.com/Cl0udG0d/Fofa-hack/issues/86)
 
 ### 2.4.18
+
 + 合入(pull request)(https://github.com/Cl0udG0d/Fofa-hack/pull/85)
 
 ### 2.4.17
+
 + 删除文档里面的存在问题的部分
 + 修改setup.py，更新fofa-hack包为0.02版本 [pip fofa-hack](https://pypi.org/manage/project/fofa-hack/release/0.0.2/)
 
 ### 2.4.16
+
 + 新增 --authorization-file 参数
 
 ### 2.4.15
+
 + 添加批量从文件使用代理的功能 --proxy-file
 + 添加使用网址代理的功能 --proxy-url
 + 在使用AUTHORIZATION的情况下,一次获取50条数据
 
 ### 2.4.14
+
 + 修改并测试了代理的问题
 
 ### 2.4.13
+
 + 新增icon文件和网址功能 [issue 64](https://github.com/Cl0udG0d/Fofa-hack/issues/64)
 + 修复BUG [issue 65](https://github.com/Cl0udG0d/Fofa-hack/issues/65)
 
 ### 2.4.12
+
 + 修复[issue 63](https://github.com/Cl0udG0d/Fofa-hack/issues/63)
 + 完善Authorization逻辑
 
 ### 2.4.11
+
 + 新增SECURITY文件
 + 新增用户Authorization查询
 
 ### 2.4.10
+
 + 修复删除文件问题
 + 修复[issue 59](https://github.com/Cl0udG0d/Fofa-hack/issues/59)
 
 ### 2.4.9
+
 + 修复语言问题
 + 修改代码冗余部分
 
 ### 2.4.8
+
 + 修复setup.py问题
 + 合并[新增可设置保存文件名代码](https://github.com/Cl0udG0d/Fofa-hack/pull/58)
 + 新增贡献者[10cks](https://github.com/10cks)
 
 ### 2.4.7
+
 + 去除没有获取到语言情况下为空的问题
 + 生成fofa-hack pip包
 
 ### 2.4.6
+
 + 修复 [issues 54](https://github.com/Cl0udG0d/Fofa-hack/issues/54)
 + 终端颜色输出问题解决
 
 ### 2.4.5
+
 + 修复 [issues 51](https://github.com/Cl0udG0d/Fofa-hack/issues/51)
 + 修复 [issues 53](https://github.com/Cl0udG0d/Fofa-hack/issues/53)
 
 ### 2.4.4
+
 + unit.py 修剪关键字功能扩展
 
 ### 2.4.3
@@ -69,6 +90,7 @@
 ### 2.4.2
 
 + 修复打包问题
+
 ### 2.4.1
 
 + 根据环境切换语言
@@ -78,6 +100,7 @@
 + 删除多余逻辑文件
 + 更新获取数据逻辑,页面爬虫 -> api接口获取
 + 默认步长设置为 50,防止等待过久
+
 ### 2.3.9
 
 + 修复exit(0)退出报错问题
@@ -105,11 +128,13 @@
 ### 2.3.4
 
 + 新增英文readme
+
 ### 2.3.3
 
-+ 修复部分已知BUG 
-  + 修复搜索结果为0时出现的列表索引越界问题
-  + 修复搜索结果时间戳列表为空时的报错问题
++ 修复部分已知BUG
+    + 修复搜索结果为0时出现的列表索引越界问题
+    + 修复搜索结果时间戳列表为空时的报错问题
+
 ### 2.3.2
 
 + 修改运行方式readme
@@ -227,21 +252,26 @@
 + 合并代码 - 优化时间戳逻辑
 
 ### 2.0.5
+
 + 新增贡献者 tastypear
 + 尝试优化时间戳逻辑
 
 ### 2.0.4
+
 + 删除.github文件夹
 + 新增TODO List
 + 删除csv导出
 
 ### 2.0.3
+
 + 修复fofa单关键字下第二页错误情况
 
 ### 2.0.2
+
 + 修复fofa多个查询条件下出现的错误
 
 ### 2.0.1
+
 + 修改filename,timeSleep等为类内部变量
 + 新增logoutInitMsg方法输出初始化信息
 + 新增fofa_fuzz_spider方法
@@ -254,14 +284,15 @@
 
 + 支持多种导出方式 txt,json,csv
 + 因FOFA对普通用户的限制停止该项目的更新
+
 ### 1.3.0
 
 + `README`添加示例运行参考
 + 新增工具文件夹`tookit`,创建`levelData`等级模板文件
 + 新增 `--level`参数,内容明细如下
-  + level=1 [ url ]
-  + level=2 [ url , port , title , ip ]
-  + level=3 [ url , port , title , ip , city , asn , organization , server , rep ]
+    + level=1 [ url ]
+    + level=2 [ url , port , title , ip ]
+    + level=3 [ url , port , title , ip , city , asn , organization , server , rep ]
 
 ### 1.2.8
 
@@ -297,8 +328,8 @@
 ### 1.2.2
 
 + BUG修复
-> 存储结果到`md5(搜索关键字)_运行时间戳.txt`文件中
 
+> 存储结果到`md5(搜索关键字)_运行时间戳.txt`文件中
 
 ### 1.2.1
 
@@ -315,7 +346,6 @@
 + FOFA登录重试机制，最大重试值默认为3
 + 添加部分代码注释
 + 自动生成文件名 搜索关键字_运行时间戳.txt
-
 
 ### 此前的一些提交
 

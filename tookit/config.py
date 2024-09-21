@@ -5,7 +5,7 @@
 # @File    : config.py
 # @Github: https://github.com/Cl0udG0d
 
-VERSION_NUM = "2.5.1"
+VERSION_NUM = "2.5.2"
 ROOT_PATH = ""
 AUTHORIZATION = ""
 AUTHORIZATION_LIST = [
@@ -15,6 +15,7 @@ AUTHORIZATION_FILE = ""
 
 FOFA_KEY = ""
 
+DEBUG = False
 ### ============================================================================
 ### 代理相关的配置参数
 

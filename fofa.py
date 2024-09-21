@@ -50,7 +50,7 @@ def main():
     parser.add_argument('--timeout', '-to', help=_('爬取每一页的超时时间,默认为180秒'), default=180)
     parser.add_argument('--endcount', '-e', help=_('爬取结束数量'))
     parser.add_argument('--level', '-l', help=_('爬取等级: 1-3 ,数字越大内容越详细,默认为 1'))
-    parser.add_argument('--output', '-o', help=_('输出格式:txt、json,默认为txt'))
+    parser.add_argument('--output', '-o', help=_('输出格式:txt、json、csv,默认为txt'))
     parser.add_argument('--outputname','-on', help=_("指定输出文件名，默认文件名为 fofaHack"))
     parser.add_argument('--fuzz', '-f', help=_('关键字fuzz参数,增加内容获取粒度'), action='store_true')
 
@@ -60,7 +60,8 @@ def main():
 
     parser.add_argument('--fofa-key', type=str,
                         help="fofa api key值(配合fofa终身会员使用)")
-
+    parser.add_argument('--debug',
+                        help="fofa-hack调试模式,运行过程中输出更多运行日志", action='store_true')
     proxy_group = parser.add_mutually_exclusive_group()
     proxy_group.add_argument('--proxy', help=_("指定代理,代理格式 --proxy '127.0.0.1:7890'"))
     proxy_group.add_argument('--proxy-url', help=_("指定代理url，即访问URL响应为proxy,代理格式 --proxy-url http://127.0.0.1/proxy_pool/get"))
@@ -68,6 +69,9 @@ def main():
     # parser.add_argument('--type', type=str, choices=["common", "selenium"], default="common",
     #                     help="运行类型,默认为普通方式")
     args = parser.parse_args()
+
+    if args.debug:
+        config.DEBUG = args.debug
 
     if args.fofa_key:
         config.FOFA_KEY = args.fofa_key
