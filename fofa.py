@@ -62,6 +62,8 @@ def main():
                         help="fofa api key值(配合fofa终身会员使用)")
     parser.add_argument('--debug',
                         help="fofa-hack调试模式,运行过程中输出更多运行日志", action='store_true')
+    parser.add_argument('--time-type',
+                        help="fofa-hack时间类型 (day | hour)，默认为day，如果选择hour的话数据采集粒度会变成按小时的",choices=['day','hour'],default='day')
     proxy_group = parser.add_mutually_exclusive_group()
     proxy_group.add_argument('--proxy', help=_("指定代理,代理格式 --proxy '127.0.0.1:7890'"))
     proxy_group.add_argument('--proxy-url', help=_("指定代理url，即访问URL响应为proxy,代理格式 --proxy-url http://127.0.0.1/proxy_pool/get"))
@@ -72,6 +74,9 @@ def main():
 
     if args.debug:
         config.DEBUG = args.debug
+
+    if args.time_type:
+        config.TIME_TYPE = args.time_type
 
     if args.fofa_key:
         config.FOFA_KEY = args.fofa_key

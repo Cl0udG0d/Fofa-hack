@@ -28,22 +28,22 @@ PS: 感谢[FOFA](https://fofa.info/)提供这么好的测绘工具
 > fofa-hack.exe --help
 
 ```shell
-Fofa-hack>python fofa.py -h
+Fofa-hack>python fofa.py -h                                
 
              ____  ____  ____  ____      
             | ===|/ () \| ===|/ () \     
             |__|  \____/|__| /__/\__\    
                  _   _   ____   ____  __  __ 
                 | |_| | / () \ / (__`|  |/  /
-                |_| |_|/__/\__\\____)|__|\__\ V2.5.1
+                |_| |_|/__/\__\\____)|__|\__\ V2.5.2
 
                 公众号: 黑糖安全
             
-usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE | --base BASE | --iconurl ICONURL | --iconfile ICONFILE) [--timesleep TIMESLEEP] [--timeout TIMEOUT] [--endcount ENDCOUNT] [--level LEVEL]
-               [--output OUTPUT] [--outputname OUTPUTNAME] [--fuzz] [--proxy-type {socks4,socks5,http}] [--authorization AUTHORIZATION] [--authorization-file AUTHORIZATION_FILE] [--fofa-key FOFA_KEY]
+usage: fofa.py [-h] (--keyword KEYWORD | --inputfile INPUTFILE | --base BASE | --iconurl ICONURL | --iconfile ICONFILE) [--timesleep TIMESLEEP] [--timeout TIMEOUT] [--endcount ENDCOUNT] [--level LEVEL] [--output OUTPUT]
+               [--outputname OUTPUTNAME] [--fuzz] [--proxy-type {socks4,socks5,http}] [--authorization AUTHORIZATION] [--authorization-file AUTHORIZATION_FILE] [--fofa-key FOFA_KEY] [--debug] [--time-type {day,hour}]
                [--proxy PROXY | --proxy-url PROXY_URL | --proxy-file PROXY_FILE]
 
-Fofa-hack v2.5.1 使用说明
+Fofa-hack v2.5.2 使用说明
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -63,7 +63,7 @@ optional arguments:
   --level LEVEL, -l LEVEL
                         爬取等级: 1-3 ,数字越大内容越详细,默认为 1
   --output OUTPUT, -o OUTPUT
-                        输出格式:txt、json,默认为txt
+                        输出格式:txt、json、csv,默认为txt
   --outputname OUTPUTNAME, -on OUTPUTNAME
                         指定输出文件名，默认文件名为 fofaHack
   --fuzz, -f            关键字fuzz参数,增加内容获取粒度
@@ -74,12 +74,14 @@ optional arguments:
   --authorization-file AUTHORIZATION_FILE
                         从文件中读取authorization列表 --authorization-file authorization.txt
   --fofa-key FOFA_KEY   fofa api key值(配合fofa终身会员使用)
+  --debug               fofa-hack调试模式,运行过程中输出更多运行日志
+  --time-type {day,hour}
+                        fofa-hack时间类型 (day | hour)，默认为day，如果选择hour的话数据采集粒度会变成按小时的
   --proxy PROXY         指定代理,代理格式 --proxy '127.0.0.1:7890'
   --proxy-url PROXY_URL
                         指定代理url，即访问URL响应为proxy,代理格式 --proxy-url http://127.0.0.1/proxy_pool/get
   --proxy-file PROXY_FILE
                         指定txt格式的代理文件,按行分割,代理格式 --proxy-file proxy.txt
-
 ```
 
 爬取的去重结果会存储到`final_fofaHack.txt`文件中
@@ -112,6 +114,9 @@ if __name__ == '__main__':
 
 + 高级语法搜索(本来我以为高级语法用不了,但是最近好像又解禁了)
 > fofa.exe -k icon_hash="1165838194"
+
++ 按照小时划分
+> python fofa.py -k index -e 100  --time-type hour
 
 + 欢迎补充....
 

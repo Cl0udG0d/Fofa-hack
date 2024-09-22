@@ -4,6 +4,7 @@
 
 + 添加csv后缀的输出
 + 添加debug模式
++ 添加细粒度时间选项 --time-type (day | hour)
 
 ### 2.5.1
 

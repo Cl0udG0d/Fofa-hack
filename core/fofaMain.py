@@ -188,7 +188,12 @@ class FofaMain:
         data = json.loads(text)
         assets = data["data"]["assets"]
         for asset in assets:
-            mtime = asset["mtime"].split()[0]
+            if config.TIME_TYPE == "day":
+                mtime = asset["mtime"].split()[0]
+            else:
+                mtime = asset["mtime"]
+            # if config.DEBUG:
+            #     print("[+] 当前时间戳 "+mtime)
             timelist.append(mtime)
         # print(timelist)
         return timelist
@@ -338,8 +343,8 @@ class FofaMain:
                                proxies=self.get_proxy())
             # request should be success
             rep.raise_for_status()
-            if config.DEBUG:
-                print("[+] 当前响应: " + rep.text)
+            # if config.DEBUG:
+            #     print("[+] 当前响应: " + rep.text)
             # request should not be limited
             # '{"code":820006,"message":"[820006] 资源访问每天限制","data":""}'
             if len(rep.text) <= 55 and '820006' in rep.text:
@@ -541,44 +546,79 @@ class FofaMain:
 
         # get before_time in search_key.
         # if there is no before_time, set tomorrow_time as default
-        before_time_in_search_key = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
-        if "before=" in search_key:
-            pattern = r'before="([^"]+)"'
-            match = re.search(pattern, search_key)
-            before_time_in_search_key = match.group(1)
-        time_before_time_in_search_key = datetime.strptime(before_time_in_search_key, "%Y-%m-%d").date()
-        # print(self.timestamp_list)
-        # print(index)
-        # print("self.timestamp_list :"+str(self.timestamp_list))
-        # print("index: "+str(index)+" ; self.timestamp_list[index]: "+str(self.timestamp_list[index]))
-        # regard the_earliest_time.tomorrow as optimized time_before
-        timestamp_list = list(self.timestamp_list[index])
-        timestamp_list.sort()
-        if len(timestamp_list) == 0:
-            print(colorize(_("似乎时间戳到了尽头."), "red"))
-            self._destroy()
-        # print(timestamp_list)
+        if config.TIME_TYPE == "day":
+            before_time_in_search_key = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
 
-        time_first = timestamp_list[0].split(' ')[0].strip('\n').strip()
-        time_first_time = datetime.strptime(time_first, "%Y-%m-%d").date()
-        time_before = time_first_time + timedelta(days=1)
+            if "before=" in search_key:
+                pattern = r'before="([^"]+)"'
+                match = re.search(pattern, search_key)
+                before_time_in_search_key = match.group(1)
+            time_before_time_in_search_key = datetime.strptime(before_time_in_search_key, "%Y-%m-%d").date()
+            # print(self.timestamp_list)
+            # print(index)
+            # print("self.timestamp_list :"+str(self.timestamp_list))
+            # print("index: "+str(index)+" ; self.timestamp_list[index]: "+str(self.timestamp_list[index]))
+            # regard the_earliest_time.tomorrow as optimized time_before
+            timestamp_list = list(self.timestamp_list[index])
+            timestamp_list.sort()
+            if len(timestamp_list) == 0:
+                print(colorize(_("似乎时间戳到了尽头."), "red"))
+                self._destroy()
+            # print(timestamp_list)
 
-        # check if optimized time_before can be used
-        if time_before >= time_before_time_in_search_key:
-            time_before = time_before_time_in_search_key - timedelta(days=1)
+            time_first = timestamp_list[0].split(' ')[0].strip('\n').strip()
+            time_first_time = datetime.strptime(time_first, "%Y-%m-%d").date()
+            time_before = time_first_time + timedelta(days=1)
 
-        # print(time_before)
+            # check if optimized time_before can be used
+            if time_before >= time_before_time_in_search_key:
+                time_before = time_before_time_in_search_key - timedelta(days=1)
 
-        if 'before' in search_key:
-            # print(search_key)
-            search_key = search_key.split('&& before')[0]
-            search_key = search_key.strip(' ')
-            search_key = search_key + ' && ' + 'before="' + str(time_before) + '"'
+            # print(time_before)
+
+            if 'before' in search_key:
+                # print(search_key)
+                search_key = search_key.split('&& before')[0]
+                search_key = search_key.strip(' ')
+                search_key = search_key + ' && ' + 'before="' + str(time_before) + '"'
+            else:
+                search_key = search_key + ' && ' + 'before="' + str(time_before) + '"'
+            search_key_modify = search_key
         else:
-            search_key = search_key + ' && ' + 'before="' + str(time_before) + '"'
-        search_key_modify = search_key
+            before_time_in_search_key = (datetime.today() + timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S')
 
-        # print('[*] 搜索词： ' + search_key_modify)
+            if "before=" in search_key:
+                pattern = r'before="([^"]+)"'
+                match = re.search(pattern, search_key)
+                before_time_in_search_key = match.group(1)
+            time_before_time_in_search_key = datetime.strptime(before_time_in_search_key, '%Y-%m-%d %H:%M:%S')
+            timestamp_list = list(self.timestamp_list[index])
+            timestamp_list.sort()
+            if len(timestamp_list) == 0:
+                print(colorize(_("似乎时间戳到了尽头."), "red"))
+                self._destroy()
+
+            if config.DEBUG:
+                print("[-] timestamp_list:"+str(timestamp_list))
+            time_first = timestamp_list[0].strip('\n').strip()
+            if config.DEBUG:
+                print("[-] time_first: "+time_first)
+            time_first_time = datetime.strptime(time_first, '%Y-%m-%d %H:%M:%S')
+            time_before = time_first_time + timedelta(hours=1)
+
+            if time_before >= time_before_time_in_search_key:
+                time_before = time_before_time_in_search_key - timedelta(hours=1)
+
+
+            if 'before' in search_key:
+                search_key = search_key.split('&& before')[0]
+                search_key = search_key.strip(' ')
+                search_key = search_key + ' && ' + 'before="' + str(time_before) + '"'
+            else:
+                search_key = search_key + ' && ' + 'before="' + str(time_before) + '"'
+            search_key_modify = search_key
+        if config.DEBUG:
+            print('[*] 搜索词： ' + search_key_modify)
 
         return search_key_modify
 
