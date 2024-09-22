@@ -96,7 +96,7 @@ class OutputData:
 
     def outputCsv(self, data):
         headers = self.getCsvHeaders(data)
-        with open('score.csv', mode='a+', newline='', encoding='utf-8-sig') as file:
+        with open(self.filename, mode='a+', newline='', encoding='utf-8-sig') as file:
             writer = csv.writer(file)
 
             # 如果尚未写入表头，则写入表头

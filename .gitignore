@@ -5,6 +5,7 @@ __pycache__/
 ./proxy.txt
 *.txt
 .idea
+*.csv
 # C extensions
 *.so
 /venv
