@@ -140,8 +140,9 @@ def main():
         #     filename = "{}_{}.{}".format(unit.md5(search_key), int(time.time()), output)
         output_data = OutputData(filename, level, pattern=output)
     else:
-        filename = _("暂无")
-        output_data = None
+        # filename = _("暂无")
+        filename="{}.{}".format(outputname,output)
+        output_data = OutputData(filename, level, pattern=output)
 
     if args.proxy or args.proxy_url or args.proxy_file :
         config.IS_PROXY = True
