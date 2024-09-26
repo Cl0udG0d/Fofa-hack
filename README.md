@@ -173,6 +173,8 @@ if __name__ == '__main__':
             <sub><b>KawaiiSh1zuku</b></sub>
         </a>
     </td>
+</tr>
+<tr>
     <td align="center">
         <a href="https://github.com/Valdo-Caeserius">
             <img src="https://avatars.githubusercontent.com/u/148833225?v=4" width="100;" alt="wanswu"/>
@@ -192,6 +194,13 @@ if __name__ == '__main__':
             <img src="https://avatars.githubusercontent.com/u/14249262?v=4" width="100;" alt="fireinrain"/>
             <br />
             <sub><b>10cks</b></sub>
+        </a>
+    </td>
+<td align="center">
+        <a href="https://github.com/Arc-2023">
+            <img src="https://avatars.githubusercontent.com/u/64178177?v=4" width="100;" alt="fireinrain"/>
+            <br />
+            <sub><b>Arc-2023</b></sub>
         </a>
     </td>
 </tr>
