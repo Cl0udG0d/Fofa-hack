@@ -432,7 +432,6 @@ class FofaMain:
         @return:
         """
         # while len(self.host_set) < self.endcount and self.old_length !=len(self.host_set):
-
         self.old_length = len(self.host_set)
         self.timestamp_list[index].clear()
         context = self.fofaSpiderOnePageData(search_key, searchbs64, index)
@@ -461,6 +460,9 @@ class FofaMain:
             self.fofaFuzzSpider(search_key, context, index)
 
         search_key_modify = self.modifySearchTimeUrl(search_key, index)
+        # 特判，如果destroy不exit的话就会出错
+        if search_key_modify == 'end':
+            return
         # print(search_key_modify)
         searchbs64_modify = urllib.parse.quote(base64.b64encode(search_key_modify.encode("utf-8")))
         # search_key = search_key_modify
@@ -564,6 +566,8 @@ class FofaMain:
             if len(timestamp_list) == 0:
                 print(colorize(_("似乎时间戳到了尽头."), "red"))
                 self._destroy()
+                # 返回特定的值，特判
+                return 'end'
             # print(timestamp_list)
 
             time_first = timestamp_list[0].split(' ')[0].strip('\n').strip()
@@ -675,11 +679,12 @@ class FofaMain:
         print(colorize(_('[*] 开始运行'), "green"))
         if self.inputfile:
             with open(self.inputfile, 'r') as f:
+                # self.filename = "{}_{}.{}".format(unit.md5(self.search_key), int(time.time()), self.output)
+                # self.output_data = OutputData(self.filename, self.level, pattern=self.output)
                 for line in f.readlines():
                     self.cleanInitParameters()
                     self.search_key = clipKeyWord(line.strip())
-                    self.filename = "{}_{}.{}".format(unit.md5(self.search_key), int(time.time()), self.output)
-                    self.output_data = OutputData(self.filename, self.level, pattern=self.output)
+                    
                     searchbs64, countnum = self.getFofaKeywordsCount(self.search_key)
                     if str(countnum) == "0" and len(str(countnum)) == 1:
                         print(colorize(_('无搜索结果，执行下一条'), "red"))
@@ -706,7 +711,9 @@ class FofaMain:
 
     def _destroy(self):
         self.removeDuplicate()
-        sys.exit(0)
+        if not self.inputfile:
+            
+            sys.exit(0)
 
 
 if __name__ == '__main__':
