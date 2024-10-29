@@ -93,8 +93,6 @@ Thanks to the contributors of this project
 
 广告时间 - 也欢迎大家加入我的纷传,会在里面更新安全开发相关的内容~
 <td align="center">
-    <a href="https://github.com/Arc-2023">
-        <img src="./images/738473188fb95c76d0b8055ec869d37.jpg" width="100;" alt="fireinrain"/>
+        <img src="./images/738473188fb95c76d0b8055ec869d37.jpg" width="300;" alt="fireinrain"/>
         <br />
-    </a>
 </td>
