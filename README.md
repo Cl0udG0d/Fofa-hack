@@ -91,8 +91,4 @@ Thanks to the contributors of this project
 </tr>
 </table>
 
-广告时间 - 也欢迎大家加入我的纷传,会在里面更新安全开发相关的内容~
-<td align="center">
-        <img src="./images/738473188fb95c76d0b8055ec869d37.jpg" width="300;" alt="fireinrain"/>
-        <br />
-</td>
+
